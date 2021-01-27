@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="9.3.0" />
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LoadLink.LoadMatching.Application\LoadLink.LoadMatching.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="EventStore\" />
+    <Folder Include="Http\" />
+    <Folder Include="ServiceBroker\" />
+  </ItemGroup>
+
+</Project>
