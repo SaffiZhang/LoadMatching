@@ -1,26 +1,26 @@
 ﻿using AutoMapper;
 using LoadLink.LoadMatching.Api.Controllers;
 using LoadLink.LoadMatching.Api.Test.Setup;
-using LoadLink.LoadMatching.Application.VehicleSize.Models.Queries;
-using LoadLink.LoadMatching.Application.VehicleSize.Profiles;
-using LoadLink.LoadMatching.Application.VehicleSize.Services;
-using LoadLink.LoadMatching.Persistence.Repositories.VehicleSize;
+using LoadLink.LoadMatching.Application.VehicleAttribute.Models.Queries;
+using LoadLink.LoadMatching.Application.VehicleAttribute.Profiles;
+using LoadLink.LoadMatching.Application.VehicleAttribute.Services;
+using LoadLink.LoadMatching.Persistence.Repositories.VehicleAttribute;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace LoadLink.LoadMatching.Api.Test.VehicleSize
+namespace LoadLink.LoadMatching.Api.Test.VehicleAttribute
 {
     public class VehicleAttributeControllerTest
     {
         private readonly IVehicleAttributeService _service;
-        private readonly VehicleSizeController _vehicleSizeController;
+        private readonly VehicleAttributeController _vehicleAttributeController;
 
         public VehicleAttributeControllerTest()
         {
-            var vehicleSizeProfile = new VehicleAttributeProfile();
-            var configuration = new MapperConfiguration(config => config.AddProfile(vehicleSizeProfile));
+            var vehicleAttributeProfile = new VehicleAttributeProfile();
+            var configuration = new MapperConfiguration(config => config.AddProfile(vehicleAttributeProfile));
             var profile = new Mapper(configuration);
 
             // integration            
@@ -28,15 +28,15 @@ namespace LoadLink.LoadMatching.Api.Test.VehicleSize
             _service = new VehicleAttributeService(repository, profile);
 
             // controller
-            _vehicleSizeController = new VehicleSizeController(_service);
+            _vehicleAttributeController = new VehicleAttributeController(_service);
         }
 
         [Fact]
-        public async Task GetVehicleSizeListAsync()
+        public async Task GetVehicleAttributeListAsync()
         {
 
             // act
-            var actionResult = await _vehicleSizeController.GetVehicleSizeListAsync();
+            var actionResult = await _vehicleAttributeController.GetVehicleAttributeListAsync();
 
             // assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);

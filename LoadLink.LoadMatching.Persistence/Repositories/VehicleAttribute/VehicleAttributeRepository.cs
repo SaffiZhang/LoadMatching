@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using LoadLink.LoadMatching.Application.VehicleSize.Repository;
+using LoadLink.LoadMatching.Application.VehicleAttribute.Repository;
 using LoadLink.LoadMatching.Domain.Procedures;
 using LoadLink.LoadMatching.Persistence.Data;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 
-namespace LoadLink.LoadMatching.Persistence.Repositories.VehicleSize
+namespace LoadLink.LoadMatching.Persistence.Repositories.VehicleAttribute
 {
     public class VehicleAttributeRepository : IVehicleAttributeRepository
     {
@@ -18,11 +18,11 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.VehicleSize
             _dbConnection = new SqlConnection(connectionFactory.ConnectionString);
         }
 
-        public async Task<IEnumerable<UspGetVehicleSizeResult>> GetListAsync()
+        public async Task<IEnumerable<UspGetVehicleAttributeResult>> GetListAsync()
         {
-            var proc = "usp_GetVehicleSize";
+            var proc = "usp_GetVehicleAttribute";
 
-            var result = await SqlMapper.QueryAsync<UspGetVehicleSizeResult>(
+            var result = await SqlMapper.QueryAsync<UspGetVehicleAttributeResult>(
                 _dbConnection, sql: proc, commandType: CommandType.StoredProcedure);
 
             return result;

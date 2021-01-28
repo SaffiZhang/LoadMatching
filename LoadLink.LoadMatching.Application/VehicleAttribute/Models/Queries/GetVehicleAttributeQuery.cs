@@ -1,5 +1,5 @@
 ﻿
-namespace LoadLink.LoadMatching.Application.VehicleSize.Models.Queries
+namespace LoadLink.LoadMatching.Application.VehicleAttribute.Models.Queries
 {
     public class GetVehicleAttributeQuery
     {
@@ -7,6 +7,6 @@ namespace LoadLink.LoadMatching.Application.VehicleSize.Models.Queries
         public string Detail { get; set; }
         public long Value { get; set; }
         public string Code { get; set; }
-        public string PostType { get; set; }
     }
 }
+

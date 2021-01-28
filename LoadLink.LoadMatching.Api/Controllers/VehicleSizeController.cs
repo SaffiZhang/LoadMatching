@@ -9,10 +9,10 @@ namespace LoadLink.LoadMatching.Api.Controllers
     [ApiController]
     public class VehicleSizeController : ControllerBase
     {
-        private readonly IVehicleSizeService _vehicleSizeService;
+        private readonly IVehicleAttributeService _vehicleSizeService;
         private readonly IMapper _mapper;
 
-        public VehicleSizeController(IVehicleSizeService vehicleSizeService)
+        public VehicleSizeController(IVehicleAttributeService vehicleSizeService)
         {
             _vehicleSizeService = vehicleSizeService;
         }

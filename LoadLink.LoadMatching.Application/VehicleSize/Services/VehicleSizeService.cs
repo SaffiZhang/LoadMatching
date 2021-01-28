@@ -7,24 +7,24 @@ using System.Threading.Tasks;
 
 namespace LoadLink.LoadMatching.Application.VehicleSize.Services
 {
-    public class VehicleSizeService : IVehicleSizeService
+    public class VehicleAttributeService : IVehicleAttributeService
     {
-        private readonly IVehicleSizeRepository _vehicleSizeRepository;
+        private readonly IVehicleAttributeRepository _vehicleSizeRepository;
         private readonly IMapper _mapper;
 
-        public VehicleSizeService(IVehicleSizeRepository vehicleSizeRepository, IMapper mapper)
+        public VehicleAttributeService(IVehicleAttributeRepository vehicleSizeRepository, IMapper mapper)
         {
             _vehicleSizeRepository = vehicleSizeRepository;
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<GetVehicleSizeQuery>> GetListAsync()
+        public async Task<IEnumerable<GetVehicleAttributeQuery>> GetListAsync()
         {
             var result = await _vehicleSizeRepository.GetListAsync();
             if (!result.Any())
                 return null;
 
-            return _mapper.Map<IEnumerable<GetVehicleSizeQuery>>(result);
+            return _mapper.Map<IEnumerable<GetVehicleAttributeQuery>>(result);
         }
     }
 }

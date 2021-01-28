@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace LoadLink.LoadMatching.Application.VehicleSize.Repository
+namespace LoadLink.LoadMatching.Application.VehicleAttribute.Repository
 {
     public interface IVehicleAttributeRepository
     {
-        Task<IEnumerable<UspGetVehicleSizeResult>> GetListAsync();
+        Task<IEnumerable<UspGetVehicleAttributeResult>> GetListAsync();
     }
 }

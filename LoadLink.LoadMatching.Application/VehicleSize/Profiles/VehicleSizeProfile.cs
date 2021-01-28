@@ -3,11 +3,11 @@ using LoadLink.LoadMatching.Domain.Procedures;
 
 namespace LoadLink.LoadMatching.Application.VehicleSize.Profiles
 {
-    public class VehicleSizeProfile : AutoMapper.Profile
+    public class VehicleAttributeProfile : AutoMapper.Profile
     {
-        public VehicleSizeProfile()
+        public VehicleAttributeProfile()
         {
-            CreateMap<UspGetVehicleSizeResult, GetVehicleSizeQuery>();
+            CreateMap<UspGetVehicleSizeResult, GetVehicleAttributeQuery>();
         }
     }
 }
