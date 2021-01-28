@@ -3,9 +3,9 @@ using LoadLink.LoadMatching.Domain.Procedures;
 
 namespace LoadLink.LoadMatching.Application.VehicleAttribute.Profiles
 {
-    public class VehicleAttributeProfile : AutoMapper.Profile
+    public class USMemberSearchProfile : AutoMapper.Profile
     {
-        public VehicleAttributeProfile()
+        public USMemberSearchProfile()
         {
             CreateMap<UspGetVehicleAttributeResult, GetVehicleAttributeQuery>();
         }

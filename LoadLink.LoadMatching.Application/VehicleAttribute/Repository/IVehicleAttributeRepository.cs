@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace LoadLink.LoadMatching.Application.VehicleAttribute.Repository
 {
-    public interface IVehicleAttributeRepository
+    public interface IUSMemberSearchRepository
     {
         Task<IEnumerable<UspGetVehicleAttributeResult>> GetListAsync();
     }

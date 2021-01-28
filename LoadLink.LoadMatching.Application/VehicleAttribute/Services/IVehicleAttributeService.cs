@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 namespace LoadLink.LoadMatching.Application.VehicleAttribute.Services
 {
-    public interface IVehicleAttributeService
+    public interface IUSMemberSearchService
     {
         Task<IEnumerable<GetVehicleAttributeQuery>> GetListAsync();
     }

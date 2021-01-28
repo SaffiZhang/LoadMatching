@@ -12,20 +12,20 @@ using Xunit;
 
 namespace LoadLink.LoadMatching.Api.Test.VehicleAttribute
 {
-    public class VehicleAttributeControllerTest
+    public class USMemberSearchControllerTest
     {
-        private readonly IVehicleAttributeService _service;
+        private readonly IUSMemberSearchService _service;
         private readonly VehicleAttributeController _vehicleAttributeController;
 
-        public VehicleAttributeControllerTest()
+        public USMemberSearchControllerTest()
         {
-            var vehicleAttributeProfile = new VehicleAttributeProfile();
+            var vehicleAttributeProfile = new USMemberSearchProfile();
             var configuration = new MapperConfiguration(config => config.AddProfile(vehicleAttributeProfile));
             var profile = new Mapper(configuration);
 
             // integration            
-            var repository = new VehicleAttributeRepository(new DatabaseFixture().ConnectionFactory);
-            _service = new VehicleAttributeService(repository, profile);
+            var repository = new USMemberSearchRepository(new DatabaseFixture().ConnectionFactory);
+            _service = new USMemberSearchService(repository, profile);
 
             // controller
             _vehicleAttributeController = new VehicleAttributeController(_service);
