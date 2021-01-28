@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using LoadLink.LoadMatching.Application.VehicleType.Repository;
+using LoadLink.LoadMatching.Application.VehicleSize.Repository;
 using LoadLink.LoadMatching.Domain.Procedures;
 using LoadLink.LoadMatching.Persistence.Data;
 using System.Collections.Generic;
@@ -7,22 +7,22 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 
-namespace LoadLink.LoadMatching.Persistence.Repositories.VehicleType
+namespace LoadLink.LoadMatching.Persistence.Repositories.VehicleSize
 {
-    public class VehicleTypeRepository : IVehicleTypeRepository
+    public class VehicleSizeRepository : IVehicleSizeRepository
     {
         private readonly IDbConnection _dbConnection;
 
-        public VehicleTypeRepository(IConnectionFactory connectionFactory)
+        public VehicleSizeRepository(IConnectionFactory connectionFactory)
         {
             _dbConnection = new SqlConnection(connectionFactory.ConnectionString);
         }
 
-        public async Task<IEnumerable<UspGetVehicleTypeResult>> GetListAsync()
+        public async Task<IEnumerable<UspGetVehicleSizeResult>> GetListAsync()
         {
-            var proc = "usp_GetVehicleType";
+            var proc = "usp_GetVehicleSize";
 
-            var result = await SqlMapper.QueryAsync<UspGetVehicleTypeResult>(
+            var result = await SqlMapper.QueryAsync<UspGetVehicleSizeResult>(
                 _dbConnection, sql: proc, commandType: CommandType.StoredProcedure);
 
             return result;

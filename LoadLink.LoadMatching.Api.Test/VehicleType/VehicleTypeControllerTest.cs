@@ -1,29 +1,23 @@
 ﻿using AutoMapper;
 using LoadLink.LoadMatching.Api.Controllers;
-using LoadLink.LoadMatching.Api.Services;
 using LoadLink.LoadMatching.Api.Test.Setup;
 using LoadLink.LoadMatching.Application.VehicleType.Models.Queries;
 using LoadLink.LoadMatching.Application.VehicleType.Profiles;
 using LoadLink.LoadMatching.Application.VehicleType.Services;
-using LoadLink.LoadMatching.Persistence.Repositories.VehicleTypeRepository;
-using Microsoft.AspNetCore.Http;
+using LoadLink.LoadMatching.Persistence.Repositories.VehicleType;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace LoadLink.LoadMatching.Api.Test.VehicleType
 {
-    public class VehicleTypeControllerTest
+    public class VehicleSizeControllerTest
     {
-        private readonly Mock<IHttpContextAccessor> _fakeHttpContextAccessor;
-        private readonly IUserHelperService _userHelper;
         private readonly IVehicleTypeService _service;
         private readonly VehicleTypeController _vehicleTypeController;
 
-        public VehicleTypeControllerTest()
+        public VehicleSizeControllerTest()
         {
             var vehicleTypeProfile = new VehicleTypeProfile();
             var configuration = new MapperConfiguration(config => config.AddProfile(vehicleTypeProfile));
