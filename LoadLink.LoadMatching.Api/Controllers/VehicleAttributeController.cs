@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using AutoMapper;
 using LoadLink.LoadMatching.Application.VehicleAttribute.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +9,6 @@ namespace LoadLink.LoadMatching.Api.Controllers
     public class VehicleAttributeController : ControllerBase
     {
         private readonly IUSMemberSearchService _vehicleAttributeService;
-        private readonly IMapper _mapper;
 
         public VehicleAttributeController(IUSMemberSearchService vehicleAttributeService)
         {

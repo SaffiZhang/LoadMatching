@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using AutoMapper;
 using LoadLink.LoadMatching.Application.VehicleType.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +9,6 @@ namespace LoadLink.LoadMatching.Api.Controllers
     public class VehicleTypeController : ControllerBase
     {
         private readonly IVehicleTypeService _vehicleTypeService;
-        private readonly IMapper _mapper;
 
         public VehicleTypeController(IVehicleTypeService vehicleTypeService)
         {

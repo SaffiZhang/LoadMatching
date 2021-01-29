@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using AutoMapper;
 using LoadLink.LoadMatching.Application.VehicleSize.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +9,6 @@ namespace LoadLink.LoadMatching.Api.Controllers
     public class VehicleSizeController : ControllerBase
     {
         private readonly IVehicleAttributeService _vehicleSizeService;
-        private readonly IMapper _mapper;
 
         public VehicleSizeController(IVehicleAttributeService vehicleSizeService)
         {

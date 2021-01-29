@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using AutoMapper;
 using LoadLink.LoadMatching.Application.USMemberSearch.Models.Commands;
 using LoadLink.LoadMatching.Application.USMemberSearch.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +10,6 @@ namespace LoadLink.LoadMatching.Api.Controllers
     public class USMemberSearchController : ControllerBase
     {
         private readonly IUSMemberSearchService _USMemberSearchService;
-        private readonly IMapper _mapper;
 
         public USMemberSearchController(IUSMemberSearchService USMemberSearchService)
         {

@@ -13,12 +13,12 @@ using Xunit;
 
 namespace LoadLink.LoadMatching.Api.Test.USMemberSearch
 {
-    public class USMemberSearchControllerTest
+    public class USCarrierSearchControllerTest
     {
         private readonly IUSMemberSearchService _service;
         private readonly USMemberSearchController _USMemberSearchController;
 
-        public USMemberSearchControllerTest()
+        public USCarrierSearchControllerTest()
         {
             var USMemberSearchProfile = new USMemberSearchProfile();
             var configuration = new MapperConfiguration(config => config.AddProfile(USMemberSearchProfile));
