@@ -46,7 +46,7 @@ namespace LoadLink.LoadMatching.Api.Helpers
 
             // services
             services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
-            
+
             // local services
             services.AddScoped<IUserHelperService, UserHelperService>();
 
@@ -61,24 +61,34 @@ namespace LoadLink.LoadMatching.Api.Helpers
         public static void AddCache(this IServiceCollection services)
         {
             var appSettings = services.BuildServiceProvider().GetRequiredService<IOptionsSnapshot<AppSettings>>();
+            var defaultCacheSetting = appSettings.Value.ServiceCacheSettings.DefaultCacheSetting;
 
-            var memoryCacheOptions = new MemoryCacheOptions();
+            // get default cache settings
+            var absoluteExpiration = defaultCacheSetting.AbsoluteExpiration;
+            var slidingExpiration = defaultCacheSetting.SlidingExpiration;
 
             // clear the cache at midnight so we get fresh data
             TimeSpan expireTimespan = new TimeSpan((DateTime.Now - DateTime.Today).Ticks);
+            if (absoluteExpiration != 0)
+                expireTimespan = new TimeSpan(0, absoluteExpiration, 0);
 
+            // set absolute expiration
             MemoryCacheEntryOptions memoryCacheEntryOptions = new MemoryCacheEntryOptions()
             {
                 AbsoluteExpirationRelativeToNow = expireTimespan, // will expire irrespective whether has been used or not                
             };
 
+            var memoryCache = new MemoryCache(new MemoryCacheOptions());
+            memoryCacheEntryOptions.SetSlidingExpiration(TimeSpan.FromMinutes(slidingExpiration));
+
+            // cached data models
+
+            // userapikey setting
             services.AddSingleton<ICacheRepository<UserApiKeyQuery>, CacheRepository<UserApiKeyQuery>>(sp =>
             {
-                var memoryCache = new MemoryCache(memoryCacheOptions);
-                memoryCacheEntryOptions.SetSlidingExpiration(TimeSpan.FromMinutes(appSettings.Value.ServiceCacheSettings.UserApiKeySetting.SlidingExpiration));
-
                 return new CacheRepository<UserApiKeyQuery>(memoryCache, memoryCacheEntryOptions);
             });
+
 
             // set other data that can be cache here
 
@@ -123,93 +133,84 @@ namespace LoadLink.LoadMatching.Api.Helpers
         public static void AddSwagger(this IServiceCollection services)
         {
             _ = services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Version = "v1",
-                    Title = "LoadLink LoadMatching API",
-                    Description = "LoadMatching swagger API",
-                    Contact = new OpenApiContact
+
+                    options.SwaggerDoc("v1", new OpenApiInfo
                     {
-                        Name = "LoadLink Development Team",
-                        Email = "dev@loadlink.ca",
-                        //Url = new Uri("https://www.loadlink.ca")
-                    },
-                    License = new OpenApiLicense
+                        Version = "v1",
+                        Title = "LoadLink LoadMatching API",
+                        Description = "LoadMatching swagger API",
+                        Contact = new OpenApiContact
+                        {
+                            Name = "LoadLink Development Team",
+                            Email = "dev@loadlink.ca",
+                            //Url = new Uri("https://www.loadlink.ca")
+                        },
+                        License = new OpenApiLicense
+                        {
+                            Name = "Restricted",
+                            //Url = new Uri("https://www.loadlink.ca/privacy")
+                        }
+                    });
+
+                    // add JWT Authentication
+                    var securityScheme = new OpenApiSecurityScheme
                     {
-                        Name = "Restricted",
-                        //Url = new Uri("https://www.loadlink.ca/privacy")
-                    }
-                }
-                );
-
-                options.OperationFilter<SwaggerHelper>();
-
-
-                // Include 'SecurityScheme' to use JWT Authentication
-                var jwtSecurityScheme = new OpenApiSecurityScheme
-                {
-                    Scheme = "bearer",
-                    BearerFormat = "JWT",
-                    Name = "JWT Authentication",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
-                    Description = "Put **_ONLY_** your JWT Bearer token on the textbox below!",
-
-                    Reference = new OpenApiReference
-                    {
-                        Id = JwtBearerDefaults.AuthenticationScheme,
-                        Type = ReferenceType.SecurityScheme
-                    }
-                };
-
-                options.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
-
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                  {
-                    { jwtSecurityScheme, Array.Empty<string>() }
-                  });
-
-            });
+                        Name = "JWT Authentication",
+                        Description = "Enter JWT Bearer token **_only_**",
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.Http,
+                        Scheme = "bearer",
+                        BearerFormat = "JWT",
+                        Reference = new OpenApiReference
+                        {
+                            Id = JwtBearerDefaults.AuthenticationScheme,
+                            Type = ReferenceType.SecurityScheme
+                        }
+                    };
+                    options.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
+                    options.AddSecurityRequirement(new OpenApiSecurityRequirement { { securityScheme, new string[] { } } });
+                });
         }
 
         public static void UseFluentValidationExceptionHandler(this IApplicationBuilder app)
         {
             _ = app.UseExceptionHandler(x =>
-            {
-                x.Run(async context =>
-                {
-                    var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
-                    var exception = errorFeature.Error;
+              {
+                  x.Run(async context =>
+                  {
+                      var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
+                      var exception = errorFeature.Error;
 
-                    context.Response.StatusCode = 400;
-                    context.Response.ContentType = "application/json";
+                      context.Response.StatusCode = 400;
+                      context.Response.ContentType = "application/json";
 
-                    string errorText = null;
+                      string errorText = null;
 
-                    // general exception 
-                    if (!(exception is ValidationException validationException))
-                    {
-                        // TODO: we need to come back to this for properly setting up the business validation property into a more specific error category
-                        var error = new FluentValidation.Results.ValidationFailure("BusinessValidation", exception.Message);
+                      // general exception 
+                      if (!(exception is ValidationException validationException))
+                      {
+                          //TODO: we need to come back to this for properly setting up the business validation property into a more specific error category
+                          var error = new FluentValidation.Results.ValidationFailure("BusinessValidation", exception.Message);
 
-                        // we can call some centralized logging  here
+                          // centralized logging  here
+                          Sentry.SentrySdk.CaptureEvent(new Sentry.SentryEvent(exception));
 
-                        errorText = System.Text.Json.JsonSerializer.Serialize(new List<dynamic> { error });
+                          errorText = System.Text.Json.JsonSerializer.Serialize(new List<dynamic> { error });
 
-                        await context.Response.WriteAsync(errorText, Encoding.UTF8);
+                          await context.Response.WriteAsync(errorText, Encoding.UTF8);
 
-                        return;
-                    }
+                          return;
+                      }
 
-                    // validation exception
-                    var errors = validationException.Errors.Select(err => new { err.PropertyName, err.ErrorMessage });
-                    errorText = System.Text.Json.JsonSerializer.Serialize(errors);
+                      // validation exception
+                      var errors = validationException.Errors.Select(err => new { err.PropertyName, err.ErrorMessage });
+                      errorText = System.Text.Json.JsonSerializer.Serialize(errors);
 
-                    await context.Response.WriteAsync(errorText, Encoding.UTF8);
+                      await context.Response.WriteAsync(errorText, Encoding.UTF8);
 
-                });
-            });
+                  });
+              });
         }
 
         public static NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter()
