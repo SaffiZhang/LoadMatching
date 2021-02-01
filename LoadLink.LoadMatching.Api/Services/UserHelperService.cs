@@ -23,6 +23,7 @@ namespace LoadLink.LoadMatching.Api.Services
     {
         int GetUserId();
         int GetAccountId();
+        string GetCustCd();
         Task<bool> HasValidSubscription(string apiKey);
     }
 
@@ -36,6 +37,19 @@ namespace LoadLink.LoadMatching.Api.Services
         {
             _httpContextAccessor = httpContextAccessor;
             _userSubscriptionService = userSubscriptionService;
+        }
+
+        public string GetCustCd()
+        {
+            if (_httpContextAccessor?.HttpContext?.User?.Identity == null)
+                throw new UnauthorizedAccessException();
+
+            var claimsIdentity = _httpContextAccessor?.HttpContext.User.Identity as ClaimsIdentity;
+
+            if (!claimsIdentity.IsAuthenticated)
+                throw new UnauthorizedAccessException();
+
+            return Convert.ToString(claimsIdentity.FindFirst("cust_cd").Value);
         }
 
         public int GetUserId()
