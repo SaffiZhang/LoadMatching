@@ -36,10 +36,8 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.TemplatePosting
             param.Add("@DestCity", templatePosting.DestCity);
             param.Add("@DestSt", templatePosting.DestSt);
             param.Add("@DestRadius", templatePosting.DestRadius);
-            //param.Add("@VSize", templatePosting.VehicleSize);
-            //param.Add("@VType", templatePosting.VehicleType);
-            param.Add("@VSize", 15);
-            param.Add("@VType", 1);
+            param.Add("@VSize", templatePosting.VehicleSize);
+            param.Add("@VType", templatePosting.VehicleType);
             param.Add("@Comment", templatePosting.Comment);
             param.Add("@PostMode", templatePosting.PostMode);
             param.Add("@ClientRefNum", templatePosting.ClientRefNum);
