@@ -23,7 +23,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.RIRate
             var proc = "usp_GetRIRate";
             var param = new DynamicParameters();
 
-            param.Add("@VType", requestLane.VehicleType);
+            param.Add("@VType", requestLane.VehicleTypeConverted);
             param.Add("@SrceSt", requestLane.SrceSt);
             param.Add("@SrceCity", requestLane.SrceCity);
             param.Add("@DestSt", requestLane.DestSt);

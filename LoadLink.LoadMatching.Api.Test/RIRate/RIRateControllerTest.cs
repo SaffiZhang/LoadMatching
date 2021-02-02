@@ -46,7 +46,7 @@ namespace LoadLink.LoadMatching.Api.Test.RIRate
             // arrange
             var searchRequest = new GetRIRateCommand
             {
-                VehicleType = 1,
+                VehicleType = "R",
                 SrceSt = "QC",
                 SrceCity = "Montreal",
                 DestSt = "ON",
