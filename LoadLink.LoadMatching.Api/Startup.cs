@@ -1,8 +1,10 @@
 using FluentValidation.AspNetCore;
 using LoadLink.LoadMatching.Api.Configuration;
 using LoadLink.LoadMatching.Api.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -33,6 +35,10 @@ namespace LoadLink.LoadMatching.Api
 
             services.AddControllers(setup =>
             {
+                var policy = new AuthorizationPolicyBuilder()
+                     .RequireAuthenticatedUser()
+                     .Build();
+                setup.Filters.Add(new AuthorizeFilter(policy));
                 setup.InputFormatters.Insert(0, StartupHelper.GetJsonPatchInputFormatter());
             }).AddFluentValidation();
 
