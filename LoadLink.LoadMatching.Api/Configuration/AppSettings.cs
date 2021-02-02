@@ -29,10 +29,12 @@ namespace LoadLink.LoadMatching.Api.Configuration
 
     public class ServiceCacheSettings
     {
-        public UserApiKeySetting UserApiKeySetting { get; set; }
+        public CacheSetting DefaultCacheSetting { get; set; }
+        public CacheSetting UserApiKeySetting { get; set; }
+        public CacheSetting ApiDataSetting { get;set;}
     }
 
-    public class UserApiKeySetting
+    public class CacheSetting
     {
         public int AbsoluteExpiration { get; set; }
         public int SlidingExpiration { get; set; }

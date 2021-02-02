@@ -52,7 +52,6 @@ namespace LoadLink.LoadMatching.Api.Test.Setup
             var configuration = new MapperConfiguration(config =>
             {
                 //config.AddProfile(new AccountProfile());
-                // add the rest of the mapping profiles here ... 
             });
 
             return new Mapper(configuration);
