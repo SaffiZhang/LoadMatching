@@ -7,12 +7,13 @@ using LoadLink.LoadMatching.Application.TemplatePosting.Models.Queries;
 using LoadLink.LoadMatching.Application.TemplatePosting.Profiles;
 using LoadLink.LoadMatching.Application.TemplatePosting.Services;
 using LoadLink.LoadMatching.Persistence.Repositories.TemplatePosting;
+using LoadLink.LoadMatching.Persistence.Repositories.UserSubscription;
+using LoadLink.LoadMatching.Application.UserSubscription.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -22,12 +23,14 @@ namespace LoadLink.LoadMatching.Api.Test.TemplatePosting
     {
         private readonly Mock<IHttpContextAccessor> _fakeHttpContextAccessor;
         private readonly IUserHelperService _userHelper;
+        private readonly IUserSubscriptionService _userSubscriptionService;
         private readonly ITemplatePostingService _service;
         private readonly TemplatePostingController _templatePostingController;
+        private readonly string apiKey = "LLB_LiveLead";
 
         public TemplatePostingControllerTest()
         {
-            var userId = 34351;
+            var userId = 34186;
             var custCd = "TCORELL";
 
             _fakeHttpContextAccessor = new FakeContext().MockHttpContext(userId, custCd);
@@ -40,8 +43,13 @@ namespace LoadLink.LoadMatching.Api.Test.TemplatePosting
             var repository = new TemplatePostingRepository(new DatabaseFixture().ConnectionFactory);
             _service = new TemplatePostingService(repository, mapper);
 
+            var userSubscriptionRepository = new UserSubscriptionRepository(new DatabaseFixture().ConnectionFactory);
+            var mockCacheUserApiKey = new DatabaseFixture().MockCacheUserApiKey();
+
+            _userSubscriptionService = new UserSubscriptionService(mockCacheUserApiKey.Object, userSubscriptionRepository);
+
             // controller
-            _userHelper = new UserHelperService(_fakeHttpContextAccessor.Object, null);
+            _userHelper = new UserHelperService(_fakeHttpContextAccessor.Object, _userSubscriptionService);
             _templatePostingController = new TemplatePostingController(_service, _userHelper);
         }
 
@@ -52,7 +60,7 @@ namespace LoadLink.LoadMatching.Api.Test.TemplatePosting
             int templateId = 109999;
 
             //act
-            var actionResult = await _templatePostingController.GetTemplatePostingAsync(templateId);
+            var actionResult = await _templatePostingController.GetTemplatePostingAsync(templateId, apiKey);
 
             //assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);
@@ -66,7 +74,7 @@ namespace LoadLink.LoadMatching.Api.Test.TemplatePosting
         public async Task Get_Template_Posting_List()
         {
             // act
-            var actionResult = await _templatePostingController.GetTemplatePostingListAsync();
+            var actionResult = await _templatePostingController.GetTemplatePostingListAsync(apiKey);
 
             // assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);
@@ -105,7 +113,7 @@ namespace LoadLink.LoadMatching.Api.Test.TemplatePosting
             };
 
             // act
-            var actionResult = await _templatePostingController.CreateTemplatePostingAsync(templatePostingCommand);
+            var actionResult = await _templatePostingController.CreateTemplatePostingAsync(templatePostingCommand, apiKey);
 
             // assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);
@@ -144,7 +152,7 @@ namespace LoadLink.LoadMatching.Api.Test.TemplatePosting
             };
 
             // act
-            var actionResult = await _templatePostingController.UpdateTemplatePostingAsync(templatePostingCommand);
+            var actionResult = await _templatePostingController.UpdateTemplatePostingAsync(templatePostingCommand, apiKey);
 
             // assert  
             Assert.IsType<OkObjectResult>(actionResult);
@@ -157,7 +165,7 @@ namespace LoadLink.LoadMatching.Api.Test.TemplatePosting
             short templateId = 1000;
 
             // act
-            var actionResult = await _templatePostingController.DeleteTemplatePostingAsync(templateId);
+            var actionResult = await _templatePostingController.DeleteTemplatePostingAsync(templateId, apiKey);
 
             // assert
             Assert.IsType<OkResult>(actionResult);

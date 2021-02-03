@@ -2,6 +2,7 @@
 using LoadLink.LoadMatching.Application.TemplatePosting.Models.Commands;
 using LoadLink.LoadMatching.Application.TemplatePosting.Models.Queries;
 using LoadLink.LoadMatching.Application.TemplatePosting.Repository;
+using LoadLink.LoadMatching.Application.Common;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,6 +22,10 @@ namespace LoadLink.LoadMatching.Application.TemplatePosting.Services
 
         public async Task<TemplatePostingCommand> CreateAsync(TemplatePostingCommand templatePosting)
         {
+            templatePosting.VehicleSizeConverted = templatePosting.PostType == "E" ? CommonLM.EquipmentVSizeStringToNum(templatePosting.VehicleSize) : CommonLM.LoadVSizeStringToNum(templatePosting.VehicleSize);
+            templatePosting.VehicleTypeConverted = CommonLM.VTypeStringToNum(templatePosting.VehicleType);
+            templatePosting.PostingAttribConverted = CommonLM.PostingAttributeStringToNum(templatePosting.PostingAttrib);
+
             templatePosting.TemplateID = await _TemplatePostingRepository.CreateAsync(templatePosting);
 
             return templatePosting;
@@ -52,6 +57,10 @@ namespace LoadLink.LoadMatching.Application.TemplatePosting.Services
 
         public async Task<TemplatePostingCommand> UpdateAsync(TemplatePostingCommand templatePosting)
         {
+            templatePosting.VehicleSizeConverted = templatePosting.PostType == "E" ? CommonLM.EquipmentVSizeStringToNum(templatePosting.VehicleSize) : CommonLM.LoadVSizeStringToNum(templatePosting.VehicleSize);
+            templatePosting.VehicleTypeConverted = CommonLM.VTypeStringToNum(templatePosting.VehicleType);
+            templatePosting.PostingAttribConverted = CommonLM.PostingAttributeStringToNum(templatePosting.PostingAttrib);
+
             templatePosting.TemplateID = await _TemplatePostingRepository.UpdateAsync(templatePosting);
 
             return templatePosting;

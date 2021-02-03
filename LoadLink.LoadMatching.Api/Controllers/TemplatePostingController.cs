@@ -3,6 +3,8 @@ using LoadLink.LoadMatching.Application.TemplatePosting.Models.Commands;
 using LoadLink.LoadMatching.Application.TemplatePosting.Services;
 using LoadLink.LoadMatching.Api.Services;
 using Microsoft.AspNetCore.Mvc;
+using LoadLink.LoadMatching.Api.Infrastructure.Http;
+using System;
 
 namespace LoadLink.LoadMatching.Api.Controllers
 {
@@ -22,8 +24,11 @@ namespace LoadLink.LoadMatching.Api.Controllers
         }
 
         [HttpGet("get-template-posting")]
-        public async Task<IActionResult> GetTemplatePostingAsync(int templateId)
+        public async Task<IActionResult> GetTemplatePostingAsync(int templateId, string apiKey)
         {
+            if (!(await _userHelperService.HasValidSubscription(apiKey)))
+                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+
             var custCd = _userHelperService.GetCustCd();
 
             var result = await _templatePostingService.GetAsync(custCd, templateId);
@@ -34,8 +39,11 @@ namespace LoadLink.LoadMatching.Api.Controllers
         }
 
         [HttpGet("get-template-posting-list")]
-        public async Task<IActionResult> GetTemplatePostingListAsync()
+        public async Task<IActionResult> GetTemplatePostingListAsync(string apiKey)
         {
+            if (!(await _userHelperService.HasValidSubscription(apiKey)))
+                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+
             var custCd = _userHelperService.GetCustCd();
 
             var result = await _templatePostingService.GetListAsync(custCd);
@@ -46,8 +54,11 @@ namespace LoadLink.LoadMatching.Api.Controllers
         }
 
         [HttpPost("create-template-posting-list")]
-        public async Task<IActionResult> CreateTemplatePostingAsync([FromBody] TemplatePostingCommand templatePosting)
+        public async Task<IActionResult> CreateTemplatePostingAsync([FromBody] TemplatePostingCommand templatePosting, string apiKey)
         {
+            if (!(await _userHelperService.HasValidSubscription(apiKey)))
+                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+
             if (templatePosting == null)
             {
                 return BadRequest();
@@ -63,8 +74,11 @@ namespace LoadLink.LoadMatching.Api.Controllers
         }
 
         [HttpPut("update-template-posting-list")]
-        public async Task<IActionResult> UpdateTemplatePostingAsync([FromBody] TemplatePostingCommand templatePosting)
+        public async Task<IActionResult> UpdateTemplatePostingAsync([FromBody] TemplatePostingCommand templatePosting, string apiKey)
         {
+            if (!(await _userHelperService.HasValidSubscription(apiKey)))
+                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+
             if (templatePosting == null)
             {
                 return BadRequest();
@@ -80,8 +94,11 @@ namespace LoadLink.LoadMatching.Api.Controllers
         }
 
         [HttpDelete("delete-template-posting-list")]
-        public async Task<IActionResult> DeleteTemplatePostingAsync(int templateId)
+        public async Task<IActionResult> DeleteTemplatePostingAsync(int templateId, string apiKey)
         {
+            if (!(await _userHelperService.HasValidSubscription(apiKey)))
+                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+
             await _templatePostingService.DeleteAsync(templateId, _userHelperService.GetUserId());
 
             return Ok();
