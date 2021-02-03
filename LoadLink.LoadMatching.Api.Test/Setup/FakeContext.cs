@@ -13,8 +13,12 @@ namespace LoadLink.LoadMatching.Api.Test.Setup
         {
 
         }
-
         public Mock<IHttpContextAccessor> MockHttpContext(int userId)
+        {
+            return MockHttpContext(userId, string.Empty);
+        }
+
+        public Mock<IHttpContextAccessor> MockHttpContext(int userId, string custCd)
         {
 
             var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
@@ -23,6 +27,7 @@ namespace LoadLink.LoadMatching.Api.Test.Setup
             var fakeIdentity = new GenericIdentity("User");
             fakeIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userId.ToString()));
             fakeIdentity.AddClaim(new Claim("id", userId.ToString()));
+            fakeIdentity.AddClaim(new Claim("cust_cd", custCd));
             var principal = new GenericPrincipal(fakeIdentity, null);
 
             // set header configuration here
@@ -43,10 +48,6 @@ namespace LoadLink.LoadMatching.Api.Test.Setup
 
             return controllerContext;
         }
-
-
-
-
     }
 }
 

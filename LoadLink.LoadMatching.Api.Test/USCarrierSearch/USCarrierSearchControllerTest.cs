@@ -7,6 +7,8 @@ using LoadLink.LoadMatching.Application.USCarrierSearch.Models.Queries;
 using LoadLink.LoadMatching.Application.USCarrierSearch.Profiles;
 using LoadLink.LoadMatching.Application.USCarrierSearch.Services;
 using LoadLink.LoadMatching.Persistence.Repositories.USCarrierSearch;
+using LoadLink.LoadMatching.Persistence.Repositories.UserSubscription;
+using LoadLink.LoadMatching.Application.UserSubscription.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -20,13 +22,16 @@ namespace LoadLink.LoadMatching.Api.Test.USCarrierSearch
     {
         private readonly Mock<IHttpContextAccessor> _fakeHttpContextAccessor;
         private readonly IUserHelperService _userHelper;
+        private readonly IUserSubscriptionService _userSubscriptionService;
         private readonly IUSCarrierSearchService _service;
         private readonly USCarrierSearchController _USCarrierSearchController;
+        private readonly string apiKey = "LLB_LiveLead";
 
         public USCarrierSearchControllerTest()
         {
-            var userId = 1235;
-            _fakeHttpContextAccessor = new FakeContext().MockHttpContext(userId);
+            var userId = 34186;
+            var custCd = "TCORELL";
+            _fakeHttpContextAccessor = new FakeContext().MockHttpContext(userId, custCd);
 
             var USCarrierSearchProfile = new USCarrierSearchProfile();
             var configuration = new MapperConfiguration(config => config.AddProfile(USCarrierSearchProfile));
@@ -36,8 +41,13 @@ namespace LoadLink.LoadMatching.Api.Test.USCarrierSearch
             var repository = new USCarrierSearchRepository(new DatabaseFixture().ConnectionFactory);
             _service = new USCarrierSearchService(repository, profile);
 
+            var userSubscriptionRepository = new UserSubscriptionRepository(new DatabaseFixture().ConnectionFactory);
+            var mockCacheUserApiKey = new DatabaseFixture().MockCacheUserApiKey();
+
+            _userSubscriptionService = new UserSubscriptionService(mockCacheUserApiKey.Object, userSubscriptionRepository);
+
             // controller
-            _userHelper = new UserHelperService(_fakeHttpContextAccessor.Object, null);
+            _userHelper = new UserHelperService(_fakeHttpContextAccessor.Object, _userSubscriptionService);
             _USCarrierSearchController = new USCarrierSearchController(_service, _userHelper);
         }
 
@@ -61,7 +71,7 @@ namespace LoadLink.LoadMatching.Api.Test.USCarrierSearch
             };
 
             // act
-            var actionResult = await _USCarrierSearchController.GetUSCarrierSearchAsync(searchRequest);
+            var actionResult = await _USCarrierSearchController.GetUSCarrierSearchAsync(searchRequest, apiKey);
 
             // assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);

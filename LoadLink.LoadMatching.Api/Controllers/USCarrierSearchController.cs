@@ -3,6 +3,8 @@ using LoadLink.LoadMatching.Application.USCarrierSearch.Models.Commands;
 using LoadLink.LoadMatching.Application.USCarrierSearch.Services;
 using LoadLink.LoadMatching.Api.Services;
 using Microsoft.AspNetCore.Mvc;
+using LoadLink.LoadMatching.Api.Infrastructure.Http;
+using System;
 
 namespace LoadLink.LoadMatching.Api.Controllers
 {
@@ -22,8 +24,11 @@ namespace LoadLink.LoadMatching.Api.Controllers
         }
 
         [HttpPost("us-carrier-search")]
-        public async Task<IActionResult> GetUSCarrierSearchAsync([FromBody] GetUSCarrierSearchCommand searchRequest)
+        public async Task<IActionResult> GetUSCarrierSearchAsync([FromBody] GetUSCarrierSearchCommand searchRequest, string apiKey)
         {
+            if (!(await _userHelperService.HasValidSubscription(apiKey)))
+                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+
             if (searchRequest == null)
                 return BadRequest();
 
