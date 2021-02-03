@@ -22,11 +22,6 @@ namespace LoadLink.LoadMatching.Application.PDRatio.Services
         {
             requestLane.VehicleTypeConverted = CommonLM.VTypeStringToNum(requestLane.VehicleType);
 
-            if (requestLane.VehicleTypeConverted == 0)
-            {
-                return null;
-            }
-
             var result = await _pdRatioRepository.GetAsync(requestLane);
 
             if (result == null)

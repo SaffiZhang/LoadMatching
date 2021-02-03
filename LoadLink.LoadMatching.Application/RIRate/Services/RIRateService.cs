@@ -22,12 +22,8 @@ namespace LoadLink.LoadMatching.Application.RIRate.Services
         {
             requestLane.VehicleTypeConverted = CommonLM.VTypeStringToNum(requestLane.VehicleType);
 
-            if (requestLane.VehicleTypeConverted == 0)
-            {
-                return null;
-            }
-
             var result = await _riRateRepository.GetAsync(requestLane);
+
             if (result == null)
                 return null;
 
