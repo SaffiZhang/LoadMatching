@@ -13,4 +13,10 @@
     <ProjectReference Include="..\LoadLink.LoadMatching.Domain\LoadLink.LoadMatching.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CarrierSearch\Models\Commands\" />
+    <Folder Include="CarrierSearch\Services\" />
+    <Folder Include="NewFolder\" />
+  </ItemGroup>
+
 </Project>
