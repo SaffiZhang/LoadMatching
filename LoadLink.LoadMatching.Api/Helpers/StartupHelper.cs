@@ -31,7 +31,6 @@ namespace LoadLink.LoadMatching.Api.Helpers
 {
     public static class StartupHelper
     {
-
         public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
             // connections
@@ -40,6 +39,8 @@ namespace LoadLink.LoadMatching.Api.Helpers
 
             // mapping profiles            
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            //TO DO: add the list of repositories and services here after the rewrite   <======
 
             // repositories
             services.AddScoped<IUserSubscriptionRepository, UserSubscriptionRepository>();
