@@ -13,4 +13,9 @@
     <ProjectReference Include="..\LoadLink.LoadMatching.Domain\LoadLink.LoadMatching.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="RepostAll\Models\Queries\" />
+    <Folder Include="RepostAll\Profiles\" />
+  </ItemGroup>
+
 </Project>
