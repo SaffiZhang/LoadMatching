@@ -5,6 +5,11 @@ using LoadLink.LoadMatching.Application.VehicleSize.Models.Queries;
 using LoadLink.LoadMatching.Application.VehicleSize.Profiles;
 using LoadLink.LoadMatching.Application.VehicleSize.Services;
 using LoadLink.LoadMatching.Persistence.Repositories.VehicleSize;
+using LoadLink.LoadMatching.Persistence.Repositories.UserSubscription;
+using LoadLink.LoadMatching.Application.UserSubscription.Services;
+using LoadLink.LoadMatching.Api.Services;
+using Microsoft.AspNetCore.Http;
+using Moq;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,9 +21,17 @@ namespace LoadLink.LoadMatching.Api.Test.VehicleSize
     {
         private readonly IVehicleAttributeService _service;
         private readonly VehicleSizeController _vehicleSizeController;
+        private readonly Mock<IHttpContextAccessor> _fakeHttpContextAccessor;
+        private readonly IUserHelperService _userHelper;
+        private readonly IUserSubscriptionService _userSubscriptionService;
+        private readonly string apiKey = "LLB_LiveLead";
 
         public VehicleAttributeControllerTest()
         {
+            var userId = 34186;
+            var custCd = "TCORELL";
+            _fakeHttpContextAccessor = new FakeContext().MockHttpContext(userId, custCd);
+
             var vehicleSizeProfile = new VehicleAttributeProfile();
             var configuration = new MapperConfiguration(config => config.AddProfile(vehicleSizeProfile));
             var profile = new Mapper(configuration);
@@ -27,8 +40,14 @@ namespace LoadLink.LoadMatching.Api.Test.VehicleSize
             var repository = new VehicleAttributeRepository(new DatabaseFixture().ConnectionFactory);
             _service = new VehicleAttributeService(repository, profile);
 
+            var userSubscriptionRepository = new UserSubscriptionRepository(new DatabaseFixture().ConnectionFactory);
+            var mockCacheUserApiKey = new DatabaseFixture().MockCacheUserApiKey();
+
+            _userSubscriptionService = new UserSubscriptionService(mockCacheUserApiKey.Object, userSubscriptionRepository);
+
             // controller
-            _vehicleSizeController = new VehicleSizeController(_service);
+            _userHelper = new UserHelperService(_fakeHttpContextAccessor.Object, _userSubscriptionService);
+            _vehicleSizeController = new VehicleSizeController(_service, _userHelper);
         }
 
         [Fact]
@@ -36,7 +55,7 @@ namespace LoadLink.LoadMatching.Api.Test.VehicleSize
         {
 
             // act
-            var actionResult = await _vehicleSizeController.GetVehicleSizeListAsync();
+            var actionResult = await _vehicleSizeController.GetVehicleSizeListAsync(apiKey);
 
             // assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);
