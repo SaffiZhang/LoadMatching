@@ -2,6 +2,9 @@
 using LoadLink.LoadMatching.Application.RepostAll.Services;
 using LoadLink.LoadMatching.Api.Services;
 using Microsoft.AspNetCore.Mvc;
+using LoadLink.LoadMatching.Api.Services;
+using LoadLink.LoadMatching.Api.Infrastructure.Http;
+using System;
 
 namespace LoadLink.LoadMatching.Api.Controllers
 {
@@ -20,9 +23,12 @@ namespace LoadLink.LoadMatching.Api.Controllers
         }
 
         [HttpGet("repost-all")]
-        public async Task<IActionResult> RepostAllAsync()
+        public async Task<IActionResult> RepostAllAsync(string apiKey)
         {
-            var custCd = ""; //_userHelperService.GetCustCd();
+            if (!(await _userHelperService.HasValidSubscription(apiKey)))
+                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+
+            var custCd = _userHelperService.GetCustCd();
             var userId = _userHelperService.GetUserId();
 
             var result = await _repostAllService.RepostAllAsync(custCd, userId);
