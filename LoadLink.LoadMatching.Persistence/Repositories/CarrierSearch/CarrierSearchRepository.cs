@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LoadLink.LoadMatching.Persistence.Repositories.CarrierSearch
 {
@@ -18,7 +19,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.CarrierSearch
             _dbConnection = new SqlConnection(connectionFactory.ConnectionString);
         }
 
-        public async IEnumerable<GetCarrierSearchResult> GetCarrierSearch(GetCarrierSearchQuery searchrequest)
+        public async Task<IEnumerable<GetCarrierSearchResult>> GetCarrierSearch(GetCarrierSearchQuery searchrequest)
         {
             var proc = "dbo.usp_GetCarrier";
             var param = new DynamicParameters(searchrequest);
