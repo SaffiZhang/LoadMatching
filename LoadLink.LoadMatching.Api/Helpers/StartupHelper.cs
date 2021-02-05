@@ -26,6 +26,9 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using AutoMapper;
+using LoadLink.LoadMatching.Application.CarrierSearch.Services;
+using LoadLink.LoadMatching.Application.CarrierSearch.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.CarrierSearch;
 
 namespace LoadLink.LoadMatching.Api.Helpers
 {
@@ -44,10 +47,11 @@ namespace LoadLink.LoadMatching.Api.Helpers
 
             // repositories
             services.AddScoped<IUserSubscriptionRepository, UserSubscriptionRepository>();
-
+            services.AddScoped<ICarrierSearchRepository, CarrierSearchRepository>();
+            
             // services
             services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
-
+            services.AddScoped<ICarrierSearchService, CarrierSearchService>();
             // local services
             services.AddScoped<IUserHelperService, UserHelperService>();
 

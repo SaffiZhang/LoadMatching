@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LoadLink.LoadMatching.Application.CarrierSearch.Models.Queries
 {
