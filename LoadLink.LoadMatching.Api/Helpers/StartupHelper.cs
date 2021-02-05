@@ -1,31 +1,34 @@
 ﻿
+using AutoMapper;
+using FluentValidation;
 using LoadLink.LoadMatching.Api.Configuration;
 using LoadLink.LoadMatching.Api.Services;
 using LoadLink.LoadMatching.Application.Caching;
-using LoadLink.LoadMatching.Application.UserSubscription.Repository;
+using LoadLink.LoadMatching.Application.City.Repository;
+using LoadLink.LoadMatching.Application.City.Services;
 using LoadLink.LoadMatching.Application.UserSubscription.Models.Queries;
+using LoadLink.LoadMatching.Application.UserSubscription.Repository;
 using LoadLink.LoadMatching.Application.UserSubscription.Services;
+using LoadLink.LoadMatching.Infrastructure.Caching;
 using LoadLink.LoadMatching.Persistence.Data;
+using LoadLink.LoadMatching.Persistence.Repositories.City;
 using LoadLink.LoadMatching.Persistence.Repositories.UserSubscription;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using ValidationException = FluentValidation.ValidationException;
-using System.Linq;
-using FluentValidation;
-using LoadLink.LoadMatching.Infrastructure.Caching;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using AutoMapper;
 
 namespace LoadLink.LoadMatching.Api.Helpers
 {
@@ -44,9 +47,10 @@ namespace LoadLink.LoadMatching.Api.Helpers
 
             // repositories
             services.AddScoped<IUserSubscriptionRepository, UserSubscriptionRepository>();
-
+            services.AddScoped<ICityRepository, CityRepository>();
             // services
             services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
+            services.AddScoped<ICityService, CityService>();
 
             // local services
             services.AddScoped<IUserHelperService, UserHelperService>();
