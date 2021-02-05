@@ -144,7 +144,7 @@ namespace LoadLink.LoadMatching.Application.Common
                     else
                     {
                         tempConvertVsize = "Q";
-                    };
+                    }
                     break;
                 case 2:
                     tempConvertVsize = "H";
