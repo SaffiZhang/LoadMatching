@@ -41,7 +41,7 @@ namespace LoadLink.LoadMatching.Api.Test.AssignedEquipment
         }
 
         [Fact]
-        public async Task Get_UserPreference()
+        public async Task Get_AssignedEquipment()
         {
             //arrange
             int token = 29913706;

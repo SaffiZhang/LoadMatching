@@ -1,35 +1,43 @@
 ﻿
+using AutoMapper;
+using FluentValidation;
 using LoadLink.LoadMatching.Api.Configuration;
 using LoadLink.LoadMatching.Api.Services;
+using LoadLink.LoadMatching.Application.AssignedEquipment.Repository;
+using LoadLink.LoadMatching.Application.AssignedEquipment.Services;
+using LoadLink.LoadMatching.Application.AssignedLoad.Repository;
+using LoadLink.LoadMatching.Application.AssignedLoad.Services;
 using LoadLink.LoadMatching.Application.Caching;
-using LoadLink.LoadMatching.Application.UserSubscription.Repository;
+using LoadLink.LoadMatching.Application.City.Repository;
+using LoadLink.LoadMatching.Application.City.Services;
 using LoadLink.LoadMatching.Application.UserSubscription.Models.Queries;
+using LoadLink.LoadMatching.Application.UserSubscription.Repository;
 using LoadLink.LoadMatching.Application.UserSubscription.Services;
+using LoadLink.LoadMatching.Infrastructure.Caching;
 using LoadLink.LoadMatching.Persistence.Data;
+using LoadLink.LoadMatching.Persistence.Repositories.AssignedEquipment;
+using LoadLink.LoadMatching.Persistence.Repositories.AssignedLoad;
+using LoadLink.LoadMatching.Persistence.Repositories.City;
 using LoadLink.LoadMatching.Persistence.Repositories.UserSubscription;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using ValidationException = FluentValidation.ValidationException;
-using System.Linq;
-using FluentValidation;
-using LoadLink.LoadMatching.Infrastructure.Caching;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using AutoMapper;
 using LoadLink.LoadMatching.Application.CarrierSearch.Services;
 using LoadLink.LoadMatching.Application.CarrierSearch.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.CarrierSearch;
-
 namespace LoadLink.LoadMatching.Api.Helpers
 {
     public static class StartupHelper
@@ -43,14 +51,19 @@ namespace LoadLink.LoadMatching.Api.Helpers
             // mapping profiles            
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            //TO DO: add the list of repositories and services here after the rewrite   <======
-
             // repositories
             services.AddScoped<IUserSubscriptionRepository, UserSubscriptionRepository>();
+            services.AddScoped<ICityRepository, CityRepository>();
+            services.AddScoped<IAssignedEquipmentRepository, AssignedEquipmentRepository>();
+            services.AddScoped<IAssignedLoadRepository, AssignedLoadRepository>();
             services.AddScoped<ICarrierSearchRepository, CarrierSearchRepository>();
             
             // services
             services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
+            services.AddScoped<ICityService, CityService>();
+            services.AddScoped<IAssignedEquipmentService, AssignedEquipmentService>();
+            services.AddScoped<IAssignedLoadService, AssignedLoadService>();
+
             services.AddScoped<ICarrierSearchService, CarrierSearchService>();
             // local services
             services.AddScoped<IUserHelperService, UserHelperService>();
