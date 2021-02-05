@@ -18,4 +18,10 @@
     <Folder Include="RepostAll\Profiles\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CarrierSearch\Models\Commands\" />
+    <Folder Include="CarrierSearch\Services\" />
+    <Folder Include="NewFolder\" />
+  </ItemGroup>
+
 </Project>
