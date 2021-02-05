@@ -5,12 +5,9 @@ using LoadLink.LoadMatching.Application.RepostAll.Services;
 using LoadLink.LoadMatching.Persistence.Repositories.RepostAll;
 using LoadLink.LoadMatching.Persistence.Repositories.UserSubscription;
 using LoadLink.LoadMatching.Application.UserSubscription.Services;
-using LoadLink.LoadMatching.Api.Services;
 using Microsoft.AspNetCore.Http;
 using Moq;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 using System.Threading.Tasks;
 using Xunit;
 
