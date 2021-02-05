@@ -26,6 +26,12 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using AutoMapper;
+using LoadLink.LoadMatching.Application.AssignedEquipment.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.AssignedEquipment;
+using LoadLink.LoadMatching.Application.AssignedEquipment.Services;
+using LoadLink.LoadMatching.Application.AssignedLoad.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.AssignedLoad;
+using LoadLink.LoadMatching.Application.AssignedLoad.Services;
 
 namespace LoadLink.LoadMatching.Api.Helpers
 {
@@ -40,13 +46,15 @@ namespace LoadLink.LoadMatching.Api.Helpers
             // mapping profiles            
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            //TO DO: add the list of repositories and services here after the rewrite   <======
-
             // repositories
             services.AddScoped<IUserSubscriptionRepository, UserSubscriptionRepository>();
+            services.AddScoped<IAssignedEquipmentRepository, AssignedEquipmentRepository>();
+            services.AddScoped<IAssignedLoadRepository, AssignedLoadRepository>();
 
             // services
             services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
+            services.AddScoped<IAssignedEquipmentService, AssignedEquipmentService>();
+            services.AddScoped<IAssignedLoadService, AssignedLoadService>();
 
             // local services
             services.AddScoped<IUserHelperService, UserHelperService>();
