@@ -19,7 +19,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
         }
 
         [HttpGet("{city}/{sortType}")]
-        public async Task<IActionResult> Get(string city, short sortType)
+        public async Task<IActionResult> GetAsync(string city, short sortType)
         {
             var result = await _cityService.GetListAsync(city, sortType);
             if (result == null)

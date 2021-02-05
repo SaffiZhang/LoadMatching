@@ -40,7 +40,7 @@ namespace LoadLink.LoadMatching.Api.Test.City
             short sortType = 1;
 
             // act
-            var actionResult = await _cityController.Get(city, sortType);
+            var actionResult = await _cityController.GetAsync(city, sortType);
 
             // assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);
