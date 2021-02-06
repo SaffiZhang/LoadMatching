@@ -24,13 +24,20 @@ namespace LoadLink.LoadMatching.Api.Controllers
         }
 
         [HttpPost("us-carrier-search")]
-        public async Task<IActionResult> GetUSCarrierSearchAsync([FromBody] GetUSCarrierSearchCommand searchRequest, string apiKey)
+        public async Task<IActionResult> GetUSCarrierSearchAsync([FromBody] GetUSCarrierSearchCommand searchRequest, string apiKey, string EQFAPIKey, string TCCAPIKey, string TCUSAPIKey)
         {
-            if (!(await _userHelperService.HasValidSubscription(apiKey)))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
-
             if (searchRequest == null)
                 return BadRequest();
+
+            var getUserApiKeys = await _userHelperService.GetUserApiKeys();
+
+            // check carrier search feature access
+            if (!getUserApiKeys.Contains(apiKey))
+                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+
+            _USCarrierSearchService.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
+            _USCarrierSearchService.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
+            _USCarrierSearchService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
             searchRequest.UserId = _userHelperService.GetUserId();
             
