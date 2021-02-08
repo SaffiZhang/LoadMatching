@@ -21,12 +21,9 @@ namespace LoadLink.LoadMatching.Api.Controllers
             _userHelperService = userHelperService;
         }
 
-        [HttpGet("get-vehicle-Attribute-list")]
-        public async Task<IActionResult> GetVehicleAttributeListAsync(string apiKey)
+        [HttpGet]
+        public async Task<IActionResult> GetListAsync()
         {
-            if (!(await _userHelperService.HasValidSubscription(apiKey)))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
-
             var result = await _vehicleAttributeService.GetListAsync();
             if (result == null)
                 return NoContent();

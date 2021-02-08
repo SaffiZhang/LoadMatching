@@ -21,10 +21,10 @@ namespace LoadLink.LoadMatching.Api.Controllers
             _userHelperService = userHelperService;
         }
 
-        [HttpPost("get-ri-rate")]
-        public async Task<IActionResult> GetRIRateAsync([FromBody] GetRIRateCommand requestLane, string apiKey)
+        [HttpPost("{APIkey}")]
+        public async Task<IActionResult> GetRIRateAsync([FromBody] GetRIRateCommand requestLane, string APIkey)
         {
-            if (!(await _userHelperService.HasValidSubscription(apiKey)))
+            if (!(await _userHelperService.HasValidSubscription(APIkey)))
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
             var result = await _riRateService.GetAsync(requestLane);

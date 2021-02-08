@@ -20,7 +20,6 @@ namespace LoadLink.LoadMatching.Api.Test.RepostAll
         private readonly IRepostAllService _service;
         private readonly RepostAllController _repostAllController;
         private readonly IUserSubscriptionService _userSubscriptionService;
-        private readonly string apiKey = "LLB_LiveLead";
 
         public RepostAllControllerTest()
         {
@@ -45,9 +44,8 @@ namespace LoadLink.LoadMatching.Api.Test.RepostAll
         [Fact]
         public async Task RepostAllAsync()
         {
-
             // act
-            var actionResult = await _repostAllController.RepostAllAsync(apiKey);
+            var actionResult = await _repostAllController.RepostAllAsync();
 
             // assert
             Assert.IsType<OkObjectResult>(actionResult);
