@@ -25,12 +25,17 @@
     <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="2.1.3" />
     <PackageReference Include="Serilog.Sinks.Http" Version="7.2.0" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.17.0.26580">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.6.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="5.6.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LoadLink.LoadMatching.Application\LoadLink.LoadMatching.Application.csproj" />
     <ProjectReference Include="..\LoadLink.LoadMatching.Infrastructure\LoadLink.LoadMatching.Infrastructure.csproj" />
     <ProjectReference Include="..\LoadLink.LoadMatching.Persistence\LoadLink.LoadMatching.Persistence.csproj" />
   </ItemGroup>

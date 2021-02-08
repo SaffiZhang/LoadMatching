@@ -12,8 +12,10 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using LoadLink.LoadMatching.Application.UserSubscription.Models.Queries;
 using LoadLink.LoadMatching.Application.UserSubscription.Services;
 using Microsoft.AspNetCore.Http;
 
@@ -25,6 +27,8 @@ namespace LoadLink.LoadMatching.Api.Services
         int GetAccountId();
         string GetCustCd();
         Task<bool> HasValidSubscription(string apiKey);
+        Task<IEnumerable<string>> GetUserApiKeys();
+
     }
 
     public class UserHelperService : IUserHelperService
@@ -88,5 +92,16 @@ namespace LoadLink.LoadMatching.Api.Services
 
             return true;
         }
+
+        public async Task<IEnumerable<string>> GetUserApiKeys() {
+
+            var userApiKeys = await _userSubscriptionService.GetUserApiKeys(GetUserId());
+            if (userApiKeys == null)
+                return null;
+
+            return userApiKeys.ApiKeys;
+
+        }
+       
     }
 }
