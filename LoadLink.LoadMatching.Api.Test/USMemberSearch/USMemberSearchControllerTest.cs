@@ -18,7 +18,7 @@ using Xunit;
 
 namespace LoadLink.LoadMatching.Api.Test.USMemberSearch
 {
-    public class USCarrierSearchControllerTest
+    public class USMemberSearchControllerTest
     {
         private readonly IUSMemberSearchService _service;
         private readonly USMemberSearchController _USMemberSearchController;
@@ -26,7 +26,7 @@ namespace LoadLink.LoadMatching.Api.Test.USMemberSearch
         private readonly IUserHelperService _userHelper;
         private readonly IUserSubscriptionService _userSubscriptionService;
 
-        public USCarrierSearchControllerTest()
+        public USMemberSearchControllerTest()
         {
             var userId = 34186;
             var custCd = "TCORELL";
