@@ -14,9 +14,9 @@ namespace LoadLink.LoadMatching.Application.CarrierSearch.Services
         private readonly ICarrierSearchRepository _carrierSearcRepository;
         private readonly IMapper _mapper;
 
-        public bool hasEQSubscription { get; set; } = false;
-        public bool hasTCSubscription { get; set; } = false;
-        public bool hasTCUSSubscription { get; set; } = false;
+        public bool HasEQSubscription { get; set; } = false;
+        public bool HasTCSubscription { get; set; } = false;
+        public bool HasTCUSSubscription { get; set; } = false;
 
 
         public CarrierSearchService(ICarrierSearchRepository carrierSearchRepository, IMapper mapper)
@@ -56,9 +56,9 @@ namespace LoadLink.LoadMatching.Application.CarrierSearch.Services
             var resultList = result.ToList();
             resultList.ForEach(
                 row => {
-                    row.Equifax = hasEQSubscription ? row.Equifax : -1;
-                    row.TCC = hasTCSubscription ? row.TCC : -1;
-                    row.TCUS = hasTCUSSubscription ? row.TCUS : -1;
+                    row.Equifax = HasEQSubscription ? row.Equifax : -1;
+                    row.TCC = HasTCSubscription ? row.TCC : -1;
+                    row.TCUS = HasTCUSSubscription ? row.TCUS : -1;
                      });
            
             return _mapper.Map<IEnumerable<GetCarrierSearchResult>>(resultList);
