@@ -8,7 +8,6 @@ namespace LoadLink.LoadMatching.Application.CarrierSearch.Repository
 {
     public interface ICarrierSearchRepository
     {
-        Task<IEnumerable<GetCarrierSearchResult>> GetCarrierSearch(GetCarrierSearchQuery searchrequest);
         Task<IEnumerable<UspGetCarrierResult>> GetListAsync(GetCarrierSearchQuery searchrequest);
     }
 }
