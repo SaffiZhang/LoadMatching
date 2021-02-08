@@ -6,6 +6,8 @@ using LoadLink.LoadMatching.Persistence.Data;
 using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using System;
+using Microsoft.Extensions.Options;
+using LoadLink.LoadMatching.Persistence.Configuration;
 
 namespace LoadLink.LoadMatching.Api.Test.Setup
 {
@@ -51,10 +53,20 @@ namespace LoadLink.LoadMatching.Api.Test.Setup
 
             var configuration = new MapperConfiguration(config =>
             {
-                //config.AddProfile(new AccountProfile());
             });
 
             return new Mapper(configuration);
+        }
+
+        public IOptions<AppSettings> AppSettings()
+        {
+            var appSettings = new AppSettings();
+
+            appSettings.LeadsCap = 500;
+            appSettings.MileageProvider = "P";
+
+            var options = Options.Create(appSettings);
+            return options;
         }
     }
 }
