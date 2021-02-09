@@ -41,6 +41,9 @@ using LoadLink.LoadMatching.Persistence.Repositories.CarrierSearch;
 using LoadLink.LoadMatching.Application.EquipmentLead.Services;
 using LoadLink.LoadMatching.Application.EquipmentLead.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.EquipmentLead;
+using LoadLink.LoadMatching.Application.DATLoadLead.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.DatLoadLead;
+using LoadLink.LoadMatching.Application.DATLoadLead.Services;
 
 namespace LoadLink.LoadMatching.Api.Helpers
 {
@@ -62,6 +65,7 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<IAssignedLoadRepository, AssignedLoadRepository>();
             services.AddScoped<ICarrierSearchRepository, CarrierSearchRepository>();
             services.AddScoped<IEquipmentLeadRepository, EquipmentLeadRepository>();
+            services.AddScoped<IDatLoadLeadRepository, DatLoadLeadRepository>();
 
             // services
             services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
@@ -70,7 +74,8 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<IAssignedLoadService, AssignedLoadService>();
             services.AddScoped<ICarrierSearchService, CarrierSearchService>();
             services.AddScoped<IEquipmentLeadService, EquipmentLeadService>();
-            
+            services.AddScoped<IDatLoadLeadService, DatLoadLeadService>();
+
             // local services
             services.AddScoped<IUserHelperService, UserHelperService>();
 
