@@ -20,7 +20,9 @@ namespace LoadLink.LoadMatching.Api.Configuration
         public ServiceCacheSettings ServiceCacheSettings { get; set; }
         public IdentityServer IdentityServer { get; set; }
         public string[] AllowedCorsOrigin { get; set; }
+        public string MileageProvider { get; set; }
     }
+
 
     public class ConnectionStrings
     {

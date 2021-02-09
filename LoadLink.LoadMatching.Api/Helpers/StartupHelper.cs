@@ -29,6 +29,9 @@ using AutoMapper;
 using LoadLink.LoadMatching.Application.CarrierSearch.Services;
 using LoadLink.LoadMatching.Application.CarrierSearch.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.CarrierSearch;
+using LoadLink.LoadMatching.Persistence.Repositories.EquipmentPosting;
+using LoadLink.LoadMatching.Application.EquipmentPosting.Repository;
+using LoadLink.LoadMatching.Application.EquipmentPosting.Services;
 
 namespace LoadLink.LoadMatching.Api.Helpers
 {
@@ -48,10 +51,13 @@ namespace LoadLink.LoadMatching.Api.Helpers
             // repositories
             services.AddScoped<IUserSubscriptionRepository, UserSubscriptionRepository>();
             services.AddScoped<ICarrierSearchRepository, CarrierSearchRepository>();
+            services.AddScoped<IEquipmentPostingRepository, EquipmentPostingRepository>();
             
             // services
             services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
             services.AddScoped<ICarrierSearchService, CarrierSearchService>();
+            services.AddScoped<IEquipmentPostingService, EquipmentPostingService>();
+
             // local services
             services.AddScoped<IUserHelperService, UserHelperService>();
 
