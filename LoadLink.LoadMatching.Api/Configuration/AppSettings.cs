@@ -20,6 +20,7 @@ namespace LoadLink.LoadMatching.Api.Configuration
         public ServiceCacheSettings ServiceCacheSettings { get; set; }
         public IdentityServer IdentityServer { get; set; }
         public string[] AllowedCorsOrigin { get; set; }
+        public AppSetting AppSetting { get; set; }
     }
 
     public class ConnectionStrings
@@ -43,5 +44,11 @@ namespace LoadLink.LoadMatching.Api.Configuration
     public class IdentityServer
     {
         public string AuthorityUrl { get; set; }
+    }
+
+    public class AppSetting
+    {
+        public int LeadsCap { get; set; }
+        public string MileageProvider { get; set; }
     }
 }
