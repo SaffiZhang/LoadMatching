@@ -6,8 +6,8 @@ namespace LoadLink.LoadMatching.Application.LoadLead.Repository
 {
     public interface ILoadLeadRepository
     {
-        Task<IEnumerable<UspGetLoadLeadResult>> GetByPostingAsync(int postingID, string custCd, string mileageProvider);
-        Task<IEnumerable<UspGetLoadLeadResult>> GetListAsync(string custCd, string mileageProvider);
-        Task<IEnumerable<UspGetLoadLeadResult>> GetByPosting_CombinedAsync(int postingID, string custCd, string mileageProvider, bool datStatus, int leadsCap);
+        Task<IEnumerable<UspGetLoadLeadResult>> GetByPostingAsync(string custCd, int postingID);
+        Task<IEnumerable<UspGetLoadLeadResult>> GetListAsync(string custCd);
+        Task<IEnumerable<UspGetLoadLeadResult>> GetByPosting_CombinedAsync(string custCd, int postingID, bool datStatus);
     }
 }

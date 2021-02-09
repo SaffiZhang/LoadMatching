@@ -5,11 +5,13 @@ using LoadLink.LoadMatching.Api.Test.Setup;
 using LoadLink.LoadMatching.Application.LoadLead.Models.Queries;
 using LoadLink.LoadMatching.Application.LoadLead.Profiles;
 using LoadLink.LoadMatching.Application.LoadLead.Services;
+using LoadLink.LoadMatching.Persistence.Configuration;
 using LoadLink.LoadMatching.Persistence.Repositories.LoadLead;
 using LoadLink.LoadMatching.Persistence.Repositories.UserSubscription;
 using LoadLink.LoadMatching.Application.UserSubscription.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Moq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -24,19 +26,23 @@ namespace LoadLink.LoadMatching.Api.Test.LoadLead
         private readonly IUserSubscriptionService _userSubscriptionService;
         private readonly ILoadLeadService _service;
         private readonly LoadLeadController _loadLeadController;
+        private readonly IOptions<AppSettings> _settings;
 
         public LoadLeadControllerTest()
         {
             var userId = 34186;
             var custCd = "TCORELL";
             _fakeHttpContextAccessor = new FakeContext().MockHttpContext(userId, custCd);
+            
+            //AppSettings
+            _settings = new DatabaseFixture().AppSettings();
 
             var LoadLeadProfile = new LoadLeadProfile();
             var configuration = new MapperConfiguration(config => config.AddProfile(LoadLeadProfile));
             var profile = new Mapper(configuration);
 
             // integration            
-            var repository = new LoadLeadRepository(new DatabaseFixture().ConnectionFactory);
+            var repository = new LoadLeadRepository(new DatabaseFixture().ConnectionFactory, _settings);
             _service = new LoadLeadService(repository, profile);
 
             var userSubscriptionRepository = new UserSubscriptionRepository(new DatabaseFixture().ConnectionFactory);

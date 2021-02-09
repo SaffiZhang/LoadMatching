@@ -2,7 +2,6 @@
 using LoadLink.LoadMatching.Application.LoadLead.Services;
 using LoadLink.LoadMatching.Api.Services;
 using Microsoft.AspNetCore.Mvc;
-using LoadLink.LoadMatching.Api.Infrastructure.Http;
 using System;
 using System.Linq;
 
@@ -23,11 +22,10 @@ namespace LoadLink.LoadMatching.Api.Controllers
             _userHelperService = userHelperService;
         }
 
-        [HttpGet("get-list-async")]
+        [HttpGet("{QPAPIKey}/{EQFAPIKey}/{TCUSAPIKey}/{TCCAPIKey}")]
         public async Task<IActionResult> GetListsAsync(string QPAPIKey, string EQFAPIKey, string TCUSAPIKey, string TCCAPIKey)
         {
             var custCd = _userHelperService.GetCustCd();
-            var mileageProvider = "P";
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             _loadLeadService.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
@@ -35,14 +33,15 @@ namespace LoadLink.LoadMatching.Api.Controllers
             _loadLeadService.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
             _loadLeadService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
-            var result = await _loadLeadService.GetListAsync(custCd, mileageProvider);
+            var result = await _loadLeadService.GetListAsync(custCd);
+
             if (result == null)
                 return NoContent();
 
             return Ok(result);
         }
 
-        [HttpGet("get-by-posting-async")]
+        [HttpGet("{token}/{QPAPIKey}/{EQFAPIKey}/{TCUSAPIKey}/{TCCAPIKey}")]
         public async Task<IActionResult> GetByPostingAsync(int token, string QPAPIKey, string EQFAPIKey, string TCUSAPIKey, string TCCAPIKey)
         {
             if (token <= 0)
@@ -51,7 +50,6 @@ namespace LoadLink.LoadMatching.Api.Controllers
             }
 
             var custCd = _userHelperService.GetCustCd();
-            var mileageProvider = "P";
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             _loadLeadService.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
@@ -59,14 +57,15 @@ namespace LoadLink.LoadMatching.Api.Controllers
             _loadLeadService.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
             _loadLeadService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
-            var result = await _loadLeadService.GetByPostingAsync(token, custCd, mileageProvider);
+            var result = await _loadLeadService.GetByPostingAsync(custCd, token);
+
             if (result == null)
                 return NoContent();
 
             return Ok(result);
         }
 
-        [HttpGet("get-combined-async")]
+        [HttpGet("{token}/{DATAPIkey}/{QPAPIKey}/{EQFAPIKey}/{TCUSAPIKey}/{TCCAPIKey}")]
         public async Task<IActionResult> GetCombinedAsync(int token, string DATAPIkey, string QPAPIKey,
                                     string EQFAPIKey, string TCUSAPIKey, string TCCAPIKey)
         {
@@ -76,8 +75,6 @@ namespace LoadLink.LoadMatching.Api.Controllers
             }
 
             var custCd = _userHelperService.GetCustCd();
-            var mileageProvider = "P";
-            var leadsCap = 500;
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             _loadLeadService.HasDATStatusEnabled = getUserApiKeys.Contains(DATAPIkey);
@@ -86,7 +83,8 @@ namespace LoadLink.LoadMatching.Api.Controllers
             _loadLeadService.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
             _loadLeadService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
-            var result = await _loadLeadService.GetByPosting_CombinedAsync(token, custCd, mileageProvider, leadsCap);
+            var result = await _loadLeadService.GetByPosting_CombinedAsync(custCd, token);
+
             if (result == null)
                 return NoContent();
 

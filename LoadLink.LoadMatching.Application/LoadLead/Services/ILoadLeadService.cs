@@ -10,8 +10,8 @@ namespace LoadLink.LoadMatching.Application.LoadLead.Services
         bool HasEQSubscription { get; set; }
         bool HasTCSubscription { get; set; }
         bool HasTCUSSubscription { get; set; }
-        Task<IEnumerable<GetLoadLeadQuery>> GetByPostingAsync(int postingID, string custCd, string mileageProvider);
-        Task<IEnumerable<GetLoadLeadQuery>> GetListAsync(string custCd, string mileageProvider);
-        Task<IEnumerable<GetLoadLeadQuery>> GetByPosting_CombinedAsync(int postingID, string custCd, string mileageProvider, int leadsCap);
+        Task<IEnumerable<GetLoadLeadQuery>> GetByPostingAsync(string custCd, int postingID);
+        Task<IEnumerable<GetLoadLeadQuery>> GetListAsync(string custCd);
+        Task<IEnumerable<GetLoadLeadQuery>> GetByPosting_CombinedAsync(string custCd, int postingID);
     }
 }

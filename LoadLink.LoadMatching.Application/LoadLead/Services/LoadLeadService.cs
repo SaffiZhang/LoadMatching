@@ -24,9 +24,9 @@ namespace LoadLink.LoadMatching.Application.LoadLead.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<GetLoadLeadQuery>> GetByPostingAsync(int postingID, string custCd, string mileageProvider)
+        public async Task<IEnumerable<GetLoadLeadQuery>> GetByPostingAsync(string custCd, int postingID)
         {
-            var result = await _LoadLeadRepository.GetByPostingAsync(postingID, custCd, mileageProvider);
+            var result = await _LoadLeadRepository.GetByPostingAsync(custCd, postingID);
             if (!result.Any())
                 return null;
 
@@ -44,9 +44,9 @@ namespace LoadLink.LoadMatching.Application.LoadLead.Services
             return _mapper.Map<IEnumerable<GetLoadLeadQuery>>(result);
         }
 
-        public async Task<IEnumerable<GetLoadLeadQuery>> GetListAsync(string custCd, string mileageProvider)
+        public async Task<IEnumerable<GetLoadLeadQuery>> GetListAsync(string custCd)
         {
-            var result = await _LoadLeadRepository.GetListAsync(custCd, mileageProvider);
+            var result = await _LoadLeadRepository.GetListAsync(custCd);
             if (!result.Any())
                 return null;
 
@@ -64,9 +64,9 @@ namespace LoadLink.LoadMatching.Application.LoadLead.Services
             return _mapper.Map<IEnumerable<GetLoadLeadQuery>>(result);
         }
 
-        public async Task<IEnumerable<GetLoadLeadQuery>> GetByPosting_CombinedAsync(int postingID, string custCd, string mileageProvider, int leadsCap)
+        public async Task<IEnumerable<GetLoadLeadQuery>> GetByPosting_CombinedAsync(string custCd, int postingID)
         {
-            var result = await _LoadLeadRepository.GetByPosting_CombinedAsync(postingID, custCd, mileageProvider, HasDATStatusEnabled, leadsCap);
+            var result = await _LoadLeadRepository.GetByPosting_CombinedAsync(custCd, postingID, HasDATStatusEnabled);
             if (!result.Any())
                 return null;
 
