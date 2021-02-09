@@ -17,28 +17,27 @@ using Xunit;
 
 namespace LoadLink.LoadMatching.Api.Test.VehicleSize
 {
-    public class VehicleAttributeControllerTest
+    public class VehicleSizeControllerTest
     {
-        private readonly IVehicleAttributeService _service;
+        private readonly IVehicleSizeService _service;
         private readonly VehicleSizeController _vehicleSizeController;
         private readonly Mock<IHttpContextAccessor> _fakeHttpContextAccessor;
         private readonly IUserHelperService _userHelper;
         private readonly IUserSubscriptionService _userSubscriptionService;
-        private readonly string apiKey = "LLB_LiveLead";
-
-        public VehicleAttributeControllerTest()
+        
+        public VehicleSizeControllerTest()
         {
             var userId = 34186;
             var custCd = "TCORELL";
             _fakeHttpContextAccessor = new FakeContext().MockHttpContext(userId, custCd);
 
-            var vehicleSizeProfile = new VehicleAttributeProfile();
+            var vehicleSizeProfile = new VehicleSizeProfile();
             var configuration = new MapperConfiguration(config => config.AddProfile(vehicleSizeProfile));
             var profile = new Mapper(configuration);
 
             // integration            
-            var repository = new VehicleAttributeRepository(new DatabaseFixture().ConnectionFactory);
-            _service = new VehicleAttributeService(repository, profile);
+            var repository = new VehicleSizeRepository(new DatabaseFixture().ConnectionFactory);
+            _service = new VehicleSizeService(repository, profile);
 
             var userSubscriptionRepository = new UserSubscriptionRepository(new DatabaseFixture().ConnectionFactory);
             var mockCacheUserApiKey = new DatabaseFixture().MockCacheUserApiKey();
@@ -51,15 +50,29 @@ namespace LoadLink.LoadMatching.Api.Test.VehicleSize
         }
 
         [Fact]
-        public async Task GetVehicleSizeListAsync()
+        public async Task GetListAsync()
         {
 
             // act
-            var actionResult = await _vehicleSizeController.GetVehicleSizeListAsync(apiKey);
+            var actionResult = await _vehicleSizeController.GetListAsync();
 
             // assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);
-            var model = Assert.IsAssignableFrom<IEnumerable<GetVehicleAttributeQuery>>(viewResult.Value);
+            var model = Assert.IsAssignableFrom<IEnumerable<GetVehicleSizeQuery>>(viewResult.Value);
+            Assert.NotNull(model);
+        }
+
+        [Fact]
+        public async Task GetListByPostTypeAsync()
+        {
+            var postType = "E";
+
+            // act
+            var actionResult = await _vehicleSizeController.GetListByPostTypeAsync(postType);
+
+            // assert
+            var viewResult = Assert.IsType<OkObjectResult>(actionResult);
+            var model = Assert.IsAssignableFrom<IEnumerable<GetVehicleSizeQuery>>(viewResult.Value);
             Assert.NotNull(model);
         }
     }

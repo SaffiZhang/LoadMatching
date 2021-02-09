@@ -25,8 +25,7 @@ namespace LoadLink.LoadMatching.Api.Test.USCarrierSearch
         private readonly IUserSubscriptionService _userSubscriptionService;
         private readonly IUSCarrierSearchService _service;
         private readonly USCarrierSearchController _USCarrierSearchController;
-        private readonly string apiKey = "LLB_LiveLead";
-
+        
         public USCarrierSearchControllerTest()
         {
             var userId = 34186;
@@ -55,6 +54,11 @@ namespace LoadLink.LoadMatching.Api.Test.USCarrierSearch
         public async Task GetUSCarrierSearchListAsync()
         {
             // arrange
+            var apiKey = "LLB_LiveLead";
+            var LLB_EQF = "LLB_EQF";
+            var LLB_TCC = "LLB_TCC";
+            var LLB_TCUS = "LLB_TCUS";
+
             var searchRequest = new GetUSCarrierSearchCommand
             {
                 UserId = 1235,
@@ -71,7 +75,7 @@ namespace LoadLink.LoadMatching.Api.Test.USCarrierSearch
             };
 
             // act
-            var actionResult = await _USCarrierSearchController.GetUSCarrierSearchAsync(searchRequest, apiKey);
+            var actionResult = await _USCarrierSearchController.GetUSCarrierSearchAsync(searchRequest, apiKey, LLB_EQF, LLB_TCC, LLB_TCUS);
 
             // assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);

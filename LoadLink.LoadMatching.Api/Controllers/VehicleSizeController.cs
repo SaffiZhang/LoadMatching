@@ -11,23 +11,30 @@ namespace LoadLink.LoadMatching.Api.Controllers
     [ApiController]
     public class VehicleSizeController : ControllerBase
     {
-        private readonly IVehicleAttributeService _vehicleSizeService;
+        private readonly IVehicleSizeService _vehicleSizeService;
         private readonly IUserHelperService _userHelperService;
 
-        public VehicleSizeController(IVehicleAttributeService vehicleSizeService,
+        public VehicleSizeController(IVehicleSizeService vehicleSizeService,
             IUserHelperService userHelperService)
         {
             _vehicleSizeService = vehicleSizeService;
             _userHelperService = userHelperService;
         }
 
-        [HttpGet("get-vehicle-size-list")]
-        public async Task<IActionResult> GetVehicleSizeListAsync(string apiKey)
+        [HttpGet]
+        public async Task<IActionResult> GetListAsync()
         {
-            if (!(await _userHelperService.HasValidSubscription(apiKey)))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
-
             var result = await _vehicleSizeService.GetListAsync();
+            if (result == null)
+                return NoContent();
+
+            return Ok(result);
+        }
+
+        [HttpGet("{postType}")]
+        public async Task<IActionResult> GetListByPostTypeAsync(string postType)
+        {
+            var result = await _vehicleSizeService.GetListByPostTypeAsync(postType);
             if (result == null)
                 return NoContent();
 

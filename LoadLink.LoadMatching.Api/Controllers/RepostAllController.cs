@@ -21,12 +21,9 @@ namespace LoadLink.LoadMatching.Api.Controllers
             _userHelperService = userHelperService;
         }
 
-        [HttpGet("repost-all")]
-        public async Task<IActionResult> RepostAllAsync(string apiKey)
+        [HttpGet]
+        public async Task<IActionResult> RepostAllAsync()
         {
-            if (!(await _userHelperService.HasValidSubscription(apiKey)))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
-
             var custCd = _userHelperService.GetCustCd();
             var userId = _userHelperService.GetUserId();
 

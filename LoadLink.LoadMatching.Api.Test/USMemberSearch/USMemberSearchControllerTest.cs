@@ -18,16 +18,15 @@ using Xunit;
 
 namespace LoadLink.LoadMatching.Api.Test.USMemberSearch
 {
-    public class USCarrierSearchControllerTest
+    public class USMemberSearchControllerTest
     {
         private readonly IUSMemberSearchService _service;
         private readonly USMemberSearchController _USMemberSearchController;
         private readonly Mock<IHttpContextAccessor> _fakeHttpContextAccessor;
         private readonly IUserHelperService _userHelper;
         private readonly IUserSubscriptionService _userSubscriptionService;
-        private readonly string apiKey = "LLB_LiveLead";
 
-        public USCarrierSearchControllerTest()
+        public USMemberSearchControllerTest()
         {
             var userId = 34186;
             var custCd = "TCORELL";
@@ -55,6 +54,11 @@ namespace LoadLink.LoadMatching.Api.Test.USMemberSearch
         public async Task GetUSMemberSearchListAsync()
         {
             // arrange
+            var apiKey = "LLB_LiveLead";
+            var LLB_EQF = "LLB_EQF";
+            var LLB_TCC = "LLB_TCC";
+            var LLB_TCUS = "LLB_TCUS";
+
             var searchRequest = new GetUSMemberSearchCommand
             {
                 CustCd = "TCORELL",
@@ -65,7 +69,7 @@ namespace LoadLink.LoadMatching.Api.Test.USMemberSearch
             };
 
             // act
-            var actionResult = await _USMemberSearchController.GetUSMemberSearchAsync(searchRequest, apiKey);
+            var actionResult = await _USMemberSearchController.GetUSMemberSearchAsync(searchRequest, apiKey, LLB_EQF, LLB_TCC, LLB_TCUS);
 
             // assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);

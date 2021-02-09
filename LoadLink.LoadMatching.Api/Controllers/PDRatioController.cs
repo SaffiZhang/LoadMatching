@@ -21,10 +21,10 @@ namespace LoadLink.LoadMatching.Api.Controllers
             _userHelperService = userHelperService;
         }
 
-        [HttpPost("get-pd-ratio")]
-        public async Task<IActionResult> GetPDRatioAsync([FromBody] GetPDRatioCommand requestLane, string apiKey)
+        [HttpPost("{APIkey}")]
+        public async Task<IActionResult> GetPDRatioAsync([FromBody] GetPDRatioCommand requestLane, string APIkey)
         {
-            if (!(await _userHelperService.HasValidSubscription(apiKey)))
+            if (!(await _userHelperService.HasValidSubscription(APIkey)))
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
             var result = await _pdRatioService.GetAsync(requestLane);

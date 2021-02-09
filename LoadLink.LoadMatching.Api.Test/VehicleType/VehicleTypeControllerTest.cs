@@ -24,7 +24,6 @@ namespace LoadLink.LoadMatching.Api.Test.VehicleType
         private readonly Mock<IHttpContextAccessor> _fakeHttpContextAccessor;
         private readonly IUserHelperService _userHelper;
         private readonly IUserSubscriptionService _userSubscriptionService;
-        private readonly string apiKey = "LLB_LiveLead";
 
         public VehicleSizeControllerTest()
         {
@@ -55,7 +54,7 @@ namespace LoadLink.LoadMatching.Api.Test.VehicleType
         {
 
             // act
-            var actionResult = await _vehicleTypeController.GetVehicleTypeListAsync(apiKey);
+            var actionResult = await _vehicleTypeController.GetListAsync();
 
             // assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);

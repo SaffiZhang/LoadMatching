@@ -4,8 +4,9 @@ using System.Threading.Tasks;
 
 namespace LoadLink.LoadMatching.Application.VehicleSize.Repository
 {
-    public interface IVehicleAttributeRepository
+    public interface IVehicleSizeRepository
     {
         Task<IEnumerable<UspGetVehicleSizeResult>> GetListAsync();
+        Task<IEnumerable<UspGetVehicleSizeResult>> GetListByPostTypeAsync(string postType);
     }
 }
