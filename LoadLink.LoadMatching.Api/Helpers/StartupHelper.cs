@@ -38,6 +38,10 @@ using ValidationException = FluentValidation.ValidationException;
 using LoadLink.LoadMatching.Application.CarrierSearch.Services;
 using LoadLink.LoadMatching.Application.CarrierSearch.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.CarrierSearch;
+using LoadLink.LoadMatching.Application.EquipmentLead.Services;
+using LoadLink.LoadMatching.Application.EquipmentLead.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.EquipmentLead;
+
 namespace LoadLink.LoadMatching.Api.Helpers
 {
     public static class StartupHelper
@@ -57,14 +61,16 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<IAssignedEquipmentRepository, AssignedEquipmentRepository>();
             services.AddScoped<IAssignedLoadRepository, AssignedLoadRepository>();
             services.AddScoped<ICarrierSearchRepository, CarrierSearchRepository>();
-            
+            services.AddScoped<IEquipmentLeadRepository, EquipmentLeadRepository>();
+
             // services
             services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
             services.AddScoped<ICityService, CityService>();
             services.AddScoped<IAssignedEquipmentService, AssignedEquipmentService>();
             services.AddScoped<IAssignedLoadService, AssignedLoadService>();
-
             services.AddScoped<ICarrierSearchService, CarrierSearchService>();
+            services.AddScoped<IEquipmentLeadService, EquipmentLeadService>();
+            
             // local services
             services.AddScoped<IUserHelperService, UserHelperService>();
 
