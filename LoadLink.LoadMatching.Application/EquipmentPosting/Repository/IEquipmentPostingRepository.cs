@@ -8,9 +8,9 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Repository
     public interface IEquipmentPostingRepository
     {
         Task<int> CreateAsync(UspCreateEquipmentPostingCommand createCommand);
-        Task<IEnumerable<UspGetEquipmentPostingResult>> GetListAsync(string custCd, string mileageProvider, bool? getDAT = false);
+        Task<IEnumerable<UspGetDatEquipmentPostingResult>> GetListAsync(string custCd, string mileageProvider, bool? getDAT = false);
 
-        Task<UspGetEquipmentPostingResult> GetAsync(int token, string custCd, string mileageProvider);
+        Task<UspGetDatEquipmentPostingResult> GetAsync(int token, string custCd, string mileageProvider);
 
         Task UpdateAsync(int token, string pstatus);
 
