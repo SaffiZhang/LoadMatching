@@ -44,6 +44,9 @@ using LoadLink.LoadMatching.Persistence.Repositories.EquipmentLead;
 using LoadLink.LoadMatching.Application.DATLoadLead.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.DatLoadLead;
 using LoadLink.LoadMatching.Application.DATLoadLead.Services;
+using LoadLink.LoadMatching.Persistence.Repositories.EquipmentPosting;
+using LoadLink.LoadMatching.Application.EquipmentPosting.Repository;
+using LoadLink.LoadMatching.Application.EquipmentPosting.Services;
 
 namespace LoadLink.LoadMatching.Api.Helpers
 {
@@ -67,6 +70,8 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<IEquipmentLeadRepository, EquipmentLeadRepository>();
             services.AddScoped<IDatLoadLeadRepository, DatLoadLeadRepository>();
 
+            services.AddScoped<IEquipmentPostingRepository, EquipmentPostingRepository>();
+            
             // services
             services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
             services.AddScoped<ICityService, CityService>();
@@ -75,6 +80,9 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<ICarrierSearchService, CarrierSearchService>();
             services.AddScoped<IEquipmentLeadService, EquipmentLeadService>();
             services.AddScoped<IDatLoadLeadService, DatLoadLeadService>();
+
+            
+            services.AddScoped<IEquipmentPostingService, EquipmentPostingService>();
 
             // local services
             services.AddScoped<IUserHelperService, UserHelperService>();
