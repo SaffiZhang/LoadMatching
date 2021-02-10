@@ -26,7 +26,6 @@ namespace LoadLink.LoadMatching.Api.Test.TemplatePosting
         private readonly IUserSubscriptionService _userSubscriptionService;
         private readonly ITemplatePostingService _service;
         private readonly TemplatePostingController _templatePostingController;
-        private readonly string apiKey = "LLB_LiveLead";
 
         public TemplatePostingControllerTest()
         {
@@ -60,7 +59,7 @@ namespace LoadLink.LoadMatching.Api.Test.TemplatePosting
             int templateId = 109999;
 
             //act
-            var actionResult = await _templatePostingController.GetTemplatePostingAsync(templateId, apiKey);
+            var actionResult = await _templatePostingController.GetAsync(templateId);
 
             //assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);
@@ -74,7 +73,7 @@ namespace LoadLink.LoadMatching.Api.Test.TemplatePosting
         public async Task Get_Template_Posting_List()
         {
             // act
-            var actionResult = await _templatePostingController.GetTemplatePostingListAsync(apiKey);
+            var actionResult = await _templatePostingController.GetListAsync();
 
             // assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);
@@ -113,7 +112,7 @@ namespace LoadLink.LoadMatching.Api.Test.TemplatePosting
             };
 
             // act
-            var actionResult = await _templatePostingController.CreateTemplatePostingAsync(templatePostingCommand, apiKey);
+            var actionResult = await _templatePostingController.CreateAsync(templatePostingCommand);
 
             // assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);
@@ -152,7 +151,7 @@ namespace LoadLink.LoadMatching.Api.Test.TemplatePosting
             };
 
             // act
-            var actionResult = await _templatePostingController.UpdateTemplatePostingAsync(templatePostingCommand, apiKey);
+            var actionResult = await _templatePostingController.UpdateAsync(templatePostingCommand);
 
             // assert  
             Assert.IsType<OkObjectResult>(actionResult);
@@ -165,7 +164,7 @@ namespace LoadLink.LoadMatching.Api.Test.TemplatePosting
             short templateId = 1000;
 
             // act
-            var actionResult = await _templatePostingController.DeleteTemplatePostingAsync(templateId, apiKey);
+            var actionResult = await _templatePostingController.DeleteAsync(templateId);
 
             // assert
             Assert.IsType<OkResult>(actionResult);

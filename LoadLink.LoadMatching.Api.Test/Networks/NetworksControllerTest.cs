@@ -59,7 +59,7 @@ namespace LoadLink.LoadMatching.Api.Test.Networks
             int networksId = 1878;
 
             //act
-            var actionResult = await _networksController.GetNetworksAsync(networksId);
+            var actionResult = await _networksController.GetAsync(networksId);
 
             //assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);
@@ -73,7 +73,7 @@ namespace LoadLink.LoadMatching.Api.Test.Networks
         public async Task Get_Networks_List()
         {
             // act
-            var actionResult = await _networksController.GetNetworksListAsync();
+            var actionResult = await _networksController.GetListAsync();
 
             // assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);
@@ -94,7 +94,7 @@ namespace LoadLink.LoadMatching.Api.Test.Networks
             };
 
             // act
-            var actionResult = await _networksController.CreateNetworksAsync(networksCommand);
+            var actionResult = await _networksController.CreateAsync(networksCommand);
 
             // assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);
@@ -112,7 +112,7 @@ namespace LoadLink.LoadMatching.Api.Test.Networks
             };
 
             // act
-            var actionResult = await _networksController.UpdateNetworksAsync(networksId, patchNetworksCommand);
+            var actionResult = await _networksController.UpdateAsync(networksId, patchNetworksCommand);
 
             // assert  
             Assert.IsType<OkResult>(actionResult);
@@ -132,7 +132,7 @@ namespace LoadLink.LoadMatching.Api.Test.Networks
             patchDocument.Add(x => x, patchNetworksCommand);
 
             // act
-            var actionResult = await _networksController.PatchNetworksAsync(networksId, patchDocument);
+            var actionResult = await _networksController.PatchAsync(networksId, patchDocument);
 
             // assert  
             Assert.IsType<OkResult>(actionResult);
@@ -145,7 +145,7 @@ namespace LoadLink.LoadMatching.Api.Test.Networks
             short networksId = 1000;
 
             // act
-            var actionResult = await _networksController.DeleteNetworksAsync(networksId);
+            var actionResult = await _networksController.DeleteAsync(networksId);
 
             // assert
             Assert.IsType<OkResult>(actionResult);

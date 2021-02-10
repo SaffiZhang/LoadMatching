@@ -27,18 +27,18 @@ namespace LoadLink.LoadMatching.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("get-networks")]
-        public async Task<IActionResult> GetNetworksAsync(int networksId)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAsync(int id)
         {
-            var result = await _networksService.GetAsync(networksId);
+            var result = await _networksService.GetAsync(id);
             if (result == null)
                 return NoContent();
 
             return Ok(result);
         }
 
-        [HttpGet("get-networks-list")]
-        public async Task<IActionResult> GetNetworksListAsync()
+        [HttpGet]
+        public async Task<IActionResult> GetListAsync()
         {
             var custCd = _userHelperService.GetCustCd();
             var userId = _userHelperService.GetUserId();
@@ -50,8 +50,8 @@ namespace LoadLink.LoadMatching.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost("create-networks")]
-        public async Task<IActionResult> CreateNetworksAsync([FromBody] NetworksCommand networks)
+        [HttpPost]
+        public async Task<IActionResult> CreateAsync([FromBody] NetworksCommand networks)
         {
             if (networks == null)
             {
@@ -68,21 +68,21 @@ namespace LoadLink.LoadMatching.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPut("update-networks")]
-        public async Task<IActionResult> UpdateNetworksAsync(int networksId, [FromBody] PatchNetworksCommand networksPatch)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync(int id, [FromBody] PatchNetworksCommand networksPatch)
         {
             if (networksPatch == null)
             {
                 return BadRequest();
             }
 
-            await _networksService.UpdateAsync(networksId, networksPatch.Name);
+            await _networksService.UpdateAsync(id, networksPatch.Name);
             
             return Ok();
         }
 
-        [HttpPatch("patch-networks")]
-        public async Task<IActionResult> PatchNetworksAsync(int networksId, [FromBody] JsonPatchDocument<PatchNetworksCommand> networksPatch)
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> PatchAsync(int id, [FromBody] JsonPatchDocument<PatchNetworksCommand> networksPatch)
         {
             if (networksPatch == null || networksPatch.Operations.Count == 0)
             {
@@ -91,15 +91,15 @@ namespace LoadLink.LoadMatching.Api.Controllers
             
             var value = (PatchNetworksCommand)networksPatch.Operations[0].value;
 
-            await _networksService.UpdateAsync(networksId, value.Name);
+            await _networksService.UpdateAsync(id, value.Name);
 
             return Ok();
         }
 
-        [HttpDelete("delete-networks")]
-        public async Task<IActionResult> DeleteNetworksAsync(int networkId)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            await _networksService.DeleteAsync(networkId);
+            await _networksService.DeleteAsync(id);
 
             return Ok();
         }

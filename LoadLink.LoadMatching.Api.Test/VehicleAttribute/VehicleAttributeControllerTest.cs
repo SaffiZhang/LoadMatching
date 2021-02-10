@@ -24,7 +24,6 @@ namespace LoadLink.LoadMatching.Api.Test.VehicleAttribute
         private readonly Mock<IHttpContextAccessor> _fakeHttpContextAccessor;
         private readonly IUserHelperService _userHelper;
         private readonly IUserSubscriptionService _userSubscriptionService;
-        private readonly string apiKey = "LLB_LiveLead";
 
         public USMemberSearchControllerTest()
         {
@@ -55,7 +54,7 @@ namespace LoadLink.LoadMatching.Api.Test.VehicleAttribute
         {
 
             // act
-            var actionResult = await _vehicleAttributeController.GetVehicleAttributeListAsync(apiKey);
+            var actionResult = await _vehicleAttributeController.GetListAsync();
 
             // assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);

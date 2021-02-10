@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace LoadLink.LoadMatching.Persistence.Repositories.VehicleSize
 {
-    public class VehicleAttributeRepository : IVehicleAttributeRepository
+    public class VehicleSizeRepository : IVehicleSizeRepository
     {
         private readonly IDbConnection _dbConnection;
 
-        public VehicleAttributeRepository(IConnectionFactory connectionFactory)
+        public VehicleSizeRepository(IConnectionFactory connectionFactory)
         {
             _dbConnection = new SqlConnection(connectionFactory.ConnectionString);
         }
@@ -24,6 +24,18 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.VehicleSize
 
             var result = await SqlMapper.QueryAsync<UspGetVehicleSizeResult>(
                 _dbConnection, sql: proc, commandType: CommandType.StoredProcedure);
+
+            return result;
+        }
+
+        public async Task<IEnumerable<UspGetVehicleSizeResult>> GetListByPostTypeAsync(string postType)
+        {
+            var proc = "usp_GetVehicleSize";
+            var param = new DynamicParameters();
+            param.Add("@PostType", postType);
+
+            var result = await SqlMapper.QueryAsync<UspGetVehicleSizeResult>(
+                _dbConnection, sql: proc, param: param, commandType: CommandType.StoredProcedure);
 
             return result;
         }
