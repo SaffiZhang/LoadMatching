@@ -93,6 +93,7 @@ namespace LoadLink.LoadMatching.Api.Test.EquipmentPosting
             Assert.Equal(token, model.Token);
         }
 
+        [Fact]
         public async Task EquipmentPostingController_Get_DAT()
         {
 

@@ -21,6 +21,7 @@ namespace LoadLink.LoadMatching.Api.Configuration
         public IdentityServer IdentityServer { get; set; }
         public string[] AllowedCorsOrigin { get; set; }
         public string MileageProvider { get; set; }
+        public AppSetting AppSetting { get; set; }
     }
 
 
