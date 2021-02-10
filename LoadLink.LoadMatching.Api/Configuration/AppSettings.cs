@@ -46,4 +46,10 @@ namespace LoadLink.LoadMatching.Api.Configuration
     {
         public string AuthorityUrl { get; set; }
     }
+
+    public class AppSetting
+    {
+        public int LeadsCap { get; set; }
+        public string MileageProvider { get; set; }
+    }
 }

@@ -35,6 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LoadLink.LoadMatching.Application\LoadLink.LoadMatching.Application.csproj" />
     <ProjectReference Include="..\LoadLink.LoadMatching.Infrastructure\LoadLink.LoadMatching.Infrastructure.csproj" />
     <ProjectReference Include="..\LoadLink.LoadMatching.Persistence\LoadLink.LoadMatching.Persistence.csproj" />
   </ItemGroup>

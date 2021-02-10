@@ -21,7 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="NewFolder\" />
+    <Folder Include="CarrierSearch\Models\Commands\" />
+    <Folder Include="CarrierSearch\Services\" />
   </ItemGroup>
 
 </Project>
