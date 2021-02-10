@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using LoadLink.LoadMatching.Api.Services;
 using LoadLink.LoadMatching.Application.LeadCount.Services;
-using Microsoft.AspNetCore.Authorization;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +10,6 @@ namespace LoadLink.LoadMatching.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
     public class LeadCountController : ControllerBase
     {
         private readonly ILeadsCountService _leadsCountService;
