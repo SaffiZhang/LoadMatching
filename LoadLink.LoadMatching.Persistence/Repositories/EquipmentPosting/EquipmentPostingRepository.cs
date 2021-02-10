@@ -20,7 +20,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.EquipmentPosting
             _dbConnection = new SqlConnection(connectionFactory.ConnectionString);
         }
 
-        public async Task<int> CreateAsync(CreateEquipmentPostingCommand createCommand)
+        public async Task<int> CreateAsync(UspCreateEquipmentPostingCommand createCommand)
         {
             var proc = "dbo.usp_CreateEquipment";
             var param = new DynamicParameters(createCommand);
@@ -28,7 +28,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.EquipmentPosting
             param.Add("@Token", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
             await SqlMapper.ExecuteAsync(_dbConnection, sql: proc, param: param, commandType: CommandType.StoredProcedure);
 
-            return param.Get<int>("@Id");
+            return param.Get<int>("@Token");
         }
 
     

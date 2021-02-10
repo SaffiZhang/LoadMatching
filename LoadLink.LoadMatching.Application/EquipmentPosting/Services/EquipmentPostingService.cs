@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LoadLink.LoadMatching.Application.Common;
 using LoadLink.LoadMatching.Application.EquipmentPosting.Models.Commands;
 using LoadLink.LoadMatching.Application.EquipmentPosting.Models.Queries;
 using LoadLink.LoadMatching.Application.EquipmentPosting.Repository;
@@ -21,9 +22,36 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Services
 
 
         public async Task<CreateEquipmentPostingCommand> CreateAsync(CreateEquipmentPostingCommand createCommand)
-        {
+        {   
             var result = createCommand;
-            var createResult = await _equipmentPostingRepository.CreateAsync(createCommand);
+            var uspCreateCommand = new UspCreateEquipmentPostingCommand { 
+            
+            CustCD = createCommand.CustCD,
+            DateAvail = createCommand.DateAvail,
+            SrceCity = createCommand.SrceCity,
+            SrceSt = createCommand.SrceSt,
+            SrceRadius = createCommand.SrceRadius,
+            DestCity = createCommand.DestCity,
+            DestSt = createCommand.DestSt,
+            DestRadius = createCommand.DestRadius,
+            VSize = CommonLM.EquipmentVSizeStringToNum(createCommand.VehicleSize),
+            VType = CommonLM.VTypeStringToNum(createCommand.VehicleSize),
+            Comment = createCommand.Comment,
+            PostMode = createCommand.PostMode,
+            ClientRefNum = createCommand.ClientRefNum,
+            ProductName = createCommand.ProductName,
+            PAttrib = CommonLM.PostingAttributeStringToNum(createCommand.PostingAttrib),
+            CreatedBy = createCommand.CreatedBy,
+            NetworkId = createCommand.NetworkId,
+            Corridor = createCommand.Corridor,
+            GlobalExcluded = createCommand.GlobalExcluded == true ? 1 : 0,
+            CustomerTracking = createCommand.CustomerTracking == true ? 1 : 0
+
+
+
+            };
+
+            var createResult = await _equipmentPostingRepository.CreateAsync(uspCreateCommand);
 
             if (createResult == -1)
                 return null;

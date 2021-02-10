@@ -52,7 +52,6 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Models.Commands
 
         public int CreatedBy { get; set; }
 
-        public string PStatus { get; set; }
 
 
         public int NetworkId { get; set; }

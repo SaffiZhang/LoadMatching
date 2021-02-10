@@ -28,13 +28,16 @@ namespace LoadLink.LoadMatching.Api.Test.EquipmentPosting
         private readonly IUserSubscriptionService _userSubscriptionService;
         private readonly IEquipmentPostingService _service;
         private readonly EquipmentPostingController _equipmentPostingController;
-        private readonly IOptions<AppSettings> _appsettings;
+ 
         public EquipmentPostingControllerTest()
         {
-            var userId = 34186;
+            var userId = 34351;
             var custCd = "TCORELL";
 
             _fakeHttpContextAccessor = new FakeContext().MockHttpContext(userId, custCd);
+            AppSettings appSettings = new AppSettings() { MileageProvider = "P" };
+            IOptions<AppSettings> options = Options.Create(appSettings);
+
 
             var mappingProfile = new EquipmentPostingProfile();
             var configuration = new MapperConfiguration(config => config.AddProfile(mappingProfile));
@@ -51,7 +54,7 @@ namespace LoadLink.LoadMatching.Api.Test.EquipmentPosting
            
             // controller
             _userHelper = new UserHelperService(_fakeHttpContextAccessor.Object, _userSubscriptionService);
-            _equipmentPostingController = new EquipmentPostingController(_service, _userHelper, _appsettings);
+            _equipmentPostingController = new EquipmentPostingController(_service, _userHelper, options);
         }
 
         [Fact]
@@ -65,9 +68,9 @@ namespace LoadLink.LoadMatching.Api.Test.EquipmentPosting
 
             //assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);
-            var model = Assert.IsAssignableFrom<GetEquipmentPostingQuery>(viewResult.Value);
+            var model = Assert.IsAssignableFrom<IEnumerable<GetEquipmentPostingQuery>>(viewResult.Value);
 
-            Assert.NotNull(model);
+            Assert.NotNull(actionResult);
 
         }
 
@@ -77,7 +80,7 @@ namespace LoadLink.LoadMatching.Api.Test.EquipmentPosting
 
             //Arrange
             var apiKey = "LLC_EqPostingsView";
-            var token = 29913736;
+            var token = 29913902;
 
             // act
             var actionResult = await _equipmentPostingController.Get(token, apiKey);
@@ -109,37 +112,35 @@ namespace LoadLink.LoadMatching.Api.Test.EquipmentPosting
         }
 
         [Fact]
-        public async Task Create_Equipment_Posting()
+        public async Task EquipmentPostingController_Create_Sucess()
         {
             // arrange
+            var apiKey = "LLC_EqPostingsView";
             var equipmentPostingCommand = new CreateEquipmentPostingCommand
             {
-                EquipmentName = "TestMontTor",
-                UserId = 34351,
-                PostType = "E",
-                DateAvail = DateTime.Now,
-                SrceID = 1003495,
-                SrceCity = "Montreal",
-                SrceSt = "QC",
-                SrceRadius = 50,
-                DestID = 1002770,
-                DestCity = "Toronto",
-                DestSt = "ON",
-                DestRadius = 50,
-                VehicleSize = "15",
-                VehicleType = "1",
-                Comment = "Montreal to Toronto",
-                PostMode = "A",
-                ClientRefNum = "Client Ref Number",
-                PostingAttrib = "0",
-                NetworkId = 0,
-                Corridor = "C",
-                CustCd = "TCORELL",
-                CustomerTracking = false
+                    DateAvail = DateTime.UtcNow,
+                    SrceCity =  "London",
+                    SrceSt =  "ON",
+                    SrceRadius =  200,
+                    DestCity =  "Chicago",
+                    DestSt =  "IL",
+                    DestRadius =  500,
+                    VehicleSize =  "U",
+                    VehicleType =  "FS",
+                    Comment =  "ll test ",
+                    PostMode =  "A",
+                    ClientRefNum =  "Client Ref",
+                    ProductName =  "WEBAPI",
+                    PostingAttrib =  "",
+                    NetworkId =  0,
+                    Corridor =  "C",
+                    GlobalExcluded =  true,
+                    CustomerTracking =  false
+
             };
 
             // act
-            var actionResult = await _equipmentPostingController.CreateEquipmentPostingAsync(equipmentPostingCommand, apiKey);
+            var actionResult = await _equipmentPostingController.Post(equipmentPostingCommand, apiKey);
 
             // assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);
@@ -147,54 +148,36 @@ namespace LoadLink.LoadMatching.Api.Test.EquipmentPosting
         }
 
         [Fact]
-        public async Task Update_Equipment_Posting()
+        public async Task EquipmentPostingController_Put_Status()
         {
             // arrange
-            var equipmentPostingCommand = new EquipmentPostingCommand
+            var apiKey = "LLC_EqPostingsView";
+            var token = 29913736;
+            var equipmentPostingUpdateCommand = new UpdateEquipmentPostingCommand
             {
-                EquipmentID = 110008,
-                EquipmentName = "TestMontTor2",
-                UserId = 34351,
-                PostType = "E",
-                DateAvail = DateTime.Now,
-                SrceID = 1003495,
-                SrceCity = "Montreal",
-                SrceSt = "QC",
-                SrceRadius = 50,
-                DestID = 1002770,
-                DestCity = "Toronto",
-                DestSt = "ON",
-                DestRadius = 50,
-                VehicleSize = "15",
-                VehicleType = "1",
-                Comment = "Montreal to Toronto",
-                PostMode = "A",
-                ClientRefNum = "Client Ref Number",
-                PostingAttrib = "0",
-                NetworkId = 0,
-                Corridor = "C",
-                CustCd = "TCORELL",
-                CustomerTracking = false
+                PStatus = "A"
             };
 
             // act
-            var actionResult = await _equipmentPostingController.UpdateEquipmentPostingAsync(equipmentPostingCommand, apiKey);
+            var actionResult = await _equipmentPostingController.Put(token, equipmentPostingUpdateCommand, apiKey);
 
             // assert  
-            Assert.IsType<OkObjectResult>(actionResult);
+            Assert.IsType<NoContentResult>(actionResult);
         }
 
         [Fact]
-        public async Task Delete_Equipment_Posting()
+        public async Task EquipmentPosting_Delete()
         {
             // arrange
-            short equipmentId = 1000;
+            var tokenId = 29913901;
+            var apiKey = "LLC_EqPostingsView";
+
 
             // act
-            var actionResult = await _equipmentPostingController.DeleteEquipmentPostingAsync(equipmentId, apiKey);
+            var actionResult = await _equipmentPostingController.Delete(tokenId, apiKey);
 
             // assert
-            Assert.IsType<OkResult>(actionResult);
+            Assert.IsType<NoContentResult>(actionResult);
         }
 
     }

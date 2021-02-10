@@ -121,7 +121,9 @@ namespace LoadLink.LoadMatching.Api.Controllers
             if (!await _userHelperService.HasValidSubscription(APIkey))
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
-
+            var custCd = _userHelperService.GetCustCd();
+            var userId = _userHelperService.GetUserId();
+            posting.CustCD = custCd; posting.CreatedBy = userId;
             return Ok(await _equipmentPostingService.CreateAsync(posting));
         }
         [HttpPut("{token}/{APIkey}")]
@@ -195,6 +197,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
         }
 
+     
         [HttpDelete("{token}/{APIkey}")]
         public async Task<IActionResult> Delete(int token, string APIkey)
         {
@@ -210,7 +213,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var custCd = _userHelperService.GetCustCd();
             var mileageProvider = _appSettings.Value.MileageProvider;
             var userId = _userHelperService.GetUserId();
-            var posting = _equipmentPostingService.GetAsync(token, custCd, mileageProvider);
+            var posting = await _equipmentPostingService.GetAsync(token, custCd, mileageProvider);
 
             if (posting == null)
             {
