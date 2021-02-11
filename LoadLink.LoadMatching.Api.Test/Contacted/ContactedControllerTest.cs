@@ -34,7 +34,7 @@ namespace LoadLink.LoadMatching.Api.Test.Contacted
         }
 
         [Fact]
-        public async Task GetAsync()
+        public async Task UpdateAsync()
         {
             // arrange
             var updateCommand = new UpdateContactedCommand
