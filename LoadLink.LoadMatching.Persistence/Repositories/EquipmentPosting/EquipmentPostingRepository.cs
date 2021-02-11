@@ -31,7 +31,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.EquipmentPosting
             return param.Get<int>("@Token");
         }
 
-    
+
 
         public async Task DeleteAsync(int token, string custCd, int userId)
         {
@@ -46,7 +46,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.EquipmentPosting
         }
 
         public async Task<UspGetEquipmentPostingResult> GetAsync(int token, string custCd, string mileageProvider)
-        
+
         {
             var proc = "dbo.usp_GetEquipmentPosting";
             var param = new DynamicParameters();
@@ -60,7 +60,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.EquipmentPosting
             return result;
         }
 
-        public async Task<IEnumerable<UspGetEquipmentPostingResult>> GetListAsync( string custCd, string mileageProvider, bool? getDAT = false )
+        public async Task<IEnumerable<UspGetEquipmentPostingResult>> GetListAsync(string custCd, string mileageProvider, bool? getDAT = false)
         {
             var proc = "dbo.usp_GetEquipmentPosting";
             var param = new DynamicParameters();

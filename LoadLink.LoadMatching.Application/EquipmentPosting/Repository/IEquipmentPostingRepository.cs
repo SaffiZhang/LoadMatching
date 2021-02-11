@@ -16,5 +16,5 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Repository
 
         Task UpdateLeadCount(int token, int initialCount);
         Task DeleteAsync(int token, string custCd, int userId);
-    }   
+    }
 }
