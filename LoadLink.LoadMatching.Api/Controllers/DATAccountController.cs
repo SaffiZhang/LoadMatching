@@ -4,14 +4,12 @@ using System.Threading.Tasks;
 using LoadLink.LoadMatching.Api.Infrastructure.Http;
 using LoadLink.LoadMatching.Api.Services;
 using LoadLink.LoadMatching.Application.DATAccount.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LoadLink.LoadMatching.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
     public class DatAccountController : ControllerBase
     {
         private readonly IDatAccountService _datAccountService;
