@@ -3,7 +3,7 @@ using System;
 
 namespace LoadLink.LoadMatching.Domain.Procedures
 {
-    public class UspGetDatEquipmentPostingResult
+    public class UspGetEquipmentPostingResult
     {
         public int Token { get; set; }
         public string CustCD { get; set; }

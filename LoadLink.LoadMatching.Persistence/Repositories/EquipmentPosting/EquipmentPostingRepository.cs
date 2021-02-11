@@ -31,7 +31,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.EquipmentPosting
             return param.Get<int>("@Token");
         }
 
-    
+
 
         public async Task DeleteAsync(int token, string custCd, int userId)
         {
@@ -45,8 +45,8 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.EquipmentPosting
 
         }
 
-        public async Task<UspGetDatEquipmentPostingResult> GetAsync(int token, string custCd, string mileageProvider)
-        
+        public async Task<UspGetEquipmentPostingResult> GetAsync(int token, string custCd, string mileageProvider)
+
         {
             var proc = "dbo.usp_GetEquipmentPosting";
             var param = new DynamicParameters();
@@ -54,13 +54,13 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.EquipmentPosting
             param.Add("@CustCD", custCd);
             param.Add("@MileageProvider", mileageProvider);
 
-            var result = await SqlMapper.QueryFirstOrDefaultAsync<UspGetDatEquipmentPostingResult>(
+            var result = await SqlMapper.QueryFirstOrDefaultAsync<UspGetEquipmentPostingResult>(
                _dbConnection, sql: proc, param, commandType: CommandType.StoredProcedure);
 
             return result;
         }
 
-        public async Task<IEnumerable<UspGetDatEquipmentPostingResult>> GetListAsync( string custCd, string mileageProvider, bool? getDAT = false )
+        public async Task<IEnumerable<UspGetEquipmentPostingResult>> GetListAsync(string custCd, string mileageProvider, bool? getDAT = false)
         {
             var proc = "dbo.usp_GetEquipmentPosting";
             var param = new DynamicParameters();
@@ -68,7 +68,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.EquipmentPosting
             param.Add("@MileageProvider", mileageProvider);
             param.Add("@GetDAT", getDAT);
 
-            var result = await SqlMapper.QueryAsync<UspGetDatEquipmentPostingResult>(
+            var result = await SqlMapper.QueryAsync<UspGetEquipmentPostingResult>(
                _dbConnection, sql: proc, param, commandType: CommandType.StoredProcedure);
 
             return result;
