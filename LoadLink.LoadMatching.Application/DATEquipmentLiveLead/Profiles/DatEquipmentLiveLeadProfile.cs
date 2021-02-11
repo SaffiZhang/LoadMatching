@@ -3,11 +3,11 @@ using LoadLink.LoadMatching.Domain.Procedures;
 
 namespace EquipmentLink.EquipmentMatching.Application.DATEquipmentLead.Profiles
 {
-    public class DatEquipmentLeadProfile : AutoMapper.Profile
+    public class DatEquipmentLiveLeadProfile : AutoMapper.Profile
     {
-        public DatEquipmentLeadProfile()
+        public DatEquipmentLiveLeadProfile()
         {
-            CreateMap<UspGetDatEquipmentLiveLeadResult, GetDatEquipmentLeadQuery>();
+            CreateMap<UspGetDatEquipmentLiveLeadResult, GetDatEquipmentLiveLeadQuery>();
         }
     }
 }
