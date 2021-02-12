@@ -55,6 +55,9 @@ using LoadLink.LoadMatching.Persistence.Repositories.DATEquipmentLead;
 using LoadLink.LoadMatching.Application.DATEquipmentLead.Services;
 using LoadLink.LoadMatching.Application.DATEquipmentLiveLead.Services;
 using LoadLink.LoadMatching.Application.DATEquipmentLiveLead.Repository;
+using LoadLink.LoadMatching.Application.DATLoadLiveLead.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.DATLoadLead;
+using LoadLink.LoadMatching.Application.DATLoadLiveLead.Services;
 
 namespace LoadLink.LoadMatching.Api.Helpers
 {
@@ -77,6 +80,7 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<ICarrierSearchRepository, CarrierSearchRepository>();
             services.AddScoped<IEquipmentLeadRepository, EquipmentLeadRepository>();
             services.AddScoped<IDatLoadLeadRepository, DatLoadLeadRepository>();
+            services.AddScoped<IDatLoadLiveLeadRepository, DatLoadLiveLeadRepository>();
             services.AddScoped<IDatEquipmentLeadRepository, DatEquipmentLeadRepository>();
             services.AddScoped<IDatEquipmentLiveLeadRepository, DatEquipmentLiveLeadRepository>();
             services.AddScoped<IEquipmentPostingRepository, EquipmentPostingRepository>();
@@ -90,6 +94,7 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<ICarrierSearchService, CarrierSearchService>();
             services.AddScoped<IEquipmentLeadService, EquipmentLeadService>();
             services.AddScoped<IDatLoadLeadService, DatLoadLeadService>();
+            services.AddScoped<IDatLoadLiveLeadService, DatLoadLiveLeadService>();
             services.AddScoped<IDatEquipmentLeadService, DatEquipmentLeadService>();
             services.AddScoped<IDatEquipmentLiveLeadService, DatEquipmentLiveLeadService>();
             services.AddScoped<IEquipmentPostingService, EquipmentPostingService>();
