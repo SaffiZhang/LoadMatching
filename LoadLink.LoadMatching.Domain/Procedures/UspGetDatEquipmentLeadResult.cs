@@ -3,7 +3,7 @@ using System;
 
 namespace LoadLink.LoadMatching.Domain.Procedures
 {
-    public class UspGetDatEquipmentLiveLeadResult
+    public class UspGetDatEquipmentLeadResult
     {
         public string CustCD { get; set; }
         public DateTime DateAvail { get; set; }

@@ -19,7 +19,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.DATEquipmentLead
             _dbConnection = new SqlConnection(connectionFactory.ConnectionString);
 
         }
-        public async Task<IEnumerable<UspGetDatEquipmentLiveLeadResult>> GetLeads(string custCd, string mileageProvider, DateTime? leadfrom, int? postingId)
+        public async Task<IEnumerable<UspGetDatEquipmentLeadResult>> GetLeads(string custCd, string mileageProvider, DateTime? leadfrom, int? postingId)
         {
             var proc = "usp_GetDATEquipmentLead";
             var param = new DynamicParameters();
@@ -28,7 +28,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.DATEquipmentLead
             param.Add("@EToken", postingId);
             param.Add("@LeadFrom", leadfrom);
 
-            var result = await SqlMapper.QueryAsync<UspGetDatEquipmentLiveLeadResult>(
+            var result = await SqlMapper.QueryAsync<UspGetDatEquipmentLeadResult>(
                _dbConnection, sql: proc, param, commandType: CommandType.StoredProcedure);
 
             return result;

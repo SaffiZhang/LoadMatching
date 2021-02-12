@@ -7,7 +7,7 @@ namespace EquipmentLink.EquipmentMatching.Application.DATEquipmentLiveLead.Profi
     {
         public DatEquipmentLiveLeadProfile()
         {
-            CreateMap<UspGetDatEquipmentLiveLeadResult, GetDatEquipmentLiveLeadQuery>();
+            CreateMap<UspGetDatEquipmentLeadResult, GetDatEquipmentLiveLeadQuery>();
         }
     }
 }
