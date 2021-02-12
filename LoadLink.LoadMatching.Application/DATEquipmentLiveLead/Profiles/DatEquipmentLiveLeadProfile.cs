@@ -1,4 +1,4 @@
-﻿using LoadLink.LoadMatching.Application.DATEquipmentLead.Models;
+﻿using LoadLink.LoadMatching.Application.DATEquipmentLiveLead.Models;
 using LoadLink.LoadMatching.Domain.Procedures;
 
 namespace EquipmentLink.EquipmentMatching.Application.DATEquipmentLiveLead.Profiles
