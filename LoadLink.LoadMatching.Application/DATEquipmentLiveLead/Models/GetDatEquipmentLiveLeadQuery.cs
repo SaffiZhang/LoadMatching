@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LoadLink.LoadMatching.Application.DATEquipmentLead.Models
+namespace LoadLink.LoadMatching.Application.DATEquipmentLiveLead.Models
 {
     public class GetDatEquipmentLiveLeadQuery
     {

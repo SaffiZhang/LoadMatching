@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using LoadLink.LoadMatching.Application.DATEquipmentLead.Models;
-using LoadLink.LoadMatching.Application.DATEquipmentLead.Repository;
+using LoadLink.LoadMatching.Application.DATEquipmentLiveLead.Models;
 using LoadLink.LoadMatching.Application.DATEquipmentLiveLead.Repository;
 using System;
 using System.Collections.Generic;
