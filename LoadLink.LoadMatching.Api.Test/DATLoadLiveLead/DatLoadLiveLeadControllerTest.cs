@@ -69,7 +69,7 @@ namespace LoadLink.LoadMatching.Api.Test.DATLoadLiveLead
             var LLB_TCUS = "LLB_TCUS";
             var LLB_API = "LLB_LiveLead";
             var LLB_DAT = "LLB_DAT";
-            var leadFrom = DateTime.Parse("2021-02-11 20:37:00.0000000");
+            var leadFrom = DateTime.Parse("2021-02-12 13:34:00.0000000");
 
             // act
             var actionResult = await _datLoadLiveLeadController.GetList(leadFrom, LLB_DAT, LLB_API, LLB_QP, LLB_EQF, LLB_TCUS, LLB_TCC);
@@ -91,7 +91,7 @@ namespace LoadLink.LoadMatching.Api.Test.DATLoadLiveLead
             var token = 29913888;
             var LLB_API = "LLB_LiveLead";
             var LLB_DAT = "LLB_DAT";
-            var leadFrom = DateTime.Parse("2021-02-11 20:37:00.0000000");
+            var leadFrom = DateTime.Parse("2021-02-12 13:33:00.0000000");
 
             // act
             var actionResult = await _datLoadLiveLeadController.GetByToken(leadFrom, token, LLB_API, LLB_DAT, LLB_QP, LLB_EQF, LLB_TCUS, LLB_TCC);
