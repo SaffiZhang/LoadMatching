@@ -66,7 +66,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.Member
             var param = new DynamicParameters();
             param.Add("@MemberId", memberId);
 
-            await SqlMapper.QueryFirstOrDefaultAsync<UspDeleteAssignedLoadResult>(
+            await SqlMapper.ExecuteAsync(
                 _dbConnection, sql: proc, param, commandType: CommandType.StoredProcedure);
         }
     }
