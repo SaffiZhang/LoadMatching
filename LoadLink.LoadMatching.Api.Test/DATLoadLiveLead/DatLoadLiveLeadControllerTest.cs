@@ -63,43 +63,61 @@ namespace LoadLink.LoadMatching.Api.Test.DATLoadLiveLead
         public async Task DatLoadController_GetList_Success()
         {
             // arrange
-            var LLB_QP = "LLB_QP";
-            var LLB_EQF = "LLB_EQF";
-            var LLB_TCC = "LLB_TCC";
-            var LLB_TCUS = "LLB_TCUS";
-            var LLB_API = "LLB_LiveLead";
-            var LLB_DAT = "LLB_DAT";
+            var LLB_QP = "LLC_QP";
+            var LLB_EQF = "LLC_EQF";
+            var LLB_TCC = "LLC_TCC";
+            var LLB_TCUS = "LLC_TCUS";
+            var LLB_API = "LLC_LiveLead";
+            var LLB_DAT = "LLC_DAT";
             var leadFrom = DateTime.Parse("2021-02-12 13:34:00.0000000");
 
             // act
             var actionResult = await _datLoadLiveLeadController.GetList(leadFrom, LLB_DAT, LLB_API, LLB_QP, LLB_EQF, LLB_TCUS, LLB_TCC);
+            var okResult = actionResult as OkObjectResult;
 
-            // assert
-            var viewResult = Assert.IsType<OkObjectResult>(actionResult);
-            var model = Assert.IsAssignableFrom<IEnumerable<GetDatLoadLiveLeadQuery>>(viewResult.Value);
-            Assert.NotNull(model);
+
+            if (okResult == null)
+            {
+                Assert.IsType<NoContentResult>(actionResult);
+            }
+            else
+            {
+                // assert
+                var viewResult = Assert.IsType<OkObjectResult>(actionResult);
+                var model = Assert.IsAssignableFrom<IEnumerable<GetDatLoadLiveLeadQuery>>(viewResult.Value);
+                Assert.NotNull(model);
+            }
         }
 
         [Fact]
         public async Task DatLoadController_GetListByPosting_Success()
         {
             // arrange
-            var LLB_QP = "LLB_QP";
-            var LLB_EQF = "LLB_EQF";
-            var LLB_TCC = "LLB_TCC";
-            var LLB_TCUS = "LLB_TCUS";
+            var LLB_QP = "LLC_QP";
+            var LLB_EQF = "LLC_EQF";
+            var LLB_TCC = "LLC_TCC";
+            var LLB_TCUS = "LLC_TCUS";
             var token = 29913888;
-            var LLB_API = "LLB_LiveLead";
-            var LLB_DAT = "LLB_DAT";
+            var LLB_API = "LLC_LiveLead";
+            var LLB_DAT = "LLC_DAT";
             var leadFrom = DateTime.Parse("2021-02-12 13:33:00.0000000");
 
             // act
             var actionResult = await _datLoadLiveLeadController.GetByToken(leadFrom, token, LLB_API, LLB_DAT, LLB_QP, LLB_EQF, LLB_TCUS, LLB_TCC);
+            var okResult = actionResult as OkObjectResult;
 
-            // assert
-            var viewResult = Assert.IsType<OkObjectResult>(actionResult);
-            var model = Assert.IsAssignableFrom<IEnumerable<GetDatLoadLiveLeadQuery>>(viewResult.Value);
-            Assert.NotNull(model);
+
+            if (okResult == null)
+            {
+                Assert.IsType<NoContentResult>(actionResult);
+            }
+            else
+            {
+                // assert
+                var viewResult = Assert.IsType<OkObjectResult>(actionResult);
+                var model = Assert.IsAssignableFrom<IEnumerable<GetDatLoadLiveLeadQuery>>(viewResult.Value);
+                Assert.NotNull(model);
+            }
         }
     }
 }

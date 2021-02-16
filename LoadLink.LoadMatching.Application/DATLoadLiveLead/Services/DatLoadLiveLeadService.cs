@@ -44,7 +44,7 @@ namespace LoadLink.LoadMatching.Application.DATLoadLiveLead.Services
                     row.Equifax = HasEQSubscription ? row.Equifax : -1;
                     row.TCC = HasTCCSubscription ? row.TCC : -1;
                     row.TCUS = HasTCUSSubscription ? row.TCUS : -1;
-                    row.QPStatus = HasQPSubscription ? row.QPStatus : -1;
+                    row.QPStatus = HasQPSubscription ? row.QPStatus : 0;
                 });
 
             return _mapper.Map<IEnumerable<GetDatLoadLiveLeadQuery>>(resultList);
