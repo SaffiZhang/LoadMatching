@@ -61,6 +61,10 @@ using LoadLink.LoadMatching.Persistence.Repositories.DATAccount;
 using LoadLink.LoadMatching.Application.DATAccount.Services;
 using LoadLink.LoadMatching.Application.DATEquipmentLiveLead.Services;
 using LoadLink.LoadMatching.Application.DATEquipmentLiveLead.Repository;
+using LoadLink.LoadMatching.Application.EquipmentLiveLead.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.EquipmentLiveLead;
+using LoadLink.LoadMatching.Application.EquipmentLiveLead.Services;
+using LoadLink.LoadMatching.Application.EquipmentLiveLeadLiveLead.Services;
 using LoadLink.LoadMatching.Application.DATLoadLiveLead.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.DATLoadLead;
 using LoadLink.LoadMatching.Application.DATLoadLiveLead.Services;
@@ -89,6 +93,7 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<IDatLoadLiveLeadRepository, DatLoadLiveLeadRepository>();
             services.AddScoped<IDatEquipmentLeadRepository, DatEquipmentLeadRepository>();
             services.AddScoped<IDatEquipmentLiveLeadRepository, DatEquipmentLiveLeadRepository>();
+            services.AddScoped<IEquipmentLiveLeadRepository, EquipmentLiveLeadRepository>();
             services.AddScoped<IEquipmentPostingRepository, EquipmentPostingRepository>();
             services.AddScoped<ILeadsCountRepository, LeadsCountRepository>();
             services.AddScoped<IContactedRepository, ContactedRepository>();
@@ -105,6 +110,7 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<IDatLoadLiveLeadService, DatLoadLiveLeadService>();
             services.AddScoped<IDatEquipmentLeadService, DatEquipmentLeadService>();
             services.AddScoped<IDatEquipmentLiveLeadService, DatEquipmentLiveLeadService>();
+            services.AddScoped<IEquipmentLiveLeadService, EquipmentLiveLeadService>();
             services.AddScoped<IEquipmentPostingService, EquipmentPostingService>();
             services.AddScoped<ILeadsCountService, LeadsCountService>();
             services.AddScoped<IContactedService, ContactedService>();
