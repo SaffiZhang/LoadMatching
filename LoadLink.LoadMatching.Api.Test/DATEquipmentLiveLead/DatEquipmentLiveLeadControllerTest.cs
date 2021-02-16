@@ -73,11 +73,20 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.DATEquipmentLiveLead
 
             // act
             var actionResult = await _datEquipmentLiveLeadController.GetList(leadFrom, LLB_DAT, LLB_API, LLB_QP, LLB_EQF, LLB_TCUS, LLB_TCC);
+            var okResult = actionResult as OkObjectResult;
 
-            // assert
-            var viewResult = Assert.IsType<OkObjectResult>(actionResult);
-            var model = Assert.IsAssignableFrom<IEnumerable<GetDatEquipmentLiveLeadQuery>>(viewResult.Value);
-            Assert.NotNull(model);
+       
+            if (okResult == null)
+            {
+                Assert.IsType<NoContentResult>(actionResult);
+            }
+            else
+            {
+                // assert
+                var viewResult = Assert.IsType<OkObjectResult>(actionResult);
+                var model = Assert.IsAssignableFrom<IEnumerable<GetDatEquipmentLiveLeadQuery>>(viewResult.Value);
+                Assert.NotNull(model);
+            }
         }
 
         [Fact]
@@ -95,11 +104,20 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.DATEquipmentLiveLead
 
             // act
             var actionResult = await _datEquipmentLiveLeadController.GetByToken(leadFrom, token, LLB_API, LLB_DAT, LLB_QP, LLB_EQF, LLB_TCUS, LLB_TCC);
+            var okResult = actionResult as OkObjectResult;
 
-            // assert
-            var viewResult = Assert.IsType<OkObjectResult>(actionResult);
-            var model = Assert.IsAssignableFrom<IEnumerable<GetDatEquipmentLiveLeadQuery>>(viewResult.Value);
-            Assert.NotNull(model);
+
+            if (okResult == null)
+            {
+                Assert.IsType<NoContentResult>(actionResult);
+            }
+            else
+            {
+                // assert
+                var viewResult = Assert.IsType<OkObjectResult>(actionResult);
+                var model = Assert.IsAssignableFrom<IEnumerable<GetDatEquipmentLiveLeadQuery>>(viewResult.Value);
+                Assert.NotNull(model);
+            }
         }
     }
 }
