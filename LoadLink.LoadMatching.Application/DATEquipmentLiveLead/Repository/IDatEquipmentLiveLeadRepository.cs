@@ -8,6 +8,6 @@ namespace LoadLink.LoadMatching.Application.DATEquipmentLiveLead.Repository
 {
     public interface IDatEquipmentLiveLeadRepository
     {
-        Task<IEnumerable<UspGetDatEquipmentLiveLeadResult>> GetLeads(string custCd, string mileageProvider, DateTime? leadfrom, int? postingId);
+        Task<IEnumerable<UspGetDatEquipmentLeadResult>> GetLeads(string custCd, string mileageProvider, DateTime? leadfrom, int? postingId);
     }
 }

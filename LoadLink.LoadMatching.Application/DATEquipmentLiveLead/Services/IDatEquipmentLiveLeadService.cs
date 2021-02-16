@@ -1,4 +1,4 @@
-﻿using LoadLink.LoadMatching.Application.DATEquipmentLead.Models;
+﻿using LoadLink.LoadMatching.Application.DATEquipmentLiveLead.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;

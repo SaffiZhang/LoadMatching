@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using LoadLink.LoadMatching.Application.DATEquipmentLead.Models;
-using LoadLink.LoadMatching.Application.DATEquipmentLead.Repository;
+using LoadLink.LoadMatching.Application.DATEquipmentLiveLead.Models;
 using LoadLink.LoadMatching.Application.DATEquipmentLiveLead.Repository;
 using System;
 using System.Collections.Generic;
@@ -45,7 +44,7 @@ namespace LoadLink.LoadMatching.Application.DATEquipmentLiveLead.Services
                     row.Equifax = HasEQSubscription ? row.Equifax : -1;
                     row.TCC = HasTCCSubscription ? row.TCC : -1;
                     row.TCUS = HasTCUSSubscription ? row.TCUS : -1;
-                    row.QPStatus = HasQPSubscription ? row.QPStatus : -1;
+                    row.QPStatus = HasQPSubscription ? row.QPStatus : 0;
                 });
 
             return _mapper.Map<IEnumerable<GetDatEquipmentLiveLeadQuery>>(resultList);
