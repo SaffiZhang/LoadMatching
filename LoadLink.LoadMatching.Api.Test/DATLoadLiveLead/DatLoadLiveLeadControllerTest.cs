@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using EquipmentLink.EquipmentMatching.Application.DATEquipmentLiveLead.Profiles;
+using LoadLink.LoadMatching.Application.DATLoadLiveLead.Profiles;
 using LoadLink.LoadMatching.Api.Configuration;
 using LoadLink.LoadMatching.Api.Controllers;
 using LoadLink.LoadMatching.Api.Services;
 using LoadLink.LoadMatching.Api.Test.Setup;
-using LoadLink.LoadMatching.Application.DATEquipmentLiveLead.Models;
-using LoadLink.LoadMatching.Application.DATEquipmentLiveLead.Services;
+using LoadLink.LoadMatching.Application.DATLoadLiveLead.Models;
+using LoadLink.LoadMatching.Application.DATLoadLiveLead.Services;
 using LoadLink.LoadMatching.Application.UserSubscription.Services;
-using LoadLink.LoadMatching.Persistence.Repositories.DATEquipmentLead;
+using LoadLink.LoadMatching.Persistence.Repositories.DATLoadLead;
 using LoadLink.LoadMatching.Persistence.Repositories.UserSubscription;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,18 +18,18 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace EquipmentLink.EquipmentMatching.Api.Test.DATEquipmentLiveLead
+namespace LoadLink.LoadMatching.Api.Test.DATLoadLiveLead
 {
-    public class DATEquipmentLiveLeadControllerTest
+    public class DATLoadLiveLeadControllerTest
     {
         private readonly Mock<IHttpContextAccessor> _fakeHttpContextAccessor;
         private readonly IUserHelperService _userHelper;
         private readonly IUserSubscriptionService _userSubscriptionService;
-        private readonly IDatEquipmentLiveLeadService _service;
-        private readonly DatEquipmentLiveLeadController _datEquipmentLiveLeadController;
+        private readonly IDatLoadLiveLeadService _service;
+        private readonly DatLoadLiveLeadController _datLoadLiveLeadController;
 
 
-        public DATEquipmentLiveLeadControllerTest()
+        public DATLoadLiveLeadControllerTest()
         {
             var userId = 34186;
             var custCd = "TCORELL";
@@ -41,13 +41,13 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.DATEquipmentLiveLead
 
             //profile
 
-            var DATEquipmentLiveLeadProfile = new DatEquipmentLiveLeadProfile();
-            var configuration = new MapperConfiguration(config => config.AddProfile(DATEquipmentLiveLeadProfile));
+            var DATLoadLiveLeadProfile = new DatLoadLiveLeadProfile();
+            var configuration = new MapperConfiguration(config => config.AddProfile(DATLoadLiveLeadProfile));
             var profile = new Mapper(configuration);
 
             // integration            
-            var repository = new DatEquipmentLiveLeadRepository(new DatabaseFixture().ConnectionFactory);
-            _service = new DatEquipmentLiveLeadService(repository, profile);
+            var repository = new DatLoadLiveLeadRepository(new DatabaseFixture().ConnectionFactory);
+            _service = new DatLoadLiveLeadService(repository, profile);
 
             var userSubscriptionRepository = new UserSubscriptionRepository(new DatabaseFixture().ConnectionFactory);
             var mockCacheUserApiKey = new DatabaseFixture().MockCacheUserApiKey();
@@ -56,26 +56,26 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.DATEquipmentLiveLead
 
             // controller
             _userHelper = new UserHelperService(_fakeHttpContextAccessor.Object, _userSubscriptionService);
-            _datEquipmentLiveLeadController = new DatEquipmentLiveLeadController(_service, _userHelper, options);
+            _datLoadLiveLeadController = new DatLoadLiveLeadController(_service, _userHelper, options);
         }
 
         [Fact]
-        public async Task DatEquipmentController_GetList_Success()
+        public async Task DatLoadController_GetList_Success()
         {
             // arrange
-            var LLB_QP = "LLB_QP";
-            var LLB_EQF = "LLB_EQF";
-            var LLB_TCC = "LLB_TCC";
-            var LLB_TCUS = "LLB_TCUS";
-            var LLB_API = "LLB_LiveLead";
-            var LLB_DAT = "LLB_DAT";
-            var leadFrom = DateTime.Parse("2021-02-11 20:37:00.0000000");
+            var LLB_QP = "LLC_QP";
+            var LLB_EQF = "LLC_EQF";
+            var LLB_TCC = "LLC_TCC";
+            var LLB_TCUS = "LLC_TCUS";
+            var LLB_API = "LLC_LiveLead";
+            var LLB_DAT = "LLC_DAT";
+            var leadFrom = DateTime.Parse("2021-02-12 13:34:00.0000000");
 
             // act
-            var actionResult = await _datEquipmentLiveLeadController.GetList(leadFrom, LLB_DAT, LLB_API, LLB_QP, LLB_EQF, LLB_TCUS, LLB_TCC);
+            var actionResult = await _datLoadLiveLeadController.GetList(leadFrom, LLB_DAT, LLB_API, LLB_QP, LLB_EQF, LLB_TCUS, LLB_TCC);
             var okResult = actionResult as OkObjectResult;
 
-       
+
             if (okResult == null)
             {
                 Assert.IsType<NoContentResult>(actionResult);
@@ -84,26 +84,26 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.DATEquipmentLiveLead
             {
                 // assert
                 var viewResult = Assert.IsType<OkObjectResult>(actionResult);
-                var model = Assert.IsAssignableFrom<IEnumerable<GetDatEquipmentLiveLeadQuery>>(viewResult.Value);
+                var model = Assert.IsAssignableFrom<IEnumerable<GetDatLoadLiveLeadQuery>>(viewResult.Value);
                 Assert.NotNull(model);
             }
         }
 
         [Fact]
-        public async Task DatEquipmentController_GetListByPosting_Success()
+        public async Task DatLoadController_GetListByPosting_Success()
         {
             // arrange
-            var LLB_QP = "LLB_QP";
-            var LLB_EQF = "LLB_EQF";
-            var LLB_TCC = "LLB_TCC";
-            var LLB_TCUS = "LLB_TCUS";
+            var LLB_QP = "LLC_QP";
+            var LLB_EQF = "LLC_EQF";
+            var LLB_TCC = "LLC_TCC";
+            var LLB_TCUS = "LLC_TCUS";
             var token = 29913888;
-            var LLB_API = "LLB_LiveLead";
-            var LLB_DAT = "LLB_DAT";
-            var leadFrom = DateTime.Parse("2021-02-11 20:37:00.0000000");
+            var LLB_API = "LLC_LiveLead";
+            var LLB_DAT = "LLC_DAT";
+            var leadFrom = DateTime.Parse("2021-02-12 13:33:00.0000000");
 
             // act
-            var actionResult = await _datEquipmentLiveLeadController.GetByToken(leadFrom, token, LLB_API, LLB_DAT, LLB_QP, LLB_EQF, LLB_TCUS, LLB_TCC);
+            var actionResult = await _datLoadLiveLeadController.GetByToken(leadFrom, token, LLB_API, LLB_DAT, LLB_QP, LLB_EQF, LLB_TCUS, LLB_TCC);
             var okResult = actionResult as OkObjectResult;
 
 
@@ -115,7 +115,7 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.DATEquipmentLiveLead
             {
                 // assert
                 var viewResult = Assert.IsType<OkObjectResult>(actionResult);
-                var model = Assert.IsAssignableFrom<IEnumerable<GetDatEquipmentLiveLeadQuery>>(viewResult.Value);
+                var model = Assert.IsAssignableFrom<IEnumerable<GetDatLoadLiveLeadQuery>>(viewResult.Value);
                 Assert.NotNull(model);
             }
         }
