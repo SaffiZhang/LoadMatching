@@ -69,6 +69,9 @@ using LoadLink.LoadMatching.Application.LoadLiveLead.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.LoadLiveLead;
 using LoadLink.LoadMatching.Application.LoadLiveLead.Services;
 using LoadLink.LoadMatching.Application.LoadLiveLeadLiveLead.Services;
+using LoadLink.LoadMatching.Persistence.Repositories.NetworkMember;
+using LoadLink.LoadMatching.Application.NetworkMembers.Repository;
+using LoadLink.LoadMatching.Application.NetworkMembers.Services;
 
 namespace LoadLink.LoadMatching.Api.Helpers
 {
@@ -99,6 +102,7 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<ILeadsCountRepository, LeadsCountRepository>();
             services.AddScoped<IContactedRepository, ContactedRepository>();
             services.AddScoped<IDatAccountRepository, DatAccountRepository>();
+            services.AddScoped<INetworkMembersRepository, NetworkMembersRepository>();
 
             // services
             services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
@@ -116,6 +120,7 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<ILeadsCountService, LeadsCountService>();
             services.AddScoped<IContactedService, ContactedService>();
             services.AddScoped<IDatAccountService, DatAccountService>();
+            services.AddScoped<INetworkMembersService, NetworkMembersService>();
 
             // local services
             services.AddScoped<IUserHelperService, UserHelperService>();
