@@ -59,6 +59,21 @@ using LoadLink.LoadMatching.Application.Contacted.Services;
 using LoadLink.LoadMatching.Application.DATAccount.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.DATAccount;
 using LoadLink.LoadMatching.Application.DATAccount.Services;
+using LoadLink.LoadMatching.Application.LoadPosting.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.LoadPosting;
+using LoadLink.LoadMatching.Application.LoadPosting.Services;
+using LoadLink.LoadMatching.Application.LoadLead.Services;
+using LoadLink.LoadMatching.Application.LoadLead.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.LoadLead;
+using LoadLink.LoadMatching.Application.Networks.Repository;
+using LoadLink.LoadMatching.Application.Networks.Services;
+using LoadLink.LoadMatching.Persistence.Repositories.Networks;
+using LoadLink.LoadMatching.Application.VehicleAttribute.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.VehicleAttribute;
+using LoadLink.LoadMatching.Application.VehicleSize.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.VehicleSize;
+using LoadLink.LoadMatching.Application.VehicleType.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.VehicleType;
 
 namespace LoadLink.LoadMatching.Api.Helpers
 {
@@ -86,6 +101,12 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<ILeadsCountRepository, LeadsCountRepository>();
             services.AddScoped<IContactedRepository, ContactedRepository>();
             services.AddScoped<IDatAccountRepository, DatAccountRepository>();
+            services.AddScoped<ILoadPostingRepository, LoadPostingRepository>();
+            services.AddScoped<ILoadLeadRepository, LoadLeadRepository>();
+            services.AddScoped<INetworksRepository, NetworksRepository>();
+            services.AddScoped<IVehicleAttributeRepository, VehicleAttributeRepository>();
+            services.AddScoped<IVehicleSizeRepository, VehicleSizeRepository>();
+            services.AddScoped<IVehicleTypeRepository, VehicleTypeRepository>();
 
             // services
             services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
@@ -96,11 +117,17 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<IEquipmentLeadService, EquipmentLeadService>();
             services.AddScoped<IDatLoadLeadService, DatLoadLeadService>();
             services.AddScoped<IDatEquipmentLeadService, DatEquipmentLeadService>();
+            services.AddScoped<ILoadLeadService, LoadLeadService>();
+            services.AddScoped<INetworksService, NetworksService>();
+            services.AddScoped<IVehicleAttributeRepository, VehicleAttributeRepository>();
+            services.AddScoped<IVehicleSizeRepository, VehicleSizeRepository>();
+            services.AddScoped<IVehicleTypeRepository, VehicleTypeRepository>();
 
             services.AddScoped<IEquipmentPostingService, EquipmentPostingService>();
             services.AddScoped<ILeadsCountService, LeadsCountService>();
             services.AddScoped<IContactedService, ContactedService>();
             services.AddScoped<IDatAccountService, DatAccountService>();
+            services.AddScoped<ILoadPostingService, LoadPostingService>();
 
             // local services
             services.AddScoped<IUserHelperService, UserHelperService>();
