@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace LoadLink.LoadMatching.Persistence.Repositories.VehicleAttribute
 {
-    public class USMemberSearchRepository : IUSMemberSearchRepository
+    public class VehicleAttributeRepository : IVehicleAttributeRepository
     {
         private readonly IDbConnection _dbConnection;
 
-        public USMemberSearchRepository(IConnectionFactory connectionFactory)
+        public VehicleAttributeRepository(IConnectionFactory connectionFactory)
         {
             _dbConnection = new SqlConnection(connectionFactory.ConnectionString);
         }

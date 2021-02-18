@@ -113,6 +113,18 @@ using LoadLink.LoadMatching.Application.VehicleType.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.VehicleType;
 using LoadLink.LoadMatching.Application.VehicleSize.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.VehicleSize;
+using LoadLink.LoadMatching.Application.LoadLiveLead.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.LoadLiveLead;
+using LoadLink.LoadMatching.Application.LoadLiveLead.Services;
+using LoadLink.LoadMatching.Application.LoadLiveLeadLiveLead.Services;
+using LoadLink.LoadMatching.Application.NetworkMembers.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.NetworkMember;
+using LoadLink.LoadMatching.Application.NetworkMembers.Services;
+using LoadLink.LoadMatching.Application.LoadPosting.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.LoadPosting;
+using LoadLink.LoadMatching.Application.LoadPosting.Services;
+using LoadLink.LoadMatching.Application.VehicleAttribute.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.VehicleAttribute;
 
 namespace LoadLink.LoadMatching.Api.Helpers
 {
@@ -139,6 +151,7 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<IDatEquipmentLeadRepository, DatEquipmentLeadRepository>();
             services.AddScoped<IDatEquipmentLiveLeadRepository, DatEquipmentLiveLeadRepository>();
             services.AddScoped<IEquipmentLiveLeadRepository, EquipmentLiveLeadRepository>();
+            services.AddScoped<ILoadLiveLeadRepository, LoadLiveLeadRepository>();
             services.AddScoped<IEquipmentPostingRepository, EquipmentPostingRepository>();
             services.AddScoped<ILeadsCountRepository, LeadsCountRepository>();
             services.AddScoped<IContactedRepository, ContactedRepository>();
@@ -158,6 +171,13 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<IUSMemberSearchRepository, USMemberSearchRepository>();
             services.AddScoped<IVehicleTypeRepository, VehicleTypeRepository>();
             services.AddScoped<IVehicleSizeRepository, VehicleSizeRepository>();
+            services.AddScoped<INetworkMembersRepository, NetworkMembersRepository>();
+            services.AddScoped<ILoadPostingRepository, LoadPostingRepository>();
+            services.AddScoped<ILoadLeadRepository, LoadLeadRepository>();
+            services.AddScoped<INetworksRepository, NetworksRepository>();
+            services.AddScoped<IVehicleAttributeRepository, VehicleAttributeRepository>();
+            services.AddScoped<IVehicleSizeRepository, VehicleSizeRepository>();
+            services.AddScoped<IVehicleTypeRepository, VehicleTypeRepository>();
 
             // services
             services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
@@ -171,6 +191,12 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<IDatEquipmentLeadService, DatEquipmentLeadService>();
             services.AddScoped<IDatEquipmentLiveLeadService, DatEquipmentLiveLeadService>();
             services.AddScoped<IEquipmentLiveLeadService, EquipmentLiveLeadService>();
+            services.AddScoped<ILoadLiveLeadService, LoadLiveLeadService>();
+            services.AddScoped<ILoadLeadService, LoadLeadService>();
+            services.AddScoped<INetworksService, NetworksService>();
+            services.AddScoped<IVehicleAttributeRepository, VehicleAttributeRepository>();
+            services.AddScoped<IVehicleSizeRepository, VehicleSizeRepository>();
+            services.AddScoped<IVehicleTypeRepository, VehicleTypeRepository>();
             services.AddScoped<IEquipmentPostingService, EquipmentPostingService>();
             services.AddScoped<ILeadsCountService, LeadsCountService>();
             services.AddScoped<IContactedService, ContactedService>();
@@ -190,6 +216,8 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<IUSMemberSearchService, USMemberSearchService>();
             services.AddScoped<IVehicleTypeService, VehicleTypeService>();
             services.AddScoped<IVehicleSizeService, VehicleSizeService>();
+            services.AddScoped<INetworkMembersService, NetworkMembersService>();
+            services.AddScoped<ILoadPostingService, LoadPostingService>();
 
             // local services
             services.AddScoped<IUserHelperService, UserHelperService>();

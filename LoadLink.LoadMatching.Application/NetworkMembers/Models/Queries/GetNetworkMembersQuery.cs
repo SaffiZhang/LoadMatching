@@ -1,7 +1,10 @@
-﻿
-namespace LoadLink.LoadMatching.Domain.Procedures
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace LoadLink.LoadMatching.Application.NetworkMembers.Models.Queries
 {
-    public class UspGetNetworkMemberResult
+    public class GetNetworkMembersQuery
     {
         public int Id { get; set; }
         public int NetworkId { get; set; }
@@ -12,6 +15,5 @@ namespace LoadLink.LoadMatching.Domain.Procedures
         public string CompanyLocation { get; set; }
         public string ContactPhone { get; set; }
         public string PrimaryContactName { get; set; }
-
     }
 }

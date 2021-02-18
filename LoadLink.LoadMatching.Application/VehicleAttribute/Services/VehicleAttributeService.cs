@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace LoadLink.LoadMatching.Application.VehicleAttribute.Services
 {
-    public class USMemberSearchService : IUSMemberSearchService
+    public class VehicleAttributeService : IVehicleAttributeService
     {
-        private readonly IUSMemberSearchRepository _vehicleAttributeRepository;
+        private readonly IVehicleAttributeRepository _vehicleAttributeRepository;
         private readonly IMapper _mapper;
 
-        public USMemberSearchService(IUSMemberSearchRepository vehicleAttributeRepository, IMapper mapper)
+        public VehicleAttributeService(IVehicleAttributeRepository vehicleAttributeRepository, IMapper mapper)
         {
             _vehicleAttributeRepository = vehicleAttributeRepository;
             _mapper = mapper;
