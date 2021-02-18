@@ -35,9 +35,12 @@ namespace LoadLink.LoadMatching.Api.Test.VehicleType
             var configuration = new MapperConfiguration(config => config.AddProfile(vehicleTypeProfile));
             var profile = new Mapper(configuration);
 
+            // cacherepository
+            var cacheVType = new DatabaseFixture().MockCacheGetVehicleTypesQuery();
+
             // integration            
             var repository = new VehicleTypeRepository(new DatabaseFixture().ConnectionFactory);
-            _service = new VehicleTypeService(repository, profile);
+            _service = new VehicleTypeService(repository, profile, cacheVType.Object);
 
             var userSubscriptionRepository = new UserSubscriptionRepository(new DatabaseFixture().ConnectionFactory);
             var mockCacheUserApiKey = new DatabaseFixture().MockCacheUserApiKey();

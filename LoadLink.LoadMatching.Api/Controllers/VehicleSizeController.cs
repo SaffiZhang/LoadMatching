@@ -31,7 +31,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{postType}")]
+        [HttpGet("PostType/{postType}")]
         public async Task<IActionResult> GetListByPostTypeAsync(string postType)
         {
             var result = await _vehicleSizeService.GetListByPostTypeAsync(postType);
