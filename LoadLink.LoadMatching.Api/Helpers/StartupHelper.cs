@@ -123,18 +123,8 @@ using LoadLink.LoadMatching.Application.NetworkMembers.Services;
 using LoadLink.LoadMatching.Application.LoadPosting.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.LoadPosting;
 using LoadLink.LoadMatching.Application.LoadPosting.Services;
-using LoadLink.LoadMatching.Application.LoadLead.Services;
-using LoadLink.LoadMatching.Application.LoadLead.Repository;
-using LoadLink.LoadMatching.Persistence.Repositories.LoadLead;
-using LoadLink.LoadMatching.Application.Networks.Repository;
-using LoadLink.LoadMatching.Application.Networks.Services;
-using LoadLink.LoadMatching.Persistence.Repositories.Networks;
 using LoadLink.LoadMatching.Application.VehicleAttribute.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.VehicleAttribute;
-using LoadLink.LoadMatching.Application.VehicleSize.Repository;
-using LoadLink.LoadMatching.Persistence.Repositories.VehicleSize;
-using LoadLink.LoadMatching.Application.VehicleType.Repository;
-using LoadLink.LoadMatching.Persistence.Repositories.VehicleType;
 
 namespace LoadLink.LoadMatching.Api.Helpers
 {
@@ -207,7 +197,6 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<IVehicleAttributeRepository, VehicleAttributeRepository>();
             services.AddScoped<IVehicleSizeRepository, VehicleSizeRepository>();
             services.AddScoped<IVehicleTypeRepository, VehicleTypeRepository>();
-
             services.AddScoped<IEquipmentPostingService, EquipmentPostingService>();
             services.AddScoped<ILeadsCountService, LeadsCountService>();
             services.AddScoped<IContactedService, ContactedService>();
