@@ -8,6 +8,10 @@ using Moq;
 using System;
 using Microsoft.Extensions.Options;
 using LoadLink.LoadMatching.Persistence.Configuration;
+using LoadLink.LoadMatching.Application.VehicleAttribute.Models.Queries;
+using System.Collections.Generic;
+using LoadLink.LoadMatching.Application.VehicleSize.Models.Queries;
+using LoadLink.LoadMatching.Application.VehicleType.Models.Queries;
 
 namespace LoadLink.LoadMatching.Api.Test.Setup
 {
@@ -38,6 +42,45 @@ namespace LoadLink.LoadMatching.Api.Test.Setup
             memoryCacheEntryOptions.SetSlidingExpiration(TimeSpan.FromMinutes(2));
 
             return new Mock<CacheRepository<UserApiKeyQuery>>(memCache, memoryCacheEntryOptions);
+        }
+
+        // VehicleSize
+        public Mock<CacheRepository<IEnumerable<GetVehicleSizeQuery>>> MockCacheGetVehicleSizeQuery()
+        {
+            var memOptions = new MemoryCacheOptions();
+            var expireTimespan = new TimeSpan((DateTime.Now - DateTime.Today).Ticks);
+            var memoryCacheEntryOptions = new MemoryCacheEntryOptions() { AbsoluteExpirationRelativeToNow = expireTimespan };
+
+            var memCache = new MemoryCache(memOptions);
+            memoryCacheEntryOptions.SetSlidingExpiration(TimeSpan.FromMinutes(2));
+
+            return new Mock<CacheRepository<IEnumerable<GetVehicleSizeQuery>>>(memCache, memoryCacheEntryOptions);
+        }
+
+        // VehicleType
+        public Mock<CacheRepository<IEnumerable<GetVehicleTypesQuery>>> MockCacheGetVehicleTypesQuery()
+        {
+            var memOptions = new MemoryCacheOptions();
+            var expireTimespan = new TimeSpan((DateTime.Now - DateTime.Today).Ticks);
+            var memoryCacheEntryOptions = new MemoryCacheEntryOptions() { AbsoluteExpirationRelativeToNow = expireTimespan };
+
+            var memCache = new MemoryCache(memOptions);
+            memoryCacheEntryOptions.SetSlidingExpiration(TimeSpan.FromMinutes(2));
+
+            return new Mock<CacheRepository<IEnumerable<GetVehicleTypesQuery>>>(memCache, memoryCacheEntryOptions);
+        }
+
+        // VehicleAttributes
+        public Mock<CacheRepository<IEnumerable<GetVehicleAttributeQuery>>> MockCacheGetVehicleAttributeQuery()
+        {
+            var memOptions = new MemoryCacheOptions();
+            var expireTimespan = new TimeSpan((DateTime.Now - DateTime.Today).Ticks);
+            var memoryCacheEntryOptions = new MemoryCacheEntryOptions() { AbsoluteExpirationRelativeToNow = expireTimespan };
+
+            var memCache = new MemoryCache(memOptions);
+            memoryCacheEntryOptions.SetSlidingExpiration(TimeSpan.FromMinutes(2));
+
+            return new Mock<CacheRepository<IEnumerable<GetVehicleAttributeQuery>>>(memCache, memoryCacheEntryOptions);
         }
 
         // specific mapping configuration

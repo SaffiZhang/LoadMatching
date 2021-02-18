@@ -128,6 +128,10 @@ using LoadLink.LoadMatching.Persistence.Repositories.VehicleAttribute;
 using LoadLink.LoadMatching.Application.LegacyDeleted.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.LegacyDeleted;
 using LoadLink.LoadMatching.Application.LegacyDeleted.Services;
+using LoadLink.LoadMatching.Application.VehicleSize.Models.Queries;
+using LoadLink.LoadMatching.Application.VehicleType.Models.Queries;
+using LoadLink.LoadMatching.Application.VehicleAttribute.Models.Queries;
+using LoadLink.LoadMatching.Application.VehicleAttribute.Services;
 
 namespace LoadLink.LoadMatching.Api.Helpers
 {
@@ -172,12 +176,8 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<ITemplatePostingRepository, TemplatePostingRepository>();
             services.AddScoped<IUSCarrierSearchRepository, USCarrierSearchRepository>();
             services.AddScoped<IUSMemberSearchRepository, USMemberSearchRepository>();
-            services.AddScoped<IVehicleTypeRepository, VehicleTypeRepository>();
-            services.AddScoped<IVehicleSizeRepository, VehicleSizeRepository>();
             services.AddScoped<INetworkMembersRepository, NetworkMembersRepository>();
             services.AddScoped<ILoadPostingRepository, LoadPostingRepository>();
-            services.AddScoped<ILoadLeadRepository, LoadLeadRepository>();
-            services.AddScoped<INetworksRepository, NetworksRepository>();
             services.AddScoped<IVehicleAttributeRepository, VehicleAttributeRepository>();
             services.AddScoped<IVehicleSizeRepository, VehicleSizeRepository>();
             services.AddScoped<IVehicleTypeRepository, VehicleTypeRepository>();
@@ -198,9 +198,6 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<ILoadLiveLeadService, LoadLiveLeadService>();
             services.AddScoped<ILoadLeadService, LoadLeadService>();
             services.AddScoped<INetworksService, NetworksService>();
-            services.AddScoped<IVehicleAttributeRepository, VehicleAttributeRepository>();
-            services.AddScoped<IVehicleSizeRepository, VehicleSizeRepository>();
-            services.AddScoped<IVehicleTypeRepository, VehicleTypeRepository>();
             services.AddScoped<IEquipmentPostingService, EquipmentPostingService>();
             services.AddScoped<ILeadsCountService, LeadsCountService>();
             services.AddScoped<IContactedService, ContactedService>();
@@ -208,10 +205,8 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<IEquipmentPositionService, EquipmentPositionService>();
             services.AddScoped<IExcludeService, ExcludeService>();
             services.AddScoped<IFlagService, FlagService>();
-            services.AddScoped<ILoadLeadService, LoadLeadService>();
             services.AddScoped<ILoadPositionService, LoadPositionService>();
             services.AddScoped<IMemberService, MemberService>();
-            services.AddScoped<INetworksService, NetworksService>();
             services.AddScoped<IPDRatioService, PDRatioService>();
             services.AddScoped<IRIRateService, RIRateService>();
             services.AddScoped<IRepostAllService, RepostAllService>();
@@ -223,6 +218,7 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<INetworkMembersService, NetworkMembersService>();
             services.AddScoped<ILoadPostingService, LoadPostingService>();
             services.AddScoped<ILegacyDeletedService, LegacyDeletedService>();
+            services.AddScoped<IVehicleAttributeService, VehicleAttributeService>();
 
             // local services
             services.AddScoped<IUserHelperService, UserHelperService>();
@@ -259,16 +255,31 @@ namespace LoadLink.LoadMatching.Api.Helpers
             memoryCacheEntryOptions.SetSlidingExpiration(TimeSpan.FromMinutes(slidingExpiration));
 
             // cached data models
-
+            // ==================
             // userapikey setting
             services.AddSingleton<ICacheRepository<UserApiKeyQuery>, CacheRepository<UserApiKeyQuery>>(sp =>
             {
                 return new CacheRepository<UserApiKeyQuery>(memoryCache, memoryCacheEntryOptions);
             });
 
+            // VehicleSize setting
+            services.AddSingleton<ICacheRepository<IEnumerable<GetVehicleSizeQuery>>, CacheRepository<IEnumerable<GetVehicleSizeQuery>>>(sp =>
+            {
+                return new CacheRepository<IEnumerable<GetVehicleSizeQuery>>(memoryCache, memoryCacheEntryOptions);
+            });
 
-            // set other data that can be cache here
+            // VehicleType setting
+            services.AddSingleton<ICacheRepository<IEnumerable<GetVehicleTypesQuery>>, CacheRepository<IEnumerable<GetVehicleTypesQuery>>>(sp =>
+            {
+                return new CacheRepository<IEnumerable<GetVehicleTypesQuery>>(memoryCache, memoryCacheEntryOptions);
+            });
 
+            // VehicleAttribute setting
+            services.AddSingleton<ICacheRepository<IEnumerable<GetVehicleAttributeQuery>>, CacheRepository<IEnumerable<GetVehicleAttributeQuery>>>(sp =>
+            {
+                return new CacheRepository<IEnumerable<GetVehicleAttributeQuery>>(memoryCache, memoryCacheEntryOptions);
+            });
+            // ==================
         }
 
         public static void RegisterAuthentication(this IServiceCollection services)
