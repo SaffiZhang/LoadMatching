@@ -125,6 +125,9 @@ using LoadLink.LoadMatching.Persistence.Repositories.LoadPosting;
 using LoadLink.LoadMatching.Application.LoadPosting.Services;
 using LoadLink.LoadMatching.Application.VehicleAttribute.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.VehicleAttribute;
+using LoadLink.LoadMatching.Application.LegacyDeleted.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.LegacyDeleted;
+using LoadLink.LoadMatching.Application.LegacyDeleted.Services;
 
 namespace LoadLink.LoadMatching.Api.Helpers
 {
@@ -178,6 +181,7 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<IVehicleAttributeRepository, VehicleAttributeRepository>();
             services.AddScoped<IVehicleSizeRepository, VehicleSizeRepository>();
             services.AddScoped<IVehicleTypeRepository, VehicleTypeRepository>();
+            services.AddScoped<ILegacyDeletedRepository, LegacyDeletedRepository>();
 
             // services
             services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
@@ -218,6 +222,7 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<IVehicleSizeService, VehicleSizeService>();
             services.AddScoped<INetworkMembersService, NetworkMembersService>();
             services.AddScoped<ILoadPostingService, LoadPostingService>();
+            services.AddScoped<ILegacyDeletedService, LegacyDeletedService>();
 
             // local services
             services.AddScoped<IUserHelperService, UserHelperService>();
