@@ -120,6 +120,9 @@ using LoadLink.LoadMatching.Application.LoadLiveLead.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.LoadLiveLead;
 using LoadLink.LoadMatching.Application.LoadLiveLead.Services;
 using LoadLink.LoadMatching.Application.LoadLiveLeadLiveLead.Services;
+using LoadLink.LoadMatching.Application.NetworkMembers.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.NetworkMember;
+using LoadLink.LoadMatching.Application.NetworkMembers.Services;
 
 namespace LoadLink.LoadMatching.Api.Helpers
 {
