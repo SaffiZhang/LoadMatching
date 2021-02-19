@@ -132,6 +132,12 @@ using LoadLink.LoadMatching.Application.VehicleSize.Models.Queries;
 using LoadLink.LoadMatching.Application.VehicleType.Models.Queries;
 using LoadLink.LoadMatching.Application.VehicleAttribute.Models.Queries;
 using LoadLink.LoadMatching.Application.VehicleAttribute.Services;
+using LoadLink.LoadMatching.Application.MemberSearch.Services;
+using LoadLink.LoadMatching.Application.MemberSearch.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.MemberSearch;
+using LoadLink.LoadMatching.Application.LiveLead.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.LiveLead;
+using LoadLink.LoadMatching.Application.LiveLead.Services;
 
 namespace LoadLink.LoadMatching.Api.Helpers
 {
@@ -147,88 +153,90 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             // repositories
-            services.AddScoped<IUserSubscriptionRepository, UserSubscriptionRepository>();
-            services.AddScoped<ICityRepository, CityRepository>();
             services.AddScoped<IAssignedEquipmentRepository, AssignedEquipmentRepository>();
             services.AddScoped<IAssignedLoadRepository, AssignedLoadRepository>();
             services.AddScoped<ICarrierSearchRepository, CarrierSearchRepository>();
-            services.AddScoped<IEquipmentLeadRepository, EquipmentLeadRepository>();
-            services.AddScoped<IDatLoadLeadRepository, DatLoadLeadRepository>();
-            services.AddScoped<IDatLoadLiveLeadRepository, DatLoadLiveLeadRepository>();
-            services.AddScoped<IDatEquipmentLeadRepository, DatEquipmentLeadRepository>();
-            services.AddScoped<IDatEquipmentLiveLeadRepository, DatEquipmentLiveLeadRepository>();
-            services.AddScoped<IEquipmentLiveLeadRepository, EquipmentLiveLeadRepository>();
-            services.AddScoped<ILoadLiveLeadRepository, LoadLiveLeadRepository>();
-            services.AddScoped<IEquipmentPostingRepository, EquipmentPostingRepository>();
-            services.AddScoped<ILeadsCountRepository, LeadsCountRepository>();
+            services.AddScoped<ICityRepository, CityRepository>();
             services.AddScoped<IContactedRepository, ContactedRepository>();
             services.AddScoped<IDatAccountRepository, DatAccountRepository>();
+            services.AddScoped<IDatEquipmentLeadRepository, DatEquipmentLeadRepository>();
+            services.AddScoped<IDatEquipmentLiveLeadRepository, DatEquipmentLiveLeadRepository>();
+            services.AddScoped<IDatLoadLeadRepository, DatLoadLeadRepository>();
+            services.AddScoped<IDatLoadLiveLeadRepository, DatLoadLiveLeadRepository>();
+            services.AddScoped<IEquipmentLeadRepository, EquipmentLeadRepository>();
+            services.AddScoped<IEquipmentLiveLeadRepository, EquipmentLiveLeadRepository>();
             services.AddScoped<IEquipmentPositionRepository, EquipmentPositionRepository>();
+            services.AddScoped<IEquipmentPostingRepository, EquipmentPostingRepository>();
             services.AddScoped<IExcludeRepository, ExcludeRepository>();
             services.AddScoped<IFlagRepository, FlagRepository>();
+            services.AddScoped<ILeadsCountRepository, LeadsCountRepository>();
+            services.AddScoped<ILegacyDeletedRepository, LegacyDeletedRepository>();
+            services.AddScoped<ILiveLeadRepository, LiveLeadRepository>();
             services.AddScoped<ILoadLeadRepository, LoadLeadRepository>();
+            services.AddScoped<ILoadLiveLeadRepository, LoadLiveLeadRepository>();
             services.AddScoped<ILoadPositionRepository, LoadPositionRepository>();
+            services.AddScoped<ILoadPostingRepository, LoadPostingRepository>();
             services.AddScoped<IMemberRepository, MemberRepository>();
+            services.AddScoped<IMemberSearchRepository, MemberSearchRepository>();
+            services.AddScoped<INetworkMembersRepository, NetworkMembersRepository>();
             services.AddScoped<INetworksRepository, NetworksRepository>();
             services.AddScoped<IPDRatioRepository, PDRatioRepository>();
-            services.AddScoped<IRIRateRepository, RIRateRepository>();
             services.AddScoped<IRepostAllRepository, RepostAllRepository>();
+            services.AddScoped<IRIRateRepository, RIRateRepository>();
             services.AddScoped<ITemplatePostingRepository, TemplatePostingRepository>();
             services.AddScoped<IUSCarrierSearchRepository, USCarrierSearchRepository>();
+            services.AddScoped<IUserSubscriptionRepository, UserSubscriptionRepository>();
             services.AddScoped<IUSMemberSearchRepository, USMemberSearchRepository>();
-            services.AddScoped<INetworkMembersRepository, NetworkMembersRepository>();
-            services.AddScoped<ILoadPostingRepository, LoadPostingRepository>();
             services.AddScoped<IVehicleAttributeRepository, VehicleAttributeRepository>();
             services.AddScoped<IVehicleSizeRepository, VehicleSizeRepository>();
             services.AddScoped<IVehicleTypeRepository, VehicleTypeRepository>();
-            services.AddScoped<ILegacyDeletedRepository, LegacyDeletedRepository>();
 
             // services
-            services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
-            services.AddScoped<ICityService, CityService>();
             services.AddScoped<IAssignedEquipmentService, AssignedEquipmentService>();
             services.AddScoped<IAssignedLoadService, AssignedLoadService>();
             services.AddScoped<ICarrierSearchService, CarrierSearchService>();
-            services.AddScoped<IEquipmentLeadService, EquipmentLeadService>();
-            services.AddScoped<IDatLoadLeadService, DatLoadLeadService>();
-            services.AddScoped<IDatLoadLiveLeadService, DatLoadLiveLeadService>();
-            services.AddScoped<IDatEquipmentLeadService, DatEquipmentLeadService>();
-            services.AddScoped<IDatEquipmentLiveLeadService, DatEquipmentLiveLeadService>();
-            services.AddScoped<IEquipmentLiveLeadService, EquipmentLiveLeadService>();
-            services.AddScoped<ILoadLiveLeadService, LoadLiveLeadService>();
-            services.AddScoped<ILoadLeadService, LoadLeadService>();
-            services.AddScoped<INetworksService, NetworksService>();
-            services.AddScoped<IEquipmentPostingService, EquipmentPostingService>();
-            services.AddScoped<ILeadsCountService, LeadsCountService>();
+            services.AddScoped<ICityService, CityService>();
             services.AddScoped<IContactedService, ContactedService>();
             services.AddScoped<IDatAccountService, DatAccountService>();
+            services.AddScoped<IDatEquipmentLeadService, DatEquipmentLeadService>();
+            services.AddScoped<IDatEquipmentLiveLeadService, DatEquipmentLiveLeadService>();
+            services.AddScoped<IDatLoadLeadService, DatLoadLeadService>();
+            services.AddScoped<IDatLoadLiveLeadService, DatLoadLiveLeadService>();
+            services.AddScoped<IEquipmentLeadService, EquipmentLeadService>();
+            services.AddScoped<IEquipmentLiveLeadService, EquipmentLiveLeadService>();
             services.AddScoped<IEquipmentPositionService, EquipmentPositionService>();
+            services.AddScoped<IEquipmentPostingService, EquipmentPostingService>();
             services.AddScoped<IExcludeService, ExcludeService>();
             services.AddScoped<IFlagService, FlagService>();
+            services.AddScoped<ILeadsCountService, LeadsCountService>();
+            services.AddScoped<ILegacyDeletedService, LegacyDeletedService>();
+            services.AddScoped<ILiveLeadService, LiveLeadService>();
+            services.AddScoped<ILoadLeadService, LoadLeadService>();
+            services.AddScoped<ILoadLiveLeadService, LoadLiveLeadService>();
             services.AddScoped<ILoadPositionService, LoadPositionService>();
+            services.AddScoped<ILoadPostingService, LoadPostingService>();
             services.AddScoped<IMemberService, MemberService>();
+            services.AddScoped<IMemberSearchService, MemberSearchService>();
+            services.AddScoped<INetworkMembersService, NetworkMembersService>();
+            services.AddScoped<INetworksService, NetworksService>();
             services.AddScoped<IPDRatioService, PDRatioService>();
-            services.AddScoped<IRIRateService, RIRateService>();
             services.AddScoped<IRepostAllService, RepostAllService>();
+            services.AddScoped<IRIRateService, RIRateService>();
             services.AddScoped<ITemplatePostingService, TemplatePostingService>();
             services.AddScoped<IUSCarrierSearchService, USCarrierSearchService>();
+            services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
             services.AddScoped<IUSMemberSearchService, USMemberSearchService>();
-            services.AddScoped<IVehicleTypeService, VehicleTypeService>();
-            services.AddScoped<IVehicleSizeService, VehicleSizeService>();
-            services.AddScoped<INetworkMembersService, NetworkMembersService>();
-            services.AddScoped<ILoadPostingService, LoadPostingService>();
-            services.AddScoped<ILegacyDeletedService, LegacyDeletedService>();
             services.AddScoped<IVehicleAttributeService, VehicleAttributeService>();
+            services.AddScoped<IVehicleSizeService, VehicleSizeService>();
+            services.AddScoped<IVehicleTypeService, VehicleTypeService>();
 
             // local services
             services.AddScoped<IUserHelperService, UserHelperService>();
-
         }
 
         public static void AddValidators(this IServiceCollection services)
         {
             services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
-
         }
 
         public static void AddCache(this IServiceCollection services)
@@ -297,7 +305,6 @@ namespace LoadLink.LoadMatching.Api.Helpers
                 o.Audience = "linkup";
                 o.RequireHttpsMetadata = false;
             });
-
         }
 
         public static void AllowedCors(this IServiceCollection services)
@@ -416,6 +423,5 @@ namespace LoadLink.LoadMatching.Api.Helpers
                 .OfType<NewtonsoftJsonPatchInputFormatter>()
                 .First();
         }
-
     }
 }
