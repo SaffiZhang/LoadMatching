@@ -17,27 +17,30 @@ using Xunit;
 
 namespace LoadLink.LoadMatching.Api.Test.VehicleAttribute
 {
-    public class USMemberSearchControllerTest
+    public class VehicleAttributeControllerTest
     {
-        private readonly IUSMemberSearchService _service;
+        private readonly IVehicleAttributeService _service;
         private readonly VehicleAttributeController _vehicleAttributeController;
         private readonly Mock<IHttpContextAccessor> _fakeHttpContextAccessor;
         private readonly IUserHelperService _userHelper;
         private readonly IUserSubscriptionService _userSubscriptionService;
 
-        public USMemberSearchControllerTest()
+        public VehicleAttributeControllerTest()
         {
             var userId = 34186;
             var custCd = "TCORELL";
             _fakeHttpContextAccessor = new FakeContext().MockHttpContext(userId, custCd);
 
-            var vehicleAttributeProfile = new USMemberSearchProfile();
+            var vehicleAttributeProfile = new VehicleAttributeProfile();
             var configuration = new MapperConfiguration(config => config.AddProfile(vehicleAttributeProfile));
             var profile = new Mapper(configuration);
 
+            // cacherepository
+            var cacheVAttribute = new DatabaseFixture().MockCacheGetVehicleAttributeQuery();
+
             // integration            
-            var repository = new USMemberSearchRepository(new DatabaseFixture().ConnectionFactory);
-            _service = new USMemberSearchService(repository, profile);
+            var repository = new VehicleAttributeRepository(new DatabaseFixture().ConnectionFactory);
+            _service = new VehicleAttributeService(repository, profile, cacheVAttribute.Object);
 
             var userSubscriptionRepository = new UserSubscriptionRepository(new DatabaseFixture().ConnectionFactory);
             var mockCacheUserApiKey = new DatabaseFixture().MockCacheUserApiKey();

@@ -68,13 +68,70 @@ using LoadLink.LoadMatching.Application.EquipmentLiveLeadLiveLead.Services;
 using LoadLink.LoadMatching.Application.DATLoadLiveLead.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.DATLoadLead;
 using LoadLink.LoadMatching.Application.DATLoadLiveLead.Services;
+using LoadLink.LoadMatching.Application.EquipmentPosition.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.EquipmentPosition;
+using LoadLink.LoadMatching.Application.EquipmentPosition.Services;
+using LoadLink.LoadMatching.Application.Exclude.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.Exclude;
+using LoadLink.LoadMatching.Application.Flag.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.Flag;
+using LoadLink.LoadMatching.Application.Exclude.Services;
+using LoadLink.LoadMatching.Application.Flag.Services;
+using LoadLink.LoadMatching.Application.LoadLead.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.LoadLead;
+using LoadLink.LoadMatching.Application.LoadLead.Services;
+using LoadLink.LoadMatching.Application.LoadPosition.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.LoadPosition;
+using LoadLink.LoadMatching.Application.LoadPosition.Services;
+using LoadLink.LoadMatching.Application.Member.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.Member;
+using LoadLink.LoadMatching.Application.Member.Services;
+using LoadLink.LoadMatching.Application.Networks.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.Networks;
+using LoadLink.LoadMatching.Application.Networks.Services;
+using LoadLink.LoadMatching.Application.PDRatio.Services;
+using LoadLink.LoadMatching.Application.RIRate.Services;
+using LoadLink.LoadMatching.Application.VehicleSize.Services;
+using LoadLink.LoadMatching.Application.RepostAll.Services;
+using LoadLink.LoadMatching.Application.TemplatePosting.Services;
+using LoadLink.LoadMatching.Application.USCarrierSearch.Services;
+using LoadLink.LoadMatching.Application.USMemberSearch.Services;
+using LoadLink.LoadMatching.Application.VehicleType.Services;
+using LoadLink.LoadMatching.Application.PDRatio.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.PDRatio;
+using LoadLink.LoadMatching.Persistence.Repositories.RIRate;
+using LoadLink.LoadMatching.Application.RIRate.Repository;
+using LoadLink.LoadMatching.Application.RepostAll.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.RepostAll;
+using LoadLink.LoadMatching.Application.TemplatePosting.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.TemplatePosting;
+using LoadLink.LoadMatching.Application.USCarrierSearch.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.USCarrierSearch;
+using LoadLink.LoadMatching.Application.USMemberSearch.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.USMemberSearch;
+using LoadLink.LoadMatching.Application.VehicleType.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.VehicleType;
+using LoadLink.LoadMatching.Application.VehicleSize.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.VehicleSize;
 using LoadLink.LoadMatching.Application.LoadLiveLead.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.LoadLiveLead;
 using LoadLink.LoadMatching.Application.LoadLiveLead.Services;
 using LoadLink.LoadMatching.Application.LoadLiveLeadLiveLead.Services;
-using LoadLink.LoadMatching.Persistence.Repositories.NetworkMember;
 using LoadLink.LoadMatching.Application.NetworkMembers.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.NetworkMember;
 using LoadLink.LoadMatching.Application.NetworkMembers.Services;
+using LoadLink.LoadMatching.Application.LoadPosting.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.LoadPosting;
+using LoadLink.LoadMatching.Application.LoadPosting.Services;
+using LoadLink.LoadMatching.Application.VehicleAttribute.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.VehicleAttribute;
+using LoadLink.LoadMatching.Application.LegacyDeleted.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.LegacyDeleted;
+using LoadLink.LoadMatching.Application.LegacyDeleted.Services;
+using LoadLink.LoadMatching.Application.VehicleSize.Models.Queries;
+using LoadLink.LoadMatching.Application.VehicleType.Models.Queries;
+using LoadLink.LoadMatching.Application.VehicleAttribute.Models.Queries;
+using LoadLink.LoadMatching.Application.VehicleAttribute.Services;
 using LoadLink.LoadMatching.Application.MemberSearch.Services;
 using LoadLink.LoadMatching.Application.MemberSearch.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.MemberSearch;
@@ -109,7 +166,25 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<ILeadsCountRepository, LeadsCountRepository>();
             services.AddScoped<IContactedRepository, ContactedRepository>();
             services.AddScoped<IDatAccountRepository, DatAccountRepository>();
+            services.AddScoped<IEquipmentPositionRepository, EquipmentPositionRepository>();
+            services.AddScoped<IExcludeRepository, ExcludeRepository>();
+            services.AddScoped<IFlagRepository, FlagRepository>();
+            services.AddScoped<ILoadLeadRepository, LoadLeadRepository>();
+            services.AddScoped<ILoadPositionRepository, LoadPositionRepository>();
+            services.AddScoped<IMemberRepository, MemberRepository>();
+            services.AddScoped<INetworksRepository, NetworksRepository>();
+            services.AddScoped<IPDRatioRepository, PDRatioRepository>();
+            services.AddScoped<IRIRateRepository, RIRateRepository>();
+            services.AddScoped<IRepostAllRepository, RepostAllRepository>();
+            services.AddScoped<ITemplatePostingRepository, TemplatePostingRepository>();
+            services.AddScoped<IUSCarrierSearchRepository, USCarrierSearchRepository>();
+            services.AddScoped<IUSMemberSearchRepository, USMemberSearchRepository>();
             services.AddScoped<INetworkMembersRepository, NetworkMembersRepository>();
+            services.AddScoped<ILoadPostingRepository, LoadPostingRepository>();
+            services.AddScoped<IVehicleAttributeRepository, VehicleAttributeRepository>();
+            services.AddScoped<IVehicleSizeRepository, VehicleSizeRepository>();
+            services.AddScoped<IVehicleTypeRepository, VehicleTypeRepository>();
+            services.AddScoped<ILegacyDeletedRepository, LegacyDeletedRepository>();
             services.AddScoped<IMemberSearchRepository, MemberSearchRepository>();
 
             // services
@@ -125,11 +200,29 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<IDatEquipmentLiveLeadService, DatEquipmentLiveLeadService>();
             services.AddScoped<IEquipmentLiveLeadService, EquipmentLiveLeadService>();
             services.AddScoped<ILoadLiveLeadService, LoadLiveLeadService>();
+            services.AddScoped<ILoadLeadService, LoadLeadService>();
+            services.AddScoped<INetworksService, NetworksService>();
             services.AddScoped<IEquipmentPostingService, EquipmentPostingService>();
             services.AddScoped<ILeadsCountService, LeadsCountService>();
             services.AddScoped<IContactedService, ContactedService>();
             services.AddScoped<IDatAccountService, DatAccountService>();
+            services.AddScoped<IEquipmentPositionService, EquipmentPositionService>();
+            services.AddScoped<IExcludeService, ExcludeService>();
+            services.AddScoped<IFlagService, FlagService>();
+            services.AddScoped<ILoadPositionService, LoadPositionService>();
+            services.AddScoped<IMemberService, MemberService>();
+            services.AddScoped<IPDRatioService, PDRatioService>();
+            services.AddScoped<IRIRateService, RIRateService>();
+            services.AddScoped<IRepostAllService, RepostAllService>();
+            services.AddScoped<ITemplatePostingService, TemplatePostingService>();
+            services.AddScoped<IUSCarrierSearchService, USCarrierSearchService>();
+            services.AddScoped<IUSMemberSearchService, USMemberSearchService>();
+            services.AddScoped<IVehicleTypeService, VehicleTypeService>();
+            services.AddScoped<IVehicleSizeService, VehicleSizeService>();
             services.AddScoped<INetworkMembersService, NetworkMembersService>();
+            services.AddScoped<ILoadPostingService, LoadPostingService>();
+            services.AddScoped<ILegacyDeletedService, LegacyDeletedService>();
+            services.AddScoped<IVehicleAttributeService, VehicleAttributeService>();
             services.AddScoped<IMemberSearchService, MemberSearchService>();
 
             // local services
@@ -167,16 +260,31 @@ namespace LoadLink.LoadMatching.Api.Helpers
             memoryCacheEntryOptions.SetSlidingExpiration(TimeSpan.FromMinutes(slidingExpiration));
 
             // cached data models
-
+            // ==================
             // userapikey setting
             services.AddSingleton<ICacheRepository<UserApiKeyQuery>, CacheRepository<UserApiKeyQuery>>(sp =>
             {
                 return new CacheRepository<UserApiKeyQuery>(memoryCache, memoryCacheEntryOptions);
             });
 
+            // VehicleSize setting
+            services.AddSingleton<ICacheRepository<IEnumerable<GetVehicleSizeQuery>>, CacheRepository<IEnumerable<GetVehicleSizeQuery>>>(sp =>
+            {
+                return new CacheRepository<IEnumerable<GetVehicleSizeQuery>>(memoryCache, memoryCacheEntryOptions);
+            });
 
-            // set other data that can be cache here
+            // VehicleType setting
+            services.AddSingleton<ICacheRepository<IEnumerable<GetVehicleTypesQuery>>, CacheRepository<IEnumerable<GetVehicleTypesQuery>>>(sp =>
+            {
+                return new CacheRepository<IEnumerable<GetVehicleTypesQuery>>(memoryCache, memoryCacheEntryOptions);
+            });
 
+            // VehicleAttribute setting
+            services.AddSingleton<ICacheRepository<IEnumerable<GetVehicleAttributeQuery>>, CacheRepository<IEnumerable<GetVehicleAttributeQuery>>>(sp =>
+            {
+                return new CacheRepository<IEnumerable<GetVehicleAttributeQuery>>(memoryCache, memoryCacheEntryOptions);
+            });
+            // ==================
         }
 
         public static void RegisterAuthentication(this IServiceCollection services)

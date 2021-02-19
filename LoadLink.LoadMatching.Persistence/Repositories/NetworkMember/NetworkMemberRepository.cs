@@ -62,7 +62,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.NetworkMember
         {
             var proc = "dbo.usp_GetNetworkMember";
             var param = new DynamicParameters();
-            param.Add("@Id", id);;
+            param.Add("@Id", id);
 
             var result = await SqlMapper.QueryFirstOrDefaultAsync<UspGetNetworkMemberResult>(
                _dbConnection, sql: proc, param: param, commandType: CommandType.StoredProcedure);

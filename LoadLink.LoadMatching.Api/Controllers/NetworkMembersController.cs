@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LoadLink.LoadMatching.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/networks/{networkId}/members")]
     [ApiController]
     public class NetworkMembersController : ControllerBase
     {

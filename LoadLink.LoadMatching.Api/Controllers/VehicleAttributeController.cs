@@ -11,10 +11,10 @@ namespace LoadLink.LoadMatching.Api.Controllers
     [ApiController]
     public class VehicleAttributeController : ControllerBase
     {
-        private readonly IUSMemberSearchService _vehicleAttributeService;
+        private readonly IVehicleAttributeService _vehicleAttributeService;
         private readonly IUserHelperService _userHelperService;
 
-        public VehicleAttributeController(IUSMemberSearchService vehicleAttributeService,
+        public VehicleAttributeController(IVehicleAttributeService vehicleAttributeService,
             IUserHelperService userHelperService)
         {
             _vehicleAttributeService = vehicleAttributeService;
