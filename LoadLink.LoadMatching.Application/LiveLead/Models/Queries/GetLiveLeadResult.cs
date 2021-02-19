@@ -1,9 +1,8 @@
-﻿
-using System;
+﻿using System;
 
-namespace LoadLink.LoadMatching.Domain.Procedures
+namespace LoadLink.LoadMatching.Application.LiveLead.Models.Queries
 {
-    public class UspGetLiveLeadsServerTimeResult
+    public class GetLiveLeadResult
     {
         public int LToken { get; set; }
         public int EToken { get; set; }
