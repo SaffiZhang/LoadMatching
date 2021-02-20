@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
+using static LoadLink.LoadMatching.Application.Common.CommonLM;
 
 namespace LoadLink.LoadMatching.Api.Test.USMemberSearch
 {
@@ -62,7 +63,7 @@ namespace LoadLink.LoadMatching.Api.Test.USMemberSearch
             var searchRequest = new GetUSMemberSearchCommand
             {
                 CustCd = "TCORELL",
-                CompanyName = "",
+                CompanyName = "te",
                 Phone = "",
                 ProvSt = "",
                 ShowExcluded = SearchType.All

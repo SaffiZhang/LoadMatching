@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using static LoadLink.LoadMatching.Application.Common.CommonLM;
 
 namespace LoadLink.LoadMatching.Application.MemberSearch.Models.Queries
 {
-    public enum SearchType
-    {
-        All = 0, // Only Included 
-        Included = 1, // All the result (Included + Excluded)
-        Excluded = 2  // Only Excluded
-    }
     public class GetMemberSearchRequest
     {
         public string CompanyName { get; set; }

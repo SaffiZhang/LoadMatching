@@ -37,7 +37,9 @@ namespace LoadLink.LoadMatching.Api.Controllers
                 _carrierSerarchService.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
                 _carrierSerarchService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
-                var result = await _carrierSerarchService.GetCarrierSearch(searchrequest, _userHelperService.GetUserId());
+                searchrequest.UserID = _userHelperService.GetUserId();
+
+                var result = await _carrierSerarchService.GetCarrierSearch(searchrequest);
 
                 // not found
                 if (result == null)
@@ -47,7 +49,6 @@ namespace LoadLink.LoadMatching.Api.Controllers
             }
             catch (Exception ex)
             {
-                
                 return BadRequest($"An exception has occurred.  Please contact support. {ex}");
             }
         }

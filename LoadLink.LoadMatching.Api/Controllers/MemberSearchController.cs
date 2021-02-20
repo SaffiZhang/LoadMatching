@@ -36,9 +36,10 @@ namespace LoadLink.LoadMatching.Api.Controllers
             _memberSearchService.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
             _memberSearchService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
-            var custCd = _userHelperService.GetCustCd();
+            if (string.IsNullOrEmpty(searchRequest.CustCd))
+                searchRequest.CustCd = _userHelperService.GetCustCd();
 
-            var result = await _memberSearchService.GetMemberSearch(searchRequest, custCd);
+            var result = await _memberSearchService.GetMemberSearch(searchRequest);
             if (result == null)
                 return NoContent();
 
@@ -56,9 +57,10 @@ namespace LoadLink.LoadMatching.Api.Controllers
             _memberSearchService.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
             _memberSearchService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
-            var custCd = _userHelperService.GetCustCd();
+            if (string.IsNullOrEmpty(searchRequest.CustCd))
+                searchRequest.CustCd = _userHelperService.GetCustCd();
 
-            var result = await _memberSearchService.GetMemberSearch(searchRequest, custCd);
+            var result = await _memberSearchService.GetMemberSearch(searchRequest);
             if (result == null)
                 return NoContent();
 

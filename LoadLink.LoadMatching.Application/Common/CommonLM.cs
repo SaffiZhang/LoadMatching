@@ -8,6 +8,13 @@ namespace LoadLink.LoadMatching.Application.Common
         private const string VSIZE_CHAR_CODES = "TLB";
         private const string POSTATTRIB_CHAR_CODES = "ABWCZITVXMGFHEN";
 
+        public enum SearchType
+        {
+            All = 0, // Only Included 
+            Included = 1, // All the result (Included + Excluded)
+            Excluded = 2  // Only Excluded
+        }
+
 
         #region Local Conversion_Method
         public static string VTypeNumToString(int lVType)

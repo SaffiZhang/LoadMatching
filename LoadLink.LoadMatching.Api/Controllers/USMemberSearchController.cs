@@ -39,6 +39,9 @@ namespace LoadLink.LoadMatching.Api.Controllers
             _USMemberSearchService.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
             _USMemberSearchService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
+            if (string.IsNullOrEmpty(searchRequest.CustCd))
+                searchRequest.CustCd = _userHelperService.GetCustCd();
+
             var result = await _USMemberSearchService.GetListAsync(searchRequest);
             if (result == null)
                 return NoContent();
