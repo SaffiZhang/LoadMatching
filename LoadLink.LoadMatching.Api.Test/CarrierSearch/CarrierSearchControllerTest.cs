@@ -79,7 +79,7 @@ namespace LoadLink.LoadMatching.Api.Test.CarrierSearch
 
             // assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);
-            var model = Assert.IsAssignableFrom<IEnumerable<GetCarrierSearchQuery>>(viewResult.Value);
+            var model = Assert.IsAssignableFrom<IEnumerable<GetCarrierSearchResult>>(viewResult.Value);
             Assert.NotNull(model);
         }
     }

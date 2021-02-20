@@ -9,6 +9,6 @@ namespace LoadLink.LoadMatching.Application.CarrierSearch.Services
         bool HasEQSubscription { get; set; }
         bool HasTCSubscription { get; set; }
         bool HasTCUSSubscription { get; set; }
-        Task<IEnumerable<GetCarrierSearchResult>> GetCarrierSearch(GetCarrierSearchRequest searchrequest,  int userId);
+        Task<IEnumerable<GetCarrierSearchResult>> GetCarrierSearch(GetCarrierSearchRequest searchrequest);
     }
 }

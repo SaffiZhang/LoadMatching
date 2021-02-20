@@ -25,8 +25,7 @@ namespace LoadLink.LoadMatching.Application.MemberSearch.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<GetMemberSearchResult>> GetMemberSearch(
-            GetMemberSearchRequest searchrequest,  string custCd)
+        public async Task<IEnumerable<GetMemberSearchResult>> GetMemberSearch(GetMemberSearchRequest searchrequest)
         {
             var searchQuery = new GetMemberSearchQuery()
             {
@@ -37,27 +36,24 @@ namespace LoadLink.LoadMatching.Application.MemberSearch.Services
                MemberType = searchrequest.MemberType == "" ? "All" : searchrequest.MemberType,
                GetLinkUS = searchrequest.GetLinkUS == "Y" ? 1 : 0,
                ShowExcluded = searchrequest.ShowExcluded,
-               CustCd = custCd
+               CustCd = searchrequest.CustCd
             };
 
             var result = await _memberSearchRepository.GetListAsync(searchQuery);
             if (!result.Any())
                 return null;
 
-
             //Filter the result based on user's feature access before returning the reuslt.
             //i.e. if user has access to Equifax data send it as part of the result else hide the result.
             var resultList = result.ToList();
             resultList.ForEach(
-                row => {
-                    row.Equifax = HasEQSubscription ? row.Equifax : -1;
-                    row.TCC = HasTCSubscription ? row.TCC : -1;
-                    row.TCUS = HasTCUSSubscription ? row.TCUS : -1;
-                     });
+                row =>  {
+                        row.Equifax = HasEQSubscription ? row.Equifax : -1;
+                        row.TCC = HasTCSubscription ? row.TCC : -1;
+                        row.TCUS = HasTCUSSubscription ? row.TCUS : -1;
+                        });
            
-            return _mapper.Map<IEnumerable<GetMemberSearchResult>>(resultList);
-               
+            return _mapper.Map<IEnumerable<GetMemberSearchResult>>(resultList);              
         }
-
     }
 }
