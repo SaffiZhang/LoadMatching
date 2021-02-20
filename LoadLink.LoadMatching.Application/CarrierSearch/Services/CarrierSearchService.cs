@@ -25,12 +25,11 @@ namespace LoadLink.LoadMatching.Application.CarrierSearch.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<GetCarrierSearchResult>> GetCarrierSearch(
-            GetCarrierSearchRequest searchrequest,  int userId)
+        public async Task<IEnumerable<GetCarrierSearchResult>> GetCarrierSearch(GetCarrierSearchRequest searchrequest)
         {
             var searchQuery = new GetCarrierSearchQuery()
             {
-                UserID = userId,
+                UserID = searchrequest.UserID,
                 SrceSt = searchrequest.SrceSt,
                 SrceCity = searchrequest.SrceCity,
                 SrceRadius = searchrequest.SrceRadius,
@@ -50,16 +49,15 @@ namespace LoadLink.LoadMatching.Application.CarrierSearch.Services
             if (!result.Any())
                 return null;
 
-
             //Filter the result based on user's feature access before returning the reuslt.
             //i.e. if user has access to Equifax data send it as part of the result else hide the result.
             var resultList = result.ToList();
             resultList.ForEach(
-                row => {
-                    row.Equifax = HasEQSubscription ? row.Equifax : -1;
-                    row.TCC = HasTCSubscription ? row.TCC : -1;
-                    row.TCUS = HasTCUSSubscription ? row.TCUS : -1;
-                     });
+                row =>  {
+                        row.Equifax = HasEQSubscription ? row.Equifax : -1;
+                        row.TCC = HasTCSubscription ? row.TCC : -1;
+                        row.TCUS = HasTCUSSubscription ? row.TCUS : -1;
+                        });
            
             return _mapper.Map<IEnumerable<GetCarrierSearchResult>>(resultList);
                

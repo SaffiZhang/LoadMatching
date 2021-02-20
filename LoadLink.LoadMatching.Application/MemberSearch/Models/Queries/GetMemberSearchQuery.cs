@@ -1,9 +1,10 @@
-﻿using System;
+﻿using static LoadLink.LoadMatching.Application.Common.CommonLM;
 
 namespace LoadLink.LoadMatching.Application.MemberSearch.Models.Queries
 {
  
-    public class GetMemberSearchQuery    {
+    public class GetMemberSearchQuery    
+    {
         public string CompanyName { get; set; }
         public string ProvSt { get; set; }
         public string City { get; set; }

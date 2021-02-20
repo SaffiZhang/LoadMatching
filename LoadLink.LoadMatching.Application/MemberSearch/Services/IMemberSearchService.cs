@@ -9,6 +9,6 @@ namespace LoadLink.LoadMatching.Application.MemberSearch.Services
         bool HasEQSubscription { get; set; }
         bool HasTCSubscription { get; set; }
         bool HasTCUSSubscription { get; set; }
-        Task<IEnumerable<GetMemberSearchResult>> GetMemberSearch(GetMemberSearchRequest searchrequest,  string custCd);
+        Task<IEnumerable<GetMemberSearchResult>> GetMemberSearch(GetMemberSearchRequest searchrequest);
     }
 }
