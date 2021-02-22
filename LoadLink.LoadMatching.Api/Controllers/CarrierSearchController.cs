@@ -23,36 +23,27 @@ namespace LoadLink.LoadMatching.Api.Controllers
         }
 
         [HttpPost("{APIkey}/{EQFAPIKey}/{TCCAPIKey}/{TCUSAPIKey}")]
-        public async Task<IActionResult> Search([FromBody] GetCarrierSearchRequest searchrequest, string APIkey, string EQFAPIKey, string TCCAPIKey, string TCUSAPIKey)
+        public async Task<IActionResult> SearchAsync([FromBody] GetCarrierSearchRequest searchrequest, string APIkey, string EQFAPIKey, string TCCAPIKey, string TCUSAPIKey)
         {
-            try
-            {
-                var getUserApiKeys = await _userHelperService.GetUserApiKeys();
+            var getUserApiKeys = await _userHelperService.GetUserApiKeys();
                 
-                // check carrier search feature access
-                if (!getUserApiKeys.Contains(APIkey))
-                    throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+            // check carrier search feature access
+            if (!getUserApiKeys.Contains(APIkey))
+                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
-                _carrierSerarchService.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
-                _carrierSerarchService.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
-                _carrierSerarchService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+            _carrierSerarchService.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
+            _carrierSerarchService.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
+            _carrierSerarchService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
-                searchrequest.UserID = _userHelperService.GetUserId();
+            searchrequest.UserID = _userHelperService.GetUserId();
 
-                var result = await _carrierSerarchService.GetCarrierSearch(searchrequest);
+            var result = await _carrierSerarchService.GetCarrierSearchAsync(searchrequest);
 
-                // not found
-                if (result == null)
-                    return NoContent();
+            // not found
+            if (result == null)
+                return NoContent();
 
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"An exception has occurred.  Please contact support. {ex}");
-            }
-        }
-
-    
+            return Ok(result);
+        }    
     }
 }

@@ -14,6 +14,7 @@ using Moq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
+using System.Diagnostics;
 
 namespace LoadLink.LoadMatching.Api.Test.MemberSearch
 {
@@ -76,5 +77,43 @@ namespace LoadLink.LoadMatching.Api.Test.MemberSearch
             var model = Assert.IsAssignableFrom<IEnumerable<GetMemberSearchResult>>(viewResult.Value);
             Assert.NotNull(model);
         }
+
+        [Fact]
+        public async Task GetMemberSearchListAsync_Benchmark()
+        {
+            // arrange
+            var numberOfRequests = 100;
+
+            var LLB_EQF = "LLB_EQF";
+            var LLB_TCC = "LLB_TCC";
+            var LLB_TCUS = "LLB_TCUS";
+
+            var searchRequest = new GetMemberSearchRequest
+            {
+                CompanyName = "Test",
+                ProvSt = "",
+                City = "",
+                Phone = "",
+                MemberType = "All",
+                GetLinkUS = "N",
+                ShowExcluded = 0
+            };
+
+            // act
+            var timer = Stopwatch.StartNew();
+            for (int i = 0; i < numberOfRequests; i++)
+            {
+                await _carrierSearchController.Search(searchRequest, LLB_EQF, LLB_TCC, LLB_TCUS);
+            }
+            timer.Stop();
+
+            // assert
+            var actualResultInSeconds = timer.Elapsed.TotalSeconds;
+            var lowestExpectedRangeInSeconds = 5.0D; // seconds
+            var tooHighRangeInSeconds = 30.0D; // seconds 
+
+            Assert.InRange(actualResultInSeconds, lowestExpectedRangeInSeconds, tooHighRangeInSeconds);
+        }
+
     }
 }

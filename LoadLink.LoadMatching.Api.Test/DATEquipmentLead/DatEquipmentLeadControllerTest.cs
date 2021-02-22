@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using EquipmentLink.EquipmentMatching.Application.DATEquipmentLead.Profiles;
-using LoadLink.LoadMatching.Api.Configuration;
 using LoadLink.LoadMatching.Api.Controllers;
 using LoadLink.LoadMatching.Api.Services;
 using LoadLink.LoadMatching.Api.Test.Setup;
 using LoadLink.LoadMatching.Application.DATEquipmentLead.Models;
 using LoadLink.LoadMatching.Application.DATEquipmentLead.Services;
 using LoadLink.LoadMatching.Application.UserSubscription.Services;
+using LoadLink.LoadMatching.Persistence.Configuration;
 using LoadLink.LoadMatching.Persistence.Repositories.DATEquipmentLead;
 using LoadLink.LoadMatching.Persistence.Repositories.UserSubscription;
 using Microsoft.AspNetCore.Http;
@@ -26,7 +26,7 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.DATEquipmentLead
         private readonly IUserSubscriptionService _userSubscriptionService;
         private readonly IDatEquipmentLeadService _service;
         private readonly DatEquipmentLeadController _datEquipmentLeadController;
-
+        private readonly IOptions<AppSettings> _settings;
 
         public DatEquipmentLeadControllerTest()
         {
@@ -35,8 +35,7 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.DATEquipmentLead
             _fakeHttpContextAccessor = new FakeContext().MockHttpContext(userId, custCd);
 
             //AppSettings
-            AppSettings appSettings = new AppSettings() { MileageProvider = "P" };
-            IOptions<AppSettings> options = Options.Create(appSettings);
+            _settings = new DatabaseFixture().AppSettings();
 
             //profile
             var datEquipmentLeadProfile = new DatEquipmentLeadProfile();
@@ -44,7 +43,7 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.DATEquipmentLead
             var profile = new Mapper(configuration);
 
             // integration            
-            var repository = new DatEquipmentLeadRepository(new DatabaseFixture().ConnectionFactory);
+            var repository = new DatEquipmentLeadRepository(new DatabaseFixture().ConnectionFactory,_settings);
             _service = new DatEquipmentLeadService(repository, profile);
 
             var userSubscriptionRepository = new UserSubscriptionRepository(new DatabaseFixture().ConnectionFactory);
@@ -54,7 +53,7 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.DATEquipmentLead
 
             // controller
             _userHelper = new UserHelperService(_fakeHttpContextAccessor.Object, _userSubscriptionService);
-            _datEquipmentLeadController = new DatEquipmentLeadController(_service, _userHelper, options);
+            _datEquipmentLeadController = new DatEquipmentLeadController(_service, _userHelper, _settings);
         }
 
         [Fact]

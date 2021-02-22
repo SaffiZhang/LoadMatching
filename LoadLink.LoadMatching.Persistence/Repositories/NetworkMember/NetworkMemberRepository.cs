@@ -35,13 +35,16 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.NetworkMember
 
             await SqlMapper.ExecuteAsync(_dbConnection, sql: proc, param: param, commandType: CommandType.StoredProcedure);
 
-            createCommand.Id = param.Get<int>("@Id");
-            createCommand.RegisteredName = param.Get<string>("@RegisteredName");
-            createCommand.CommonName = param.Get<string>("@CommonName");
-            createCommand.CompanyPhone = param.Get<string>("@CompanyPhone");
-            createCommand.CompanyLocation = param.Get<string>("@CompanyLocation");
-            createCommand.ContactPhone = param.Get<string>("@ContactPhone");
-            createCommand.PrimaryContactName = param.Get<string>("@PrimaryContactName");
+            if (param.Get<int>("@Id") != -1)    // SP returns @Id -1 in case of a caught error
+            {
+                createCommand.Id = param.Get<int>("@Id");
+                createCommand.RegisteredName = param.Get<string>("@RegisteredName");
+                createCommand.CommonName = param.Get<string>("@CommonName");
+                createCommand.CompanyPhone = param.Get<string>("@CompanyPhone");
+                createCommand.CompanyLocation = param.Get<string>("@CompanyLocation");
+                createCommand.ContactPhone = param.Get<string>("@ContactPhone");
+                createCommand.PrimaryContactName = param.Get<string>("@PrimaryContactName");
+            }
 
             return createCommand;
         }

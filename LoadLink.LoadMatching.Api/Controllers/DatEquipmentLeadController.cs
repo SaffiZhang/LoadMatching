@@ -1,14 +1,12 @@
-﻿using LoadLink.LoadMatching.Api.Configuration;
-using LoadLink.LoadMatching.Api.Infrastructure.Http;
+﻿using LoadLink.LoadMatching.Api.Infrastructure.Http;
 using LoadLink.LoadMatching.Api.Services;
 using LoadLink.LoadMatching.Application.DATEquipmentLead.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LoadLink.LoadMatching.Persistence.Configuration;
 
 namespace LoadLink.LoadMatching.Api.Controllers
 {
@@ -18,19 +16,20 @@ namespace LoadLink.LoadMatching.Api.Controllers
     {
         private readonly IDatEquipmentLeadService _datEquipmentLeadService;
         private readonly IUserHelperService _userHelperService;
-        private readonly IOptions<AppSettings> _appSettings;
+        private readonly AppSettings _appSettings;
 
-        public DatEquipmentLeadController(IDatEquipmentLeadService datEquipmentLeadService, IUserHelperService userHelperService, IOptions<AppSettings> appSettings)
+        public DatEquipmentLeadController(IDatEquipmentLeadService datEquipmentLeadService, 
+                                            IUserHelperService userHelperService, 
+                                            IOptions<AppSettings> appSettings)
         {
             _datEquipmentLeadService = datEquipmentLeadService;
             _userHelperService = userHelperService;
-            _appSettings = appSettings;
+            _appSettings = appSettings.Value;
         }
 
         [HttpGet("{DATAPIkey}/{QPAPIKey}/{EQFAPIKey}/{TCUSAPIKey}/{TCCAPIKey}")]
         public async Task<IActionResult> GetListAsync(string DATAPIkey, string QPAPIKey, string EQFAPIKey, string TCUSAPIKey, string TCCAPIKey)
         {
-
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check subscription
@@ -44,8 +43,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             _datEquipmentLeadService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
             var custCd = _userHelperService.GetCustCd();
-            var mileageProvider = _appSettings.Value.MileageProvider;
-            var leads = await _datEquipmentLeadService.GetAsyncList(custCd, mileageProvider);
+            var leads = await _datEquipmentLeadService.GetListAsync(custCd);
 
             if (leads == null)
             {
@@ -53,8 +51,6 @@ namespace LoadLink.LoadMatching.Api.Controllers
             }
 
             return Ok(leads);
-
-
         }
 
         [HttpGet("{token}/{DATAPIkey}/{QPAPIKey}/{EQFAPIKey}/{TCUSAPIKey}/{TCCAPIKey}")]
@@ -77,8 +73,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             _datEquipmentLeadService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
             var custCd = _userHelperService.GetCustCd();
-            var mileageProvider = _appSettings.Value.MileageProvider;
-            var leads = await _datEquipmentLeadService.GetAsyncByPosting(custCd,mileageProvider,token );
+            var leads = await _datEquipmentLeadService.GetAsyncByPosting(custCd, token);
 
             if (leads == null)
             {

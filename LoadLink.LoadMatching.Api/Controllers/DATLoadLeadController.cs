@@ -27,7 +27,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             _settings = settings.Value;
         }
 
-        [HttpPost("{DATAPIkey}/{QPAPIKey}/{EQFAPIKey}/{TCUSAPIKey}/{TCCAPIKey}")]
+        [HttpGet("{DATAPIkey}/{QPAPIKey}/{EQFAPIKey}/{TCUSAPIKey}/{TCCAPIKey}")]
         public async Task<IActionResult> GetListAsync(string DATAPIkey, string QPAPIKey, string EQFAPIKey, string TCUSAPIKey, string TCCAPIKey)
         {
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
@@ -52,7 +52,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost("{token}/{DATAPIkey}/{QPAPIKey}/{EQFAPIKey}/{TCUSAPIKey}/{TCCAPIKey}")]
+        [HttpGet("{token}/{DATAPIkey}/{QPAPIKey}/{EQFAPIKey}/{TCUSAPIKey}/{TCCAPIKey}")]
         public async Task<IActionResult> GetByPostingAsync(int token, string DATAPIkey, string QPAPIKey, string EQFAPIKey, string TCUSAPIKey, string TCCAPIKey)
         {
             if (token <= 0)

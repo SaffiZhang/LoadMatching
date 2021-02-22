@@ -8,7 +8,7 @@ namespace LoadLink.LoadMatching.Application.DATEquipmentLead.Repository
 {
     public interface IDatEquipmentLeadRepository
     {
-       Task <IEnumerable<UspGetDatEquipmentLeadResult>> GetList(string custCd, string mileageProvider);
-       Task <IEnumerable<UspGetDatEquipmentLeadResult>> GetByPosting(string custCd, string mileageProvider , int postingId);
+       Task <IEnumerable<UspGetDatEquipmentLeadResult>> GetList(string custCd);
+       Task <IEnumerable<UspGetDatEquipmentLeadResult>> GetByPosting(string custCd, int postingId);
     }
 }

@@ -1,7 +1,5 @@
 ﻿using LoadLink.LoadMatching.Application.DATEquipmentLead.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LoadLink.LoadMatching.Application.DATEquipmentLead.Services
@@ -14,8 +12,8 @@ namespace LoadLink.LoadMatching.Application.DATEquipmentLead.Services
         bool HasTCUSSubscription { get; set; }
 
 
-        Task<IEnumerable<GetDatEquipmentLeadQuery>> GetAsyncList(string custCd, string mileageProvider);
-        Task<IEnumerable<GetDatEquipmentLeadQuery>> GetAsyncByPosting(string custCd, string mileageProvider, int postingId);
+        Task<IEnumerable<GetDatEquipmentLeadQuery>> GetListAsync(string custCd);
+        Task<IEnumerable<GetDatEquipmentLeadQuery>> GetAsyncByPosting(string custCd, int postingId);
 
     }
 }
