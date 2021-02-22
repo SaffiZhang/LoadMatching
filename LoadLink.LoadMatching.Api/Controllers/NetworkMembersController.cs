@@ -88,14 +88,15 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int networkId, string id)
+        public async Task<IActionResult> DeleteAsync(int networkId, string memberCustCd)
         {
-            if (networkId == 0 || String.IsNullOrEmpty(id))
+            if (networkId == 0 || String.IsNullOrEmpty(memberCustCd))
                 return BadRequest();
 
-            await _networkMembersService.Delete(networkId, id);
+            var custCd = _userHelperService.GetCustCd();
+            await _networkMembersService.Delete(networkId, custCd);
 
-            return NoContent();
+            return Ok();
         }
     }
 }
