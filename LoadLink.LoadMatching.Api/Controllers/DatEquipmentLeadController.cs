@@ -2,11 +2,12 @@
 using LoadLink.LoadMatching.Api.Services;
 using LoadLink.LoadMatching.Application.DATEquipmentLead.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using LoadLink.LoadMatching.Persistence.Configuration;
+using LoadLink.LoadMatching.Application.DATEquipmentLead.Models.Commands;
+using LoadLink.LoadMatching.Api.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace LoadLink.LoadMatching.Api.Controllers
 {
@@ -16,15 +17,15 @@ namespace LoadLink.LoadMatching.Api.Controllers
     {
         private readonly IDatEquipmentLeadService _datEquipmentLeadService;
         private readonly IUserHelperService _userHelperService;
-        private readonly AppSettings _appSettings;
+        private readonly AppSettings _settings;
 
         public DatEquipmentLeadController(IDatEquipmentLeadService datEquipmentLeadService, 
-                                            IUserHelperService userHelperService, 
-                                            IOptions<AppSettings> appSettings)
+                                            IUserHelperService userHelperService,
+                                            IOptions<AppSettings> settings)
         {
             _datEquipmentLeadService = datEquipmentLeadService;
             _userHelperService = userHelperService;
-            _appSettings = appSettings.Value;
+            _settings = settings.Value;
         }
 
         [HttpGet("{DATAPIkey}/{QPAPIKey}/{EQFAPIKey}/{TCUSAPIKey}/{TCCAPIKey}")]
@@ -37,13 +38,17 @@ namespace LoadLink.LoadMatching.Api.Controllers
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
             // features subscription 
-            _datEquipmentLeadService.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
-            _datEquipmentLeadService.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
-            _datEquipmentLeadService.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
-            _datEquipmentLeadService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+            DatEquipmentSubscriptionsStatus subscriptions = new DatEquipmentSubscriptionsStatus();     
+            subscriptions.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
+            subscriptions.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+
+            //AppSettings
+            var mileageProvider = _settings.AppSetting.MileageProvider;
 
             var custCd = _userHelperService.GetCustCd();
-            var leads = await _datEquipmentLeadService.GetListAsync(custCd);
+            var leads = await _datEquipmentLeadService.GetListAsync(custCd, subscriptions, mileageProvider);
 
             if (leads == null)
             {
@@ -67,13 +72,17 @@ namespace LoadLink.LoadMatching.Api.Controllers
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
             // features subscription 
-            _datEquipmentLeadService.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
-            _datEquipmentLeadService.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
-            _datEquipmentLeadService.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
-            _datEquipmentLeadService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+            DatEquipmentSubscriptionsStatus subscriptions = new DatEquipmentSubscriptionsStatus();      
+            subscriptions.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
+            subscriptions.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+
+            //AppSettings
+            var mileageProvider = _settings.AppSetting.MileageProvider;
 
             var custCd = _userHelperService.GetCustCd();
-            var leads = await _datEquipmentLeadService.GetAsyncByPosting(custCd, token);
+            var leads = await _datEquipmentLeadService.GetAsyncByPosting(custCd, token, subscriptions, mileageProvider);
 
             if (leads == null)
             {

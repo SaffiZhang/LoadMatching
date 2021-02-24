@@ -1,9 +1,7 @@
 ﻿using Dapper;
 using LoadLink.LoadMatching.Application.DATEquipmentLead.Repository;
 using LoadLink.LoadMatching.Domain.Procedures;
-using LoadLink.LoadMatching.Persistence.Configuration;
 using LoadLink.LoadMatching.Persistence.Data;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -14,20 +12,18 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.DATEquipmentLead
     public class DatEquipmentLeadRepository : IDatEquipmentLeadRepository
     {
         private readonly IDbConnection _dbConnection;
-        private readonly AppSettings _settings;
 
-        public DatEquipmentLeadRepository(IConnectionFactory connectionFactory,
-                                            IOptions<AppSettings> settings)
+        public DatEquipmentLeadRepository(IConnectionFactory connectionFactory)
         {
             _dbConnection = new SqlConnection(connectionFactory.ConnectionString);
-            _settings = settings.Value;
         }
-        public async Task<IEnumerable<UspGetDatEquipmentLeadResult>> GetByPosting(string custCd, int postingId)
+
+        public async Task<IEnumerable<UspGetDatEquipmentLeadResult>> GetByPosting(string custCd, int postingId, string mileageProvider)
         {
             var proc = "usp_GetDATEquipmentLead";
             var param = new DynamicParameters();
             param.Add("@CustCD", custCd);
-            param.Add("@MileageProvider", _settings.MileageProvider);
+            param.Add("@MileageProvider", mileageProvider);
             param.Add("@EToken", postingId);
 
             var result = await SqlMapper.QueryAsync<UspGetDatEquipmentLeadResult>(
@@ -36,12 +32,12 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.DATEquipmentLead
             return result;
         }
 
-        public async Task<IEnumerable<UspGetDatEquipmentLeadResult>> GetList(string custCd)
+        public async Task<IEnumerable<UspGetDatEquipmentLeadResult>> GetList(string custCd, string mileageProvider)
         {
             var proc = "usp_GetDATEquipmentLead";
             var param = new DynamicParameters();
             param.Add("@CustCD", custCd);
-            param.Add("@MileageProvider", _settings.MileageProvider);
+            param.Add("@MileageProvider", mileageProvider);
 
             var result = await SqlMapper.QueryAsync<UspGetDatEquipmentLeadResult>(
                _dbConnection, sql: proc, param, commandType: CommandType.StoredProcedure);

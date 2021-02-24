@@ -27,7 +27,7 @@ namespace LoadLink.LoadMatching.Api.Test.DATLoadLiveLead
         private readonly IUserSubscriptionService _userSubscriptionService;
         private readonly IDatLoadLiveLeadService _service;
         private readonly DatLoadLiveLeadController _datLoadLiveLeadController;
-
+        private readonly IOptions<AppSettings> _settings;
 
         public DATLoadLiveLeadControllerTest()
         {
@@ -36,8 +36,7 @@ namespace LoadLink.LoadMatching.Api.Test.DATLoadLiveLead
             _fakeHttpContextAccessor = new FakeContext().MockHttpContext(userId, custCd);
 
             //AppSettings
-            AppSettings appSettings = new AppSettings() { MileageProvider = "P" };
-            IOptions<AppSettings> options = Options.Create(appSettings);
+            _settings = new DatabaseFixture().AppSettings();
 
             //profile
 
@@ -56,7 +55,7 @@ namespace LoadLink.LoadMatching.Api.Test.DATLoadLiveLead
 
             // controller
             _userHelper = new UserHelperService(_fakeHttpContextAccessor.Object, _userSubscriptionService);
-            _datLoadLiveLeadController = new DatLoadLiveLeadController(_service, _userHelper, options);
+            _datLoadLiveLeadController = new DatLoadLiveLeadController(_service, _userHelper, _settings);
         }
 
         [Fact]

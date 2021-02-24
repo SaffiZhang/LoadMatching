@@ -5,7 +5,6 @@ using LoadLink.LoadMatching.Api.Test.Setup;
 using LoadLink.LoadMatching.Application.LoadLead.Models.Queries;
 using LoadLink.LoadMatching.Application.LoadLead.Profiles;
 using LoadLink.LoadMatching.Application.LoadLead.Services;
-using LoadLink.LoadMatching.Persistence.Configuration;
 using LoadLink.LoadMatching.Persistence.Repositories.LoadLead;
 using LoadLink.LoadMatching.Persistence.Repositories.UserSubscription;
 using LoadLink.LoadMatching.Application.UserSubscription.Services;
@@ -16,6 +15,7 @@ using Moq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
+using LoadLink.LoadMatching.Api.Configuration;
 
 namespace LoadLink.LoadMatching.Api.Test.LoadLead
 {
@@ -42,7 +42,7 @@ namespace LoadLink.LoadMatching.Api.Test.LoadLead
             var profile = new Mapper(configuration);
 
             // integration            
-            var repository = new LoadLeadRepository(new DatabaseFixture().ConnectionFactory, _settings);
+            var repository = new LoadLeadRepository(new DatabaseFixture().ConnectionFactory);
             _service = new LoadLeadService(repository, profile);
 
             var userSubscriptionRepository = new UserSubscriptionRepository(new DatabaseFixture().ConnectionFactory);
@@ -52,7 +52,7 @@ namespace LoadLink.LoadMatching.Api.Test.LoadLead
 
             // controller
             _userHelper = new UserHelperService(_fakeHttpContextAccessor.Object, _userSubscriptionService);
-            _loadLeadController = new LoadLeadController(_service, _userHelper);
+            _loadLeadController = new LoadLeadController(_service, _userHelper, _settings);
         }
 
         [Fact]

@@ -59,7 +59,7 @@ namespace LoadLink.LoadMatching.Api.Test.DATAccount
             var actionResult = await _datAccountController.GetAsync(custCd, LLB_DAT);
 
             // assert
-            var viewResult = Assert.IsType<OkObjectResult>(actionResult);
+            var viewResult = Assert.IsType<ObjectResult>(actionResult);
             var model = Assert.IsAssignableFrom<GetDatAccountQuery>(viewResult.Value);
             Assert.NotNull(model);
         }

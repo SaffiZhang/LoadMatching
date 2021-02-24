@@ -19,34 +19,15 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.NetworkMember
             _dbConnection = new SqlConnection(connectionFactory.ConnectionString);
         }
 
-        public async Task<CreateNetworkMembersCommand> Create(CreateNetworkMembersCommand createCommand)
+        public async Task<UspCreateNetworkMemberResult> Create(CreateNetworkMembersCommand createCommand)
         {
             var proc = "dbo.usp_CreateNetworkMember";
             var param = new DynamicParameters(createCommand);
 
+            var result = await SqlMapper.QueryFirstOrDefaultAsync<UspCreateNetworkMemberResult>(
+                _dbConnection, sql: proc, param: param, commandType: CommandType.StoredProcedure);
 
-            param.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
-            param.Add("@RegisteredName", dbType: DbType.String, size: 100, direction: ParameterDirection.Output);
-            param.Add("@CommonName", dbType: DbType.String, size: 100, direction: ParameterDirection.Output);
-            param.Add("@CompanyPhone", dbType: DbType.String, size: 100, direction: ParameterDirection.Output);
-            param.Add("@CompanyLocation", dbType: DbType.String, size: 100, direction: ParameterDirection.Output);
-            param.Add("@ContactPhone", dbType: DbType.String, size: 100, direction: ParameterDirection.Output);
-            param.Add("@PrimaryContactName", dbType: DbType.String, size: 100, direction: ParameterDirection.Output);
-
-            await SqlMapper.ExecuteAsync(_dbConnection, sql: proc, param: param, commandType: CommandType.StoredProcedure);
-
-            if (param.Get<int>("@Id") != -1)    // SP returns @Id -1 in case of a caught error
-            {
-                createCommand.Id = param.Get<int>("@Id");
-                createCommand.RegisteredName = param.Get<string>("@RegisteredName");
-                createCommand.CommonName = param.Get<string>("@CommonName");
-                createCommand.CompanyPhone = param.Get<string>("@CompanyPhone");
-                createCommand.CompanyLocation = param.Get<string>("@CompanyLocation");
-                createCommand.ContactPhone = param.Get<string>("@ContactPhone");
-                createCommand.PrimaryContactName = param.Get<string>("@PrimaryContactName");
-            }
-
-            return createCommand;
+            return result;
         }
 
         public async Task Delete(int networkId, string custCd)

@@ -4,6 +4,9 @@ using LoadLink.LoadMatching.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using LoadLink.LoadMatching.Api.Configuration;
+using Microsoft.Extensions.Options;
+using LoadLink.LoadMatching.Application.LoadLead.Models.Commands;
 
 namespace LoadLink.LoadMatching.Api.Controllers
 {
@@ -13,13 +16,15 @@ namespace LoadLink.LoadMatching.Api.Controllers
     {
         private readonly ILoadLeadService _loadLeadService;
         private readonly IUserHelperService _userHelperService;
+        private readonly AppSettings _settings;
 
-        public LoadLeadController(
-            ILoadLeadService LoadLeadService,
-            IUserHelperService userHelperService)
+        public LoadLeadController(ILoadLeadService LoadLeadService,
+                                    IUserHelperService userHelperService,
+                                    IOptions<AppSettings> settings)
         {
             _loadLeadService = LoadLeadService;
             _userHelperService = userHelperService;
+            _settings = settings.Value;
         }
 
         [HttpGet("{QPAPIKey}/{EQFAPIKey}/{TCUSAPIKey}/{TCCAPIKey}")]
@@ -28,12 +33,17 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var custCd = _userHelperService.GetCustCd();
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
-            _loadLeadService.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
-            _loadLeadService.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
-            _loadLeadService.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
-            _loadLeadService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+            // features subscription 
+            LoadLeadSubscriptionsStatus subscriptions = new LoadLeadSubscriptionsStatus();
+            subscriptions.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
+            subscriptions.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
-            var result = await _loadLeadService.GetListAsync(custCd);
+            //AppSettings
+            var mileageProvider = _settings.AppSetting.MileageProvider;
+
+            var result = await _loadLeadService.GetListAsync(custCd, mileageProvider, subscriptions);
 
             if (result == null)
                 return NoContent();
@@ -49,15 +59,21 @@ namespace LoadLink.LoadMatching.Api.Controllers
                 return BadRequest("Invalid Load Token");
             }
 
-            var custCd = _userHelperService.GetCustCd();
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
-            _loadLeadService.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
-            _loadLeadService.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
-            _loadLeadService.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
-            _loadLeadService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+            // features subscription 
+            LoadLeadSubscriptionsStatus subscriptions = new LoadLeadSubscriptionsStatus();
+            subscriptions.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
+            subscriptions.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
-            var result = await _loadLeadService.GetByPostingAsync(custCd, token);
+            //AppSettings
+            var mileageProvider = _settings.AppSetting.MileageProvider;
+
+            var custCd = _userHelperService.GetCustCd();
+
+            var result = await _loadLeadService.GetByPostingAsync(custCd, token, mileageProvider, subscriptions);
 
             if (result == null)
                 return NoContent();
@@ -74,16 +90,23 @@ namespace LoadLink.LoadMatching.Api.Controllers
                 return BadRequest("Invalid Load Token");
             }
 
-            var custCd = _userHelperService.GetCustCd();
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
-            _loadLeadService.HasDATStatusEnabled = getUserApiKeys.Contains(DATAPIkey);
-            _loadLeadService.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
-            _loadLeadService.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
-            _loadLeadService.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
-            _loadLeadService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+            // features subscription 
+            LoadLeadSubscriptionsStatus subscriptions = new LoadLeadSubscriptionsStatus();
+            subscriptions.HasDATSubscription = getUserApiKeys.Contains(DATAPIkey);
+            subscriptions.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
+            subscriptions.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
-            var result = await _loadLeadService.GetByPosting_CombinedAsync(custCd, token);
+            //AppSettings
+            var mileageProvider = _settings.AppSetting.MileageProvider;
+            var leadsCap = _settings.AppSetting.LeadsCap;
+
+            var custCd = _userHelperService.GetCustCd();
+
+            var result = await _loadLeadService.GetByPosting_CombinedAsync(custCd, token, mileageProvider, leadsCap, subscriptions);
 
             if (result == null)
                 return NoContent();

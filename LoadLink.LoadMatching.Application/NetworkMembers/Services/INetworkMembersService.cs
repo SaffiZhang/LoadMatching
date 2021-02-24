@@ -7,8 +7,7 @@ namespace LoadLink.LoadMatching.Application.NetworkMembers.Services
 {
     public interface INetworkMembersService
     {
-
-        Task<CreateNetworkMembersCommand> Create(CreateNetworkMembersCommand createCommand);
+        Task<CreateNetworkMemberQuery> Create(CreateNetworkMembersCommand createCommand);
         Task<IEnumerable<GetNetworkMembersQuery>> GetList(string custCd);
         Task<IEnumerable<GetNetworkMembersQuery>> GetList(int networkId, string custCd);
         Task<GetNetworkMembersQuery> Get(int id);
