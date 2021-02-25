@@ -12,26 +12,38 @@
 // <summary>Caching of data</summary>
 // ***********************************************************************
 using LoadLink.LoadMatching.Application.Caching;
-using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace LoadLink.LoadMatching.Infrastructure.Caching
 {
     public class CacheRepository<T> : ICacheRepository<T> where T : class
     {
+        private readonly IDistributedCache _cache;
 
-        private readonly IMemoryCache _cache;
+        private readonly DistributedCacheEntryOptions _cacheOptions;
 
-        private readonly MemoryCacheEntryOptions _cacheOptions;
-
-        public CacheRepository(IMemoryCache cache, MemoryCacheEntryOptions cacheOptions)
+        public CacheRepository(IDistributedCache cache, IConfiguration configuration)
         {
             _cache = cache;
-            _cacheOptions = cacheOptions;
+            _cacheOptions = new DistributedCacheEntryOptions();
+
+            var cacheSetting = configuration.GetSection("ServiceCacheSettings");
+
+            // five minutes default
+            var slidingExpiration = Convert.ToInt32(cacheSetting["DefaultCacheSetting:SlidingExpiration"] ?? "5");
+            _cacheOptions.SlidingExpiration = TimeSpan.FromMinutes(slidingExpiration);
+
+            // clear the cache at midnight so we get fresh data
+            var expireTimespan = new DateTimeOffset(DateTime.Today.AddHours(24));
+            _cacheOptions.AbsoluteExpiration = expireTimespan;
         }
 
         public async Task<IList<T>> GetMany(string keyName, Expression<Func<T, bool>> expression, Func<Task<List<T>>> callback)
@@ -55,24 +67,39 @@ namespace LoadLink.LoadMatching.Infrastructure.Caching
 
         private async Task<T> TryGetAndSetSingle(string keyname, Func<Task<T>> callback)
         {
-            if (_cache.TryGetValue(keyname, out T returnData))
-                return returnData;
+            var result = await _cache.GetAsync(keyname);
+            if (result != null)
+            {
+                var data = Encoding.UTF8.GetString(result);
+                return JsonConvert.DeserializeObject<T>(data);
+            }
 
-            returnData = await callback();
+            var returnData = await callback();
+            if (returnData == null)
+                return null;
 
-            _cache.Set(keyname, returnData, _cacheOptions);
+            var serializeData = JsonConvert.SerializeObject(returnData);
+
+            _cache.Set(keyname, Encoding.UTF8.GetBytes(serializeData), _cacheOptions);
 
             return returnData;
         }
 
         private async Task<IList<T>> TryGetAndSet(string keyname, Func<Task<List<T>>> callback)
         {
-            if (_cache.TryGetValue(keyname, out IList<T> returnData))
-                return returnData;
+            var result = await _cache.GetAsync(keyname);
+            if (result != null)
+            {
+                var data = Encoding.UTF8.GetString(result);
+                return JsonConvert.DeserializeObject<IList<T>>(data);
+            }
 
-            returnData = await callback();
+            var returnData = await callback();
+            if (returnData == null)
+                return null;
 
-            _cache.Set(keyname, returnData, _cacheOptions);
+            var serializeData = JsonConvert.SerializeObject(returnData);
+            _cache.Set(keyname, Encoding.UTF8.GetBytes(serializeData), _cacheOptions);
 
             return returnData;
         }

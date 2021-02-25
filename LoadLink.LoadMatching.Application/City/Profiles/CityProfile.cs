@@ -1,4 +1,4 @@
-﻿using LoadLink.LoadMatching.Application.City.Models.Commands;
+﻿using LoadLink.LoadMatching.Application.City.Models.Queries;
 using LoadLink.LoadMatching.Domain.Procedures;
 
 namespace LoadLink.LoadMatching.Application.City.Profiles
@@ -7,7 +7,7 @@ namespace LoadLink.LoadMatching.Application.City.Profiles
     {
         public CityProfile()
         {
-            CreateMap<UspGetCityListResult, GetCityCommand>();
+            CreateMap<UspGetCityListResult, GetCityQuery>();
         }
     }
 }

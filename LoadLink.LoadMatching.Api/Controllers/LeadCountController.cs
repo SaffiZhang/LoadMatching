@@ -22,7 +22,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             _userHelperService = userHelperService;
         }
 
-        [HttpPost("{token}/{type}/{DATAPIKey}")]
+        [HttpGet("{token}/{type}/{DATAPIKey}")]
         public async Task<IActionResult> GetLeadsCountAsync(int token, string type, string DATAPIKey)
         {
             bool getDAT = false;

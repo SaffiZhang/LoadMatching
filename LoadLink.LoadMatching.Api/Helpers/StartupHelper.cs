@@ -241,52 +241,19 @@ namespace LoadLink.LoadMatching.Api.Helpers
 
         public static void AddCache(this IServiceCollection services)
         {
-            var appSettings = services.BuildServiceProvider().GetRequiredService<IOptionsSnapshot<AppSettings>>();
-            var defaultCacheSetting = appSettings.Value.ServiceCacheSettings.DefaultCacheSetting;
-
-            // get default cache settings
-            var absoluteExpiration = defaultCacheSetting.AbsoluteExpiration;
-            var slidingExpiration = defaultCacheSetting.SlidingExpiration;
-
-            // clear the cache at midnight so we get fresh data
-            TimeSpan expireTimespan = new TimeSpan((DateTime.Now - DateTime.Today).Ticks);
-            if (absoluteExpiration != 0)
-                expireTimespan = new TimeSpan(0, absoluteExpiration, 0);
-
-            // set absolute expiration
-            MemoryCacheEntryOptions memoryCacheEntryOptions = new MemoryCacheEntryOptions()
-            {
-                AbsoluteExpirationRelativeToNow = expireTimespan, // will expire irrespective whether has been used or not                
-            };
-
-            var memoryCache = new MemoryCache(new MemoryCacheOptions());
-            memoryCacheEntryOptions.SetSlidingExpiration(TimeSpan.FromMinutes(slidingExpiration));
-
             // cached data models
             // ==================
             // userapikey setting
-            services.AddSingleton<ICacheRepository<UserApiKeyQuery>, CacheRepository<UserApiKeyQuery>>(sp =>
-            {
-                return new CacheRepository<UserApiKeyQuery>(memoryCache, memoryCacheEntryOptions);
-            });
+            services.AddSingleton<ICacheRepository<UserApiKeyQuery>, CacheRepository<UserApiKeyQuery>>();
 
             // VehicleSize setting
-            services.AddSingleton<ICacheRepository<IEnumerable<GetVehicleSizeQuery>>, CacheRepository<IEnumerable<GetVehicleSizeQuery>>>(sp =>
-            {
-                return new CacheRepository<IEnumerable<GetVehicleSizeQuery>>(memoryCache, memoryCacheEntryOptions);
-            });
+            services.AddSingleton<ICacheRepository<IEnumerable<GetVehicleSizeQuery>>, CacheRepository<IEnumerable<GetVehicleSizeQuery>>>();
 
             // VehicleType setting
-            services.AddSingleton<ICacheRepository<IEnumerable<GetVehicleTypesQuery>>, CacheRepository<IEnumerable<GetVehicleTypesQuery>>>(sp =>
-            {
-                return new CacheRepository<IEnumerable<GetVehicleTypesQuery>>(memoryCache, memoryCacheEntryOptions);
-            });
+            services.AddSingleton<ICacheRepository<IEnumerable<GetVehicleTypesQuery>>, CacheRepository<IEnumerable<GetVehicleTypesQuery>>>();
 
             // VehicleAttribute setting
-            services.AddSingleton<ICacheRepository<IEnumerable<GetVehicleAttributeQuery>>, CacheRepository<IEnumerable<GetVehicleAttributeQuery>>>(sp =>
-            {
-                return new CacheRepository<IEnumerable<GetVehicleAttributeQuery>>(memoryCache, memoryCacheEntryOptions);
-            });
+            services.AddSingleton<ICacheRepository<IEnumerable<GetVehicleAttributeQuery>>, CacheRepository<IEnumerable<GetVehicleAttributeQuery>>>();
             // ==================
         }
 
@@ -422,6 +389,21 @@ namespace LoadLink.LoadMatching.Api.Helpers
                 .InputFormatters
                 .OfType<NewtonsoftJsonPatchInputFormatter>()
                 .First();
+        }
+
+        public static void AddRedisCaching(this IServiceCollection services, IConfiguration configuration)
+        {
+            var appSettings = services.BuildServiceProvider().GetRequiredService<IOptionsSnapshot<AppSettings>>();
+            var redisConfig = appSettings.Value.RedisConfiguration;
+
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.InstanceName = "LoadLinkCentralCaching";
+                options.Configuration = $"{redisConfig.Server},abortConnect=false,password={redisConfig.Password ?? "L0@dL1nk#1"}";
+
+            });
+
+            AddCache(services);
         }
     }
 }

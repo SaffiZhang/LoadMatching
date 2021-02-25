@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using LoadLink.LoadMatching.Application.City.Models.Commands;
+using LoadLink.LoadMatching.Application.City.Models.Queries;
 using LoadLink.LoadMatching.Application.City.Repository;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LoadLink.LoadMatching.Application.City.Services
@@ -18,13 +16,13 @@ namespace LoadLink.LoadMatching.Application.City.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<GetCityCommand>> GetListAsync(string city, short sortType)
+        public async Task<IEnumerable<GetCityQuery>> GetListAsync(string city, short sortType)
         {
             var result = await _cityRepository.GetListAsync(city, sortType);
             if (result == null)
                 return null;
 
-            return _mapper.Map<IEnumerable<GetCityCommand>>(result);
+            return _mapper.Map<IEnumerable<GetCityQuery>>(result);
         }
     }
 }

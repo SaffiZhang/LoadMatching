@@ -22,7 +22,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             _userHelperService = userHelperService;
         }
 
-        [HttpPost("{custcd}/{APIkey}")]
+        [HttpGet("{custcd}/{APIkey}")]
         public async Task<IActionResult> GetAsync(string custcd, string APIkey)
         {
             if (string.IsNullOrEmpty(custcd))
@@ -41,7 +41,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             if (result == null)
                 return NoContent();
 
-            return Ok(result);
+            return new ObjectResult(result);
         }
     }
 }

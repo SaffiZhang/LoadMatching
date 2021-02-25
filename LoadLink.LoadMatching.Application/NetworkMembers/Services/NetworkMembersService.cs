@@ -20,9 +20,13 @@ namespace LoadLink.LoadMatching.Application.NetworkMembers.Services
             _networksMembersRepository = networksMembersRepository;
             _mapper = mapper;
         }
-        public async Task<CreateNetworkMembersCommand> Create(CreateNetworkMembersCommand createCommand)
+        public async Task<CreateNetworkMemberQuery> Create(CreateNetworkMembersCommand createCommand)
         {
-            return await _networksMembersRepository.Create(createCommand);
+            var result = await _networksMembersRepository.Create(createCommand);
+            if (result == null)
+                return null;
+
+            return _mapper.Map<CreateNetworkMemberQuery>(result);
         }
 
         public async Task  Delete(int networkId, string custCd)

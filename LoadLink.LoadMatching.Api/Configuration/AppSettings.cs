@@ -22,6 +22,7 @@ namespace LoadLink.LoadMatching.Api.Configuration
         public string[] AllowedCorsOrigin { get; set; }
         public string MileageProvider { get; set; }
         public AppSetting AppSetting { get; set; }
+        public RedisConfiguration RedisConfiguration { get; set; }
     }
 
 
@@ -52,5 +53,13 @@ namespace LoadLink.LoadMatching.Api.Configuration
     {
         public int LeadsCap { get; set; }
         public string MileageProvider { get; set; }
+    }
+
+    public class RedisConfiguration
+    {
+        public string Server { get; set; }
+        public string Password { get; set; }
+        public int ConnectTimeout { get; set; } = 5000; // milliseconds
+        public int SyncTimeout { get; set; } = 5000; // milliseconds
     }
 }

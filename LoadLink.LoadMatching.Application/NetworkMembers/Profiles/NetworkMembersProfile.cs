@@ -8,6 +8,7 @@ namespace LoadLink.LoadMatching.Application.NetworkMember.Profiles
         public NetworkMembersProfile()
         {
             CreateMap<UspGetNetworkMemberResult, GetNetworkMembersQuery>();
+            CreateMap<UspCreateNetworkMemberResult, CreateNetworkMemberQuery>();
         }
     }
 }

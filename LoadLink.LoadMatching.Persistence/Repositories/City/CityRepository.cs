@@ -1,13 +1,10 @@
 ﻿using Dapper;
-using LoadLink.LoadMatching.Application.City.Models.Commands;
 using LoadLink.LoadMatching.Application.City.Repository;
 using LoadLink.LoadMatching.Domain.Procedures;
 using LoadLink.LoadMatching.Persistence.Data;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LoadLink.LoadMatching.Persistence.Repositories.City

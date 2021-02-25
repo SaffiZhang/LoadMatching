@@ -1,9 +1,7 @@
 ﻿using Dapper;
 using LoadLink.LoadMatching.Application.LoadLead.Repository;
 using LoadLink.LoadMatching.Domain.Procedures;
-using LoadLink.LoadMatching.Persistence.Configuration;
 using LoadLink.LoadMatching.Persistence.Data;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -14,23 +12,20 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.LoadLead
     public class LoadLeadRepository : ILoadLeadRepository
     {
         private readonly IDbConnection _dbConnection;
-        private readonly AppSettings _settings;
 
-        public LoadLeadRepository(IConnectionFactory connectionFactory,
-                                  IOptions<AppSettings> settings)
+        public LoadLeadRepository(IConnectionFactory connectionFactory)
         {
             _dbConnection = new SqlConnection(connectionFactory.ConnectionString);
-            _settings = settings.Value;
         }
 
-        public async Task<IEnumerable<UspGetLoadLeadResult>> GetByPostingAsync(string custCd, int postingID)
+        public async Task<IEnumerable<UspGetLoadLeadResult>> GetByPostingAsync(string custCd, int postingID, string mileageProvider)
         {
             var proc = "usp_GetLoadLead";
             var param = new DynamicParameters();
 
             param.Add("@LToken", postingID);
             param.Add("@CustCD", custCd);
-            param.Add("@MileageProvider", _settings.MileageProvider);
+            param.Add("@MileageProvider", mileageProvider);
 
             var result = await SqlMapper.QueryAsync<UspGetLoadLeadResult>(
                 _dbConnection, sql: proc, param: param, commandType: CommandType.StoredProcedure);
@@ -38,13 +33,13 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.LoadLead
             return result;
         }
 
-        public async Task<IEnumerable<UspGetLoadLeadResult>> GetListAsync(string custCd)
+        public async Task<IEnumerable<UspGetLoadLeadResult>> GetListAsync(string custCd, string mileageProvider)
         {
             var proc = "usp_GetLoadLead";
             var param = new DynamicParameters();
 
             param.Add("@CustCD", custCd);
-            param.Add("@MileageProvider", _settings.MileageProvider);
+            param.Add("@MileageProvider", mileageProvider);
 
             var result = await SqlMapper.QueryAsync<UspGetLoadLeadResult>(
                 _dbConnection, sql: proc, param: param, commandType: CommandType.StoredProcedure);
@@ -52,22 +47,22 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.LoadLead
             return result;
         }
 
-        public async Task<IEnumerable<UspGetLoadLeadResult>> GetByPosting_CombinedAsync(string custCd, int postingID,  bool datStatus)
+        public async Task<IEnumerable<UspGetLoadLeadResult>> GetByPosting_CombinedAsync(string custCd, int postingID, string mileageProvider,
+                                                                            int leadsCap, bool datStatus)
         {
             var proc = "usp_GetLoadLead_Combined";
             var param = new DynamicParameters();
 
             param.Add("@LToken", postingID);
             param.Add("@CustCD", custCd);
-            param.Add("@MileageProvider", _settings.MileageProvider);
+            param.Add("@MileageProvider", mileageProvider);
             param.Add("@GetDAT", datStatus);
-            param.Add("@LeadsCap", _settings.LeadsCap);
+            param.Add("@LeadsCap", leadsCap);
 
             var result = await SqlMapper.QueryAsync<UspGetLoadLeadResult>(
                 _dbConnection, sql: proc, param: param, commandType: CommandType.StoredProcedure);
 
             return result;
         }
-
     }
 }
