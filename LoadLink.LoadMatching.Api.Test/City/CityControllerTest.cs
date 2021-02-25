@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using LoadLink.LoadMatching.Api.Controllers;
 using LoadLink.LoadMatching.Api.Test.Setup;
-using LoadLink.LoadMatching.Application.City.Models.Commands;
+using LoadLink.LoadMatching.Application.City.Models.Queries;
 using LoadLink.LoadMatching.Application.City.Profiles;
 using LoadLink.LoadMatching.Application.City.Services;
 using LoadLink.LoadMatching.Persistence.Repositories.City;
@@ -44,7 +44,7 @@ namespace LoadLink.LoadMatching.Api.Test.City
 
             // assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);
-            var model = Assert.IsAssignableFrom<IEnumerable<GetCityCommand>>(viewResult.Value);
+            var model = Assert.IsAssignableFrom<IEnumerable<GetCityQuery>>(viewResult.Value);
             Assert.NotNull(model);
         }
     }

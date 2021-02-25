@@ -1,7 +1,7 @@
 ﻿
-namespace LoadLink.LoadMatching.Domain.Procedures
+namespace LoadLink.LoadMatching.Application.NetworkMembers.Models.Queries
 {
-    public class UspCreateNetworkMemberResult
+    public class CreateNetworkMemberQuery
     {
         public int Id { get; set; }
         public int NetworkId { get; set; }

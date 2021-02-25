@@ -16,9 +16,9 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.DATEquipmentLead
         public DatEquipmentLeadRepository(IConnectionFactory connectionFactory)
         {
             _dbConnection = new SqlConnection(connectionFactory.ConnectionString);
-
         }
-        public async Task<IEnumerable<UspGetDatEquipmentLeadResult>> GetByPosting(string custCd, string mileageProvider, int postingId)
+
+        public async Task<IEnumerable<UspGetDatEquipmentLeadResult>> GetByPosting(string custCd, int postingId, string mileageProvider)
         {
             var proc = "usp_GetDATEquipmentLead";
             var param = new DynamicParameters();
@@ -30,7 +30,6 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.DATEquipmentLead
                _dbConnection, sql: proc, param, commandType: CommandType.StoredProcedure);
 
             return result;
-
         }
 
         public async Task<IEnumerable<UspGetDatEquipmentLeadResult>> GetList(string custCd, string mileageProvider)

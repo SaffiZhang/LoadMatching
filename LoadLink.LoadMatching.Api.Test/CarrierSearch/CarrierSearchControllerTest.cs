@@ -14,6 +14,7 @@ using Moq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
+using System.Diagnostics;
 
 namespace LoadLink.LoadMatching.Api.Test.CarrierSearch
 {
@@ -75,12 +76,56 @@ namespace LoadLink.LoadMatching.Api.Test.CarrierSearch
             };
 
             // act
-            var actionResult = await _carrierSearchController.Search(searchRequest, apiKey, LLB_EQF, LLB_TCC, LLB_TCUS);
+            var actionResult = await _carrierSearchController.SearchAsync(searchRequest, apiKey, LLB_EQF, LLB_TCC, LLB_TCUS);
 
             // assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);
             var model = Assert.IsAssignableFrom<IEnumerable<GetCarrierSearchResult>>(viewResult.Value);
             Assert.NotNull(model);
+        }
+
+
+        [Fact]
+        public async Task CarrierSearch_Benchmark()
+        {
+            // arrange
+            var numberOfRequests = 100;
+
+            var apiKey = "LLB_CarrSearch";
+            var LLB_EQF = "LLB_EQF";
+            var LLB_TCC = "LLB_TCC";
+            var LLB_TCUS = "LLB_TCUS";
+
+            var searchRequest = new GetCarrierSearchRequest
+            {
+                SrceSt = "",
+                SrceCity = "",
+                SrceRadius = 0,
+                DestSt = "",
+                DestCity = "",
+                DestRadius = 0,
+                VehicleType = "",
+                VehicleSize = "",
+                PostingAttrib = "",
+                CompanyName = "TRANS",
+                GetDat = "Y",
+                GetMexico = "N"
+            };
+
+            // act
+            var timer = Stopwatch.StartNew();
+            for (int i = 0; i < numberOfRequests; i++)
+            {
+                await _carrierSearchController.SearchAsync(searchRequest, apiKey, LLB_EQF, LLB_TCC, LLB_TCUS);
+            }
+            timer.Stop();
+
+            // assert
+            var actualResultInSeconds = timer.Elapsed.TotalSeconds;
+            var lowestExpectedRangeInSeconds = 5.0D; // seconds
+            var tooHighRangeInSeconds = 30.0D; // seconds 
+
+            Assert.InRange(actualResultInSeconds, lowestExpectedRangeInSeconds, tooHighRangeInSeconds);
         }
     }
 }

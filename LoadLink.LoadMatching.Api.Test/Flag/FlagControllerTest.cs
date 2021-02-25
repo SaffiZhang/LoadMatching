@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -138,6 +139,28 @@ namespace LoadLink.LoadMatching.Api.Test.Flag
 
             // assert
             Assert.IsType<NoContentResult>(actionResult);
+        }
+
+        [Fact]
+        public async Task GetListAsync_Benchmark()
+        {
+            // arrange
+            var numberOfRequests = 100;
+
+            // act
+            var timer = Stopwatch.StartNew();
+            for (int i = 0; i < numberOfRequests; i++)
+            {
+                await _controller.GetListAsync();
+            }
+            timer.Stop();
+
+            // assert
+            var actualResultInSeconds = timer.Elapsed.TotalSeconds;
+            var lowestExpectedRangeInSeconds = 5.0D; // seconds
+            var tooHighRangeInSeconds = 30.0D; // seconds 
+
+            Assert.InRange(actualResultInSeconds, lowestExpectedRangeInSeconds, tooHighRangeInSeconds);
         }
     }
 }

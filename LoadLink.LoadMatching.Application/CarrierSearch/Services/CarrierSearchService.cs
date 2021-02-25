@@ -25,7 +25,7 @@ namespace LoadLink.LoadMatching.Application.CarrierSearch.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<GetCarrierSearchResult>> GetCarrierSearch(GetCarrierSearchRequest searchrequest)
+        public async Task<IEnumerable<GetCarrierSearchResult>> GetCarrierSearchAsync(GetCarrierSearchRequest searchrequest)
         {
             var searchQuery = new GetCarrierSearchQuery()
             {

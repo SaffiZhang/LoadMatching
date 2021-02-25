@@ -27,7 +27,7 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.DATEquipmentLiveLead
         private readonly IUserSubscriptionService _userSubscriptionService;
         private readonly IDatEquipmentLiveLeadService _service;
         private readonly DatEquipmentLiveLeadController _datEquipmentLiveLeadController;
-
+        private readonly IOptions<AppSettings> _settings;
 
         public DATEquipmentLiveLeadControllerTest()
         {
@@ -36,8 +36,7 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.DATEquipmentLiveLead
             _fakeHttpContextAccessor = new FakeContext().MockHttpContext(userId, custCd);
 
             //AppSettings
-            AppSettings appSettings = new AppSettings() { MileageProvider = "P" };
-            IOptions<AppSettings> options = Options.Create(appSettings);
+            _settings = new DatabaseFixture().AppSettings();
 
             //profile
 
@@ -56,7 +55,7 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.DATEquipmentLiveLead
 
             // controller
             _userHelper = new UserHelperService(_fakeHttpContextAccessor.Object, _userSubscriptionService);
-            _datEquipmentLiveLeadController = new DatEquipmentLiveLeadController(_service, _userHelper, options);
+            _datEquipmentLiveLeadController = new DatEquipmentLiveLeadController(_service, _userHelper, _settings);
         }
 
         [Fact]

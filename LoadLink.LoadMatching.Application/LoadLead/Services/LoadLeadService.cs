@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LoadLink.LoadMatching.Application.LoadLead.Models.Commands;
 using LoadLink.LoadMatching.Application.LoadLead.Models.Queries;
 using LoadLink.LoadMatching.Application.LoadLead.Repository;
 using System.Collections.Generic;
@@ -11,12 +12,6 @@ namespace LoadLink.LoadMatching.Application.LoadLead.Services
     {
         private readonly ILoadLeadRepository _LoadLeadRepository;
         private readonly IMapper _mapper;
-
-        public bool HasDATStatusEnabled { get; set; } = false;
-        public bool HasQPSubscription { get; set; } = false;
-        public bool HasEQSubscription { get; set; } = false;
-        public bool HasTCSubscription { get; set; } = false;
-        public bool HasTCUSSubscription { get; set; } = false;
         
         public LoadLeadService(ILoadLeadRepository LoadLeadRepository, IMapper mapper)
         {
@@ -24,9 +19,10 @@ namespace LoadLink.LoadMatching.Application.LoadLead.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<GetLoadLeadQuery>> GetByPostingAsync(string custCd, int postingID)
+        public async Task<IEnumerable<GetLoadLeadQuery>> GetByPostingAsync(string custCd, int postingID, string mileageProvider,
+                                                                            LoadLeadSubscriptionsStatus subscriptions)
         {
-            var result = await _LoadLeadRepository.GetByPostingAsync(custCd, postingID);
+            var result = await _LoadLeadRepository.GetByPostingAsync(custCd, postingID, mileageProvider);
             if (!result.Any())
                 return null;
 
@@ -35,18 +31,19 @@ namespace LoadLink.LoadMatching.Application.LoadLead.Services
             var resultList = result.ToList();
             resultList.ForEach(
                 row => {
-                    row.QPStatus = HasQPSubscription ? row.QPStatus : 0;
-                    row.Equifax = HasEQSubscription ? row.Equifax : -1;
-                    row.TCC = HasTCSubscription ? row.TCC : -1;
-                    row.TCUS = HasTCUSSubscription ? row.TCUS : -1;
+                    row.QPStatus = subscriptions.HasQPSubscription ? row.QPStatus : 0;
+                    row.Equifax = subscriptions.HasEQSubscription ? row.Equifax : -1;
+                    row.TCC = subscriptions.HasTCCSubscription ? row.TCC : -1;
+                    row.TCUS = subscriptions.HasTCUSSubscription ? row.TCUS : -1;
                 });
 
             return _mapper.Map<IEnumerable<GetLoadLeadQuery>>(result);
         }
 
-        public async Task<IEnumerable<GetLoadLeadQuery>> GetListAsync(string custCd)
+        public async Task<IEnumerable<GetLoadLeadQuery>> GetListAsync(string custCd, string mileageProvider,
+                                                                        LoadLeadSubscriptionsStatus subscriptions)
         {
-            var result = await _LoadLeadRepository.GetListAsync(custCd);
+            var result = await _LoadLeadRepository.GetListAsync(custCd, mileageProvider);
             if (!result.Any())
                 return null;
 
@@ -55,18 +52,21 @@ namespace LoadLink.LoadMatching.Application.LoadLead.Services
             var resultList = result.ToList();
             resultList.ForEach(
                 row => {
-                    row.QPStatus = HasQPSubscription ? row.QPStatus : 0;
-                    row.Equifax = HasEQSubscription ? row.Equifax : -1;
-                    row.TCC = HasTCSubscription ? row.TCC : -1;
-                    row.TCUS = HasTCUSSubscription ? row.TCUS : -1;
+                    row.QPStatus = subscriptions.HasQPSubscription ? row.QPStatus : 0;
+                    row.Equifax = subscriptions.HasEQSubscription ? row.Equifax : -1;
+                    row.TCC = subscriptions.HasTCCSubscription ? row.TCC : -1;
+                    row.TCUS = subscriptions.HasTCUSSubscription ? row.TCUS : -1;
                 });
 
             return _mapper.Map<IEnumerable<GetLoadLeadQuery>>(result);
         }
 
-        public async Task<IEnumerable<GetLoadLeadQuery>> GetByPosting_CombinedAsync(string custCd, int postingID)
+        public async Task<IEnumerable<GetLoadLeadQuery>> GetByPosting_CombinedAsync(string custCd, int postingID,
+                                                                                    string mileageProvider, int leadsCap,
+                                                                                    LoadLeadSubscriptionsStatus subscriptions)
         {
-            var result = await _LoadLeadRepository.GetByPosting_CombinedAsync(custCd, postingID, HasDATStatusEnabled);
+            var result = await _LoadLeadRepository.GetByPosting_CombinedAsync(custCd, postingID, mileageProvider, 
+                                                                                leadsCap, subscriptions.HasDATSubscription);
             if (!result.Any())
                 return null;
 
@@ -75,10 +75,10 @@ namespace LoadLink.LoadMatching.Application.LoadLead.Services
             var resultList = result.ToList();
             resultList.ForEach(
                 row => {
-                    row.QPStatus = HasQPSubscription ? row.QPStatus : 0;
-                    row.Equifax = HasEQSubscription ? row.Equifax : -1;
-                    row.TCC = HasTCSubscription ? row.TCC : -1;
-                    row.TCUS = HasTCUSSubscription ? row.TCUS : -1;
+                    row.QPStatus = subscriptions.HasQPSubscription ? row.QPStatus : 0;
+                    row.Equifax = subscriptions.HasEQSubscription ? row.Equifax : -1;
+                    row.TCC = subscriptions.HasTCCSubscription ? row.TCC : -1;
+                    row.TCUS = subscriptions.HasTCUSSubscription ? row.TCUS : -1;
                 });
 
             return _mapper.Map<IEnumerable<GetLoadLeadQuery>>(result);

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using LoadLink.LoadMatching.Api.Configuration;
 using LoadLink.LoadMatching.Api.Services;
+using LoadLink.LoadMatching.Application.EquipmentLead.Models.Commands;
 using LoadLink.LoadMatching.Application.EquipmentLead.Services;
-using LoadLink.LoadMatching.Persistence.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -32,14 +33,18 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // features subscription statuses
-            _equipmentLeadService.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
-            _equipmentLeadService.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
-            _equipmentLeadService.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
-            _equipmentLeadService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+            EquipmentLeadSubscriptionsStatus subscriptions = new EquipmentLeadSubscriptionsStatus();
+            subscriptions.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
+            subscriptions.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+
+            //AppSettings
+            var mileageProvider = _settings.AppSetting.MileageProvider;
 
             var custCD = _userHelperService.GetCustCd();
 
-            var result = await _equipmentLeadService.GetListAsync(custCD);
+            var result = await _equipmentLeadService.GetListAsync(custCD, mileageProvider, subscriptions);
 
             if (result == null)
                 return NoContent();
@@ -56,14 +61,18 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // features subscription statuses
-            _equipmentLeadService.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
-            _equipmentLeadService.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
-            _equipmentLeadService.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
-            _equipmentLeadService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+            EquipmentLeadSubscriptionsStatus subscriptions = new EquipmentLeadSubscriptionsStatus();
+            subscriptions.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
+            subscriptions.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+
+            //AppSettings
+            var mileageProvider = _settings.AppSetting.MileageProvider;
 
             var custCD = _userHelperService.GetCustCd();
 
-            var result = await _equipmentLeadService.GetByPostingAsync(custCD, token);
+            var result = await _equipmentLeadService.GetByPostingAsync(custCD, token, mileageProvider, subscriptions);
 
             if (result == null)
                 return NoContent();
@@ -83,15 +92,20 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // features subscription statuses
-            _equipmentLeadService.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
-            _equipmentLeadService.HasDATSubscription = getUserApiKeys.Contains(DATAPIkey);
-            _equipmentLeadService.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
-            _equipmentLeadService.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
-            _equipmentLeadService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+            EquipmentLeadSubscriptionsStatus subscriptions = new EquipmentLeadSubscriptionsStatus();
+            subscriptions.HasDATSubscription = getUserApiKeys.Contains(DATAPIkey);
+            subscriptions.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
+            subscriptions.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+
+            //AppSettings
+            var mileageProvider = _settings.AppSetting.MileageProvider;
+            var leadsCap = _settings.AppSetting.LeadsCap;
 
             var custCD = _userHelperService.GetCustCd();
 
-            var result = await _equipmentLeadService.GetCombinedAsync(custCD, token);
+            var result = await _equipmentLeadService.GetCombinedAsync(custCD, token, mileageProvider, leadsCap, subscriptions);
 
             if (result == null)
                 return NoContent();

@@ -54,9 +54,7 @@ namespace LoadLink.LoadMatching.Api
 
             services.AddApplicationServices(Configuration);
 
-            services.AddCache();
-
-            services.Configure<Persistence.Configuration.AppSettings>(Configuration.GetSection("AppSetting"));
+            services.AddRedisCaching(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

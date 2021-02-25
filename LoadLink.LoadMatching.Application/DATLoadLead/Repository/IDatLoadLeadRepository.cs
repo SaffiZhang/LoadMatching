@@ -6,7 +6,7 @@ namespace LoadLink.LoadMatching.Application.DATLoadLead.Repository
 {
     public interface IDatLoadLeadRepository
     {
-        Task<IEnumerable<UspGetDatLoadLeadResult>> GetListAsync(string custCD);
-        Task<IEnumerable<UspGetDatLoadLeadResult>> GetByPostingAsync(string custCD, int postingId);
+        Task<IEnumerable<UspGetDatLoadLeadResult>> GetListAsync(string custCD, string mileageProvider);
+        Task<IEnumerable<UspGetDatLoadLeadResult>> GetByPostingAsync(string custCD, int postingId, string mileageProvider);
     }
 }

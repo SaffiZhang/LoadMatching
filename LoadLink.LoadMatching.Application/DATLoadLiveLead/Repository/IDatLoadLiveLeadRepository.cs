@@ -1,7 +1,6 @@
 ﻿using LoadLink.LoadMatching.Domain.Procedures;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LoadLink.LoadMatching.Application.DATLoadLiveLead.Repository

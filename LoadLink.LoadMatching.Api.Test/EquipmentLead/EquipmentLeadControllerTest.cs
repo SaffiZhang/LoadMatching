@@ -1,5 +1,6 @@
 ﻿
 using AutoMapper;
+using LoadLink.LoadMatching.Api.Configuration;
 using LoadLink.LoadMatching.Api.Controllers;
 using LoadLink.LoadMatching.Api.Services;
 using LoadLink.LoadMatching.Api.Test.Setup;
@@ -7,7 +8,6 @@ using LoadLink.LoadMatching.Application.EquipmentLead.Models.Queries;
 using LoadLink.LoadMatching.Application.EquipmentLead.Profiles;
 using LoadLink.LoadMatching.Application.EquipmentLead.Services;
 using LoadLink.LoadMatching.Application.UserSubscription.Services;
-using LoadLink.LoadMatching.Persistence.Configuration;
 using LoadLink.LoadMatching.Persistence.Repositories.EquipmentLead;
 using LoadLink.LoadMatching.Persistence.Repositories.UserSubscription;
 using Microsoft.AspNetCore.Http;
@@ -44,7 +44,7 @@ namespace LoadLink.LoadMatching.Api.Test.EquipmentLead
             var profile = new Mapper(configuration);
 
             // integration            
-            var repository = new EquipmentLeadRepository(new DatabaseFixture().ConnectionFactory, _settings);
+            var repository = new EquipmentLeadRepository(new DatabaseFixture().ConnectionFactory);
             _service = new EquipmentLeadService(repository, profile);
 
             var userSubscriptionRepository = new UserSubscriptionRepository(new DatabaseFixture().ConnectionFactory);
