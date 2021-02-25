@@ -23,7 +23,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
         private readonly IUserHelperService _userHelperService;
         private readonly IOptions<AppSettings> _appSettings;
 
-        public LoadPostingController(ILoadPostingService loadPostingService, IUserHelperService userHelperService, IOptions<AppSettings> appSettings )
+        public LoadPostingController(ILoadPostingService loadPostingService, IUserHelperService userHelperService, IOptions<AppSettings> appSettings)
         {
             _loadPostingService = loadPostingService;
             _userHelperService = userHelperService;
@@ -36,7 +36,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
         {
 
             //Check Subscription 
-            if (! await _userHelperService.HasValidSubscription(APIkey))
+            if (!await _userHelperService.HasValidSubscription(APIkey))
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
             //Get the result
@@ -50,7 +50,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
                 return NoContent();
             }
             return Ok(postings);
-            
+
 
         }
 
@@ -67,14 +67,14 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var custCd = _userHelperService.GetCustCd();
             var mileageProvider = _appSettings.Value.MileageProvider;
 
-            var postings = await _loadPostingService.GetListAsync(custCd, mileageProvider, false);
+            var postings = await _loadPostingService.GetListAsync(custCd, mileageProvider, GETDAT);
 
             if (postings == null)
             {
                 return NoContent();
             }
             return Ok(postings);
-            
+
 
         }
 
@@ -145,23 +145,23 @@ namespace LoadLink.LoadMatching.Api.Controllers
             await _loadPostingService.UpdateAsync(token, loadPosting.PStatus);
             return NoContent();
         }
-        
+
         [HttpPut("{token}")]
         public async Task<IActionResult> Put(int token, [FromBody] int InitialLeadsCount)
         {
-            
+
             if (token == 0)
                 return BadRequest("Invalid Load Token");
 
             await _loadPostingService.UpdateLeadCount(token, InitialLeadsCount);
             return NoContent();
-            
+
         }
 
         [HttpPatch("{token}/{APIkey}")]
         public async Task<IActionResult> Patch(int token, [FromBody] JsonPatchDocument<UpdateLoadPostingCommand> patchDoc, string APIkey)
         {
-           
+
             //Ensure patch Doc is not null
             if (patchDoc == null)
                 return BadRequest("No Posting Status Provided");
@@ -170,11 +170,11 @@ namespace LoadLink.LoadMatching.Api.Controllers
             if (!await _userHelperService.HasValidSubscription(APIkey))
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
-  
+
             //Get the Posting the update needs to be applied on
             var custCd = _userHelperService.GetCustCd();
             var mileageProvider = _appSettings.Value.MileageProvider;
-             
+
             var loadPostingToUpdate = await _loadPostingService.GetAsync(token, custCd, mileageProvider);
 
             //Ensure record to be updated exists
@@ -193,11 +193,11 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             await _loadPostingService.UpdateAsync(token, loadPostingToPatch.PStatus);
             return NoContent();
-            
+
 
         }
 
-     
+
         [HttpDelete("{token}/{APIkey}")]
         public async Task<IActionResult> Delete(int token, string APIkey)
         {
@@ -209,7 +209,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             if (!await _userHelperService.HasValidSubscription(APIkey))
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
-                //Check if posting exsits before delete
+            //Check if posting exsits before delete
             var custCd = _userHelperService.GetCustCd();
             var mileageProvider = _appSettings.Value.MileageProvider;
             var userId = _userHelperService.GetUserId();
@@ -220,7 +220,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
                 return NoContent();
             }
 
-            await  _loadPostingService.DeleteAsync(token,custCd,userId);
+            await _loadPostingService.DeleteAsync(token, custCd, userId);
             return NoContent();
 
         }
