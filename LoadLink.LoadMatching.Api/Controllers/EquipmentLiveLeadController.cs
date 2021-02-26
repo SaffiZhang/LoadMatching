@@ -1,6 +1,7 @@
 ﻿using LoadLink.LoadMatching.Api.Configuration;
 using LoadLink.LoadMatching.Api.Infrastructure.Http;
 using LoadLink.LoadMatching.Api.Services;
+using LoadLink.LoadMatching.Application.EquipmentLiveLead.Models.Commands;
 using LoadLink.LoadMatching.Application.EquipmentLiveLead.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -16,17 +17,19 @@ namespace LoadLink.LoadMatching.Api.Controllers
     {
         private readonly IEquipmentLiveLeadService _datEquipmentLiveLeadService;
         private readonly IUserHelperService _userHelperService;
-        private readonly IOptions<AppSettings> _appSettings;
+        private readonly AppSettings _appSettings;
 
-        public EquipmentLiveLeadController(IEquipmentLiveLeadService datEquipmentLiveLeadService, IUserHelperService userHelperService, IOptions<AppSettings> appSettings)
+        public EquipmentLiveLeadController(IEquipmentLiveLeadService datEquipmentLiveLeadService, 
+                                            IUserHelperService userHelperService, 
+                                            IOptions<AppSettings> appSettings)
         {
             _datEquipmentLiveLeadService = datEquipmentLiveLeadService;
             _userHelperService = userHelperService;
-            _appSettings = appSettings;
+            _appSettings = appSettings.Value;
         }
 
-        [HttpGet("leadfrom/{leadfrom}/{LLAPIkey}/{DATAPIkey}/{QPAPIKey}/{EQFAPIKey}/{TCUSAPIKey}/{TCCAPIKey}")]
-        public async Task<IActionResult> GetList(DateTime leadfrom, string LLAPIkey, string DATAPIkey, string QPAPIKey, string EQFAPIKey, string TCUSAPIKey, string TCCAPIKey)
+        [HttpGet("leadfrom/{leadfrom}/{LLAPIkey}/{QPAPIKey}/{EQFAPIKey}/{TCUSAPIKey}/{TCCAPIKey}")]
+        public async Task<IActionResult> GetList(DateTime leadfrom, string LLAPIkey, string QPAPIKey, string EQFAPIKey, string TCUSAPIKey, string TCCAPIKey)
         {
             if (leadfrom <= DateTime.MinValue)
                 return BadRequest("leadfrom must be valid date format.");
@@ -38,14 +41,15 @@ namespace LoadLink.LoadMatching.Api.Controllers
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
             // features subscription 
-            _datEquipmentLiveLeadService.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
-            _datEquipmentLiveLeadService.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
-            _datEquipmentLiveLeadService.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
-            _datEquipmentLiveLeadService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+            EquipmentLiveLeadSubscriptionsStatus subscriptions = new EquipmentLiveLeadSubscriptionsStatus();
+            subscriptions.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
+            subscriptions.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
             var custCd = _userHelperService.GetCustCd();
-            var mileageProvider = _appSettings.Value.MileageProvider;
-            var leads = await _datEquipmentLiveLeadService.GetLeadsAsync(custCd, mileageProvider, leadfrom, null);
+            var mileageProvider = _appSettings.AppSetting.MileageProvider;
+            var leads = await _datEquipmentLiveLeadService.GetLeadsAsync(custCd, mileageProvider, leadfrom, null, subscriptions);
 
             if (leads == null)
             {
@@ -53,16 +57,13 @@ namespace LoadLink.LoadMatching.Api.Controllers
             }
 
             return Ok(leads);
-
-
         }
 
-        [HttpGet("{token}/leadfrom/{leadfrom}/{LLAPIkey}/{DATAPIkey}/{QPAPIKey}/{EQFAPIKey}/{TCUSAPIKey}/{TCCAPIKey}")]
-        public async Task<IActionResult> GetByToken(DateTime leadfrom, int? token, string LLAPIkey, string DATAPIkey, string QPAPIKey, string EQFAPIKey, string TCUSAPIKey, string TCCAPIKey)
+        [HttpGet("{token}/leadfrom/{leadfrom}/{LLAPIkey}/{QPAPIKey}/{EQFAPIKey}/{TCUSAPIKey}/{TCCAPIKey}")]
+        public async Task<IActionResult> GetByToken(DateTime leadfrom, int? token, string LLAPIkey, string QPAPIKey, string EQFAPIKey, string TCUSAPIKey, string TCCAPIKey)
         {
-
             if (token < 0)
-                return BadRequest();
+                return BadRequest("Invalid Equipment token.");
             if (leadfrom <= DateTime.MinValue)
                 return BadRequest("leadfrom must be valid date format.");
 
@@ -73,14 +74,15 @@ namespace LoadLink.LoadMatching.Api.Controllers
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
             // features subscription 
-            _datEquipmentLiveLeadService.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
-            _datEquipmentLiveLeadService.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
-            _datEquipmentLiveLeadService.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
-            _datEquipmentLiveLeadService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+            EquipmentLiveLeadSubscriptionsStatus subscriptions = new EquipmentLiveLeadSubscriptionsStatus();
+            subscriptions.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
+            subscriptions.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
             var custCd = _userHelperService.GetCustCd();
-            var mileageProvider = _appSettings.Value.MileageProvider;
-            var leads = await _datEquipmentLiveLeadService.GetLeadsAsync(custCd, mileageProvider, leadfrom, token);
+            var mileageProvider = _appSettings.MileageProvider;
+            var leads = await _datEquipmentLiveLeadService.GetLeadsAsync(custCd, mileageProvider, leadfrom, token, subscriptions);
 
             if (leads == null)
             {
@@ -88,8 +90,6 @@ namespace LoadLink.LoadMatching.Api.Controllers
             }
 
             return Ok(leads);
-
         }
-
     }
 }

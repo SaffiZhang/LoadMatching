@@ -29,7 +29,7 @@ namespace LoadLink.LoadMatching.Api.Test.LoadLiveLead
         private readonly IUserSubscriptionService _userSubscriptionService;
         private readonly ILoadLiveLeadService _service;
         private readonly LoadLiveLeadController _datLoadLiveLeadController;
-
+        private readonly IOptions<AppSettings> _settings;
 
         public LoadLiveLeadControllerTest()
         {
@@ -38,8 +38,7 @@ namespace LoadLink.LoadMatching.Api.Test.LoadLiveLead
             _fakeHttpContextAccessor = new FakeContext().MockHttpContext(userId, custCd);
 
             //AppSettings
-            AppSettings appSettings = new AppSettings() { MileageProvider = "P" };
-            IOptions<AppSettings> options = Options.Create(appSettings);
+            _settings = new DatabaseFixture().AppSettings();
 
             //profile
             var LoadLiveLeadProfile = new LoadLiveLeadProfile();
@@ -57,7 +56,7 @@ namespace LoadLink.LoadMatching.Api.Test.LoadLiveLead
 
             // controller
             _userHelper = new UserHelperService(_fakeHttpContextAccessor.Object, _userSubscriptionService);
-            _datLoadLiveLeadController = new LoadLiveLeadController(_service, _userHelper, options);
+            _datLoadLiveLeadController = new LoadLiveLeadController(_service, _userHelper, _settings);
         }
 
         [Fact]
@@ -69,13 +68,12 @@ namespace LoadLink.LoadMatching.Api.Test.LoadLiveLead
             var LLB_TCC = "LLB_TCC";
             var LLB_TCUS = "LLB_TCUS";
             var LLB_API = "LLB_LiveLead";
-            var LLB_DAT = "LLB_DAT";
             var leadFrom = DateTime.Parse("2021-02-11 20:37:00.0000000");
 
             //Please note this test is just to allow the CIDC to pass - s
 
             // act
-            var actionResult = await _datLoadLiveLeadController.GetList(leadFrom, LLB_DAT, LLB_API, LLB_QP, LLB_EQF, LLB_TCUS, LLB_TCC);
+            var actionResult = await _datLoadLiveLeadController.GetList(leadFrom, LLB_API, LLB_QP, LLB_EQF, LLB_TCUS, LLB_TCC);
             var okResult = actionResult as OkObjectResult;
 
             // assert
@@ -102,11 +100,10 @@ namespace LoadLink.LoadMatching.Api.Test.LoadLiveLead
             var LLB_TCUS = "LLB_TCUS";
             var token = 29913888;
             var LLB_API = "LLB_LiveLead";
-            var LLB_DAT = "LLB_DAT";
             var leadFrom = DateTime.Parse("2021-02-11 20:37:00.0000000");
 
             // act
-            var actionResult = await _datLoadLiveLeadController.GetByToken(leadFrom, token, LLB_API, LLB_DAT, LLB_QP, LLB_EQF, LLB_TCUS, LLB_TCC);
+            var actionResult = await _datLoadLiveLeadController.GetByToken(leadFrom, token, LLB_API, LLB_QP, LLB_EQF, LLB_TCUS, LLB_TCC);
             var okResult = actionResult as OkObjectResult;
 
             // assert

@@ -6,9 +6,7 @@ namespace LoadLink.LoadMatching.Application.USMemberSearch.Services
 {
     public interface IUSMemberSearchService
     {
-        bool HasEQSubscription { get; set; }
-        bool HasTCSubscription { get; set; }
-        bool HasTCUSSubscription { get; set; }
-        Task<IEnumerable<GetUSMemberSearchQuery>> GetListAsync(GetUSMemberSearchCommand searchRequest);
+        Task<IEnumerable<GetUSMemberSearchQuery>> GetListAsync(GetUSMemberSearchCommand searchRequest,
+                                                                USMemberSearchSubscriptionsStatus subscriptions);
     }
 }

@@ -5,6 +5,7 @@ using LoadLink.LoadMatching.Application.PDRatio.Models.Commands;
 using LoadLink.LoadMatching.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 
 namespace LoadLink.LoadMatching.Api.Controllers
 {
@@ -24,7 +25,10 @@ namespace LoadLink.LoadMatching.Api.Controllers
         [HttpPost("{APIkey}")]
         public async Task<IActionResult> GetPDRatioAsync([FromBody] GetPDRatioCommand requestLane, string APIkey)
         {
-            if (!(await _userHelperService.HasValidSubscription(APIkey)))
+            var getUserApiKeys = await _userHelperService.GetUserApiKeys();
+
+            // check subscription
+            if (!getUserApiKeys.Contains(APIkey))
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
             var result = await _pdRatioService.GetAsync(requestLane);

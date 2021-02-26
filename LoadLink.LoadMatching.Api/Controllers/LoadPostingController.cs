@@ -3,12 +3,10 @@ using LoadLink.LoadMatching.Api.Infrastructure.Http;
 using LoadLink.LoadMatching.Api.Services;
 using LoadLink.LoadMatching.Application.LoadPosting.Models.Commands;
 using LoadLink.LoadMatching.Application.LoadPosting.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -21,27 +19,29 @@ namespace LoadLink.LoadMatching.Api.Controllers
     {
         private readonly ILoadPostingService _loadPostingService;
         private readonly IUserHelperService _userHelperService;
-        private readonly IOptions<AppSettings> _appSettings;
+        private readonly AppSettings _appSettings;
 
-        public LoadPostingController(ILoadPostingService loadPostingService, IUserHelperService userHelperService, IOptions<AppSettings> appSettings)
+        public LoadPostingController(ILoadPostingService loadPostingService, 
+                                        IUserHelperService userHelperService, 
+                                        IOptions<AppSettings> appSettings)
         {
             _loadPostingService = loadPostingService;
             _userHelperService = userHelperService;
-            _appSettings = appSettings;
+            _appSettings = appSettings.Value;
         }
-
 
         [HttpGet("{APIkey}")]
         public async Task<IActionResult> GetList(string APIkey)
         {
+            var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
-            //Check Subscription 
-            if (!await _userHelperService.HasValidSubscription(APIkey))
+            // check feature access
+            if (!getUserApiKeys.Contains(APIkey))
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
             //Get the result
             var custCd = _userHelperService.GetCustCd();
-            var mileageProvider = _appSettings.Value.MileageProvider;
+            var mileageProvider = _appSettings.AppSetting.MileageProvider;
 
             var postings = await _loadPostingService.GetListAsync(custCd, mileageProvider, false);
 
@@ -50,22 +50,20 @@ namespace LoadLink.LoadMatching.Api.Controllers
                 return NoContent();
             }
             return Ok(postings);
-
-
         }
 
         [HttpGet("{APIkey}/GETDAT/{GETDAT?}")]
         public async Task<IActionResult> GetList(string APIkey, bool GETDAT)
         {
+            var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
-            //Check Subscription 
-            if (!await _userHelperService.HasValidSubscription(APIkey))
+            // check feature access
+            if (!getUserApiKeys.Contains(APIkey))
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
-
 
             //Get the result
             var custCd = _userHelperService.GetCustCd();
-            var mileageProvider = _appSettings.Value.MileageProvider;
+            var mileageProvider = _appSettings.AppSetting.MileageProvider;
 
             var postings = await _loadPostingService.GetListAsync(custCd, mileageProvider, GETDAT);
 
@@ -73,25 +71,26 @@ namespace LoadLink.LoadMatching.Api.Controllers
             {
                 return NoContent();
             }
+
             return Ok(postings);
-
-
         }
 
         [HttpGet("{token}/{APIkey}")]
         public async Task<IActionResult> Get(int token, string APIkey)
         {
-
             if (token <= 0)
                 return BadRequest("Invalid Load Token");
 
-            //Check Subscription 
-            if (!await _userHelperService.HasValidSubscription(APIkey))
+            var getUserApiKeys = await _userHelperService.GetUserApiKeys();
+
+            // check feature access
+            if (!getUserApiKeys.Contains(APIkey))
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
             //Get the result
             var custCd = _userHelperService.GetCustCd();
-            var mileageProvider = _appSettings.Value.MileageProvider;
+            var mileageProvider = _appSettings.AppSetting.MileageProvider;
+
             var posting = await _loadPostingService.GetAsync(token, custCd, mileageProvider);
 
             if (posting == null)
@@ -105,7 +104,6 @@ namespace LoadLink.LoadMatching.Api.Controllers
         [HttpPost("{APIkey}")]
         public async Task<IActionResult> Post([FromBody] CreateLoadPostingCommand posting, string APIkey)
         {
-
             //DATA VALIDATIONS
             if (posting == null)
                 return BadRequest("No Posting Data provided");
@@ -116,20 +114,23 @@ namespace LoadLink.LoadMatching.Api.Controllers
             if (!ValidatePostingAttrib(posting.PostingAttrib))
                 return BadRequest("Invalid PostingAttrib");
 
+            var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
-            //Check Subscription 
-            if (!await _userHelperService.HasValidSubscription(APIkey))
+            // check feature access
+            if (!getUserApiKeys.Contains(APIkey))
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
             var custCd = _userHelperService.GetCustCd();
             var userId = _userHelperService.GetUserId();
-            posting.CustCD = custCd; posting.CreatedBy = userId;
+            posting.CustCD = custCd; 
+            posting.CreatedBy = userId;
+
             return Ok(await _loadPostingService.CreateAsync(posting));
         }
+
         [HttpPut("{token}/{APIkey}")]
         public async Task<IActionResult> Put(int token, [FromBody] UpdateLoadPostingCommand loadPosting, string APIkey)
         {
-
             if (loadPosting == null)
                 return BadRequest("No Posting Status Provided");
             if (token <= 0)
@@ -137,10 +138,11 @@ namespace LoadLink.LoadMatching.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            //Check Subscription 
-            if (!await _userHelperService.HasValidSubscription(APIkey))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+            var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
+            // check feature access
+            if (!getUserApiKeys.Contains(APIkey))
+                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
             await _loadPostingService.UpdateAsync(token, loadPosting.PStatus);
             return NoContent();
@@ -155,32 +157,30 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             await _loadPostingService.UpdateLeadCount(token, InitialLeadsCount);
             return NoContent();
-
         }
 
         [HttpPatch("{token}/{APIkey}")]
         public async Task<IActionResult> Patch(int token, [FromBody] JsonPatchDocument<UpdateLoadPostingCommand> patchDoc, string APIkey)
         {
-
             //Ensure patch Doc is not null
             if (patchDoc == null)
                 return BadRequest("No Posting Status Provided");
 
-            //Check Subscription 
-            if (!await _userHelperService.HasValidSubscription(APIkey))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+            var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
+            // check feature access
+            if (!getUserApiKeys.Contains(APIkey))
+                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
             //Get the Posting the update needs to be applied on
             var custCd = _userHelperService.GetCustCd();
-            var mileageProvider = _appSettings.Value.MileageProvider;
+            var mileageProvider = _appSettings.AppSetting.MileageProvider;
 
             var loadPostingToUpdate = await _loadPostingService.GetAsync(token, custCd, mileageProvider);
 
             //Ensure record to be updated exists
             if (loadPostingToUpdate == null)
                 return NoContent();
-
 
             //apply update model
             var loadPostingToPatch = new UpdateLoadPostingCommand() { PStatus = loadPostingToUpdate.PStatus };
@@ -193,26 +193,26 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             await _loadPostingService.UpdateAsync(token, loadPostingToPatch.PStatus);
             return NoContent();
-
-
         }
 
 
         [HttpDelete("{token}/{APIkey}")]
         public async Task<IActionResult> Delete(int token, string APIkey)
         {
-
             if (token <= 0)
                 return BadRequest("Invalid Load Token");
 
-            //Check Subscription 
-            if (!await _userHelperService.HasValidSubscription(APIkey))
+            var getUserApiKeys = await _userHelperService.GetUserApiKeys();
+
+            // check feature access
+            if (!getUserApiKeys.Contains(APIkey))
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
             //Check if posting exsits before delete
             var custCd = _userHelperService.GetCustCd();
-            var mileageProvider = _appSettings.Value.MileageProvider;
+            var mileageProvider = _appSettings.AppSetting.MileageProvider;
             var userId = _userHelperService.GetUserId();
+
             var posting = await _loadPostingService.GetAsync(token, custCd, mileageProvider);
 
             if (posting == null)
@@ -222,7 +222,6 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             await _loadPostingService.DeleteAsync(token, custCd, userId);
             return NoContent();
-
         }
 
         // VEHICLE TYPE & ATTRIBUTES VALIDATIONS

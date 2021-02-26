@@ -5,6 +5,7 @@ using LoadLink.LoadMatching.Application.RIRate.Models.Commands;
 using LoadLink.LoadMatching.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 
 namespace LoadLink.LoadMatching.Api.Controllers
 {
@@ -24,7 +25,10 @@ namespace LoadLink.LoadMatching.Api.Controllers
         [HttpPost("{APIkey}")]
         public async Task<IActionResult> GetRIRateAsync([FromBody] GetRIRateCommand requestLane, string APIkey)
         {
-            if (!(await _userHelperService.HasValidSubscription(APIkey)))
+            var getUserApiKeys = await _userHelperService.GetUserApiKeys();
+
+            // check subscription
+            if (!getUserApiKeys.Contains(APIkey))
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
             var result = await _riRateService.GetAsync(requestLane);

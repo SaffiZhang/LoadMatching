@@ -16,16 +16,16 @@ namespace LoadLink.LoadMatching.Api.Controllers
         private readonly IUSCarrierSearchService _USCarrierSearchService;
         private readonly IUserHelperService _userHelperService;
 
-        public USCarrierSearchController(
-            IUSCarrierSearchService USCarrierSearchService,
-            IUserHelperService userHelperService)
+        public USCarrierSearchController(IUSCarrierSearchService USCarrierSearchService,
+                                            IUserHelperService userHelperService)
         {
             _USCarrierSearchService = USCarrierSearchService;
             _userHelperService = userHelperService;
         }
 
         [HttpPost("{APIkey}/{EQFAPIKey}/{TCCAPIKey}/{TCUSAPIKey}")]
-        public async Task<IActionResult> GetUSCarrierSearchAsync([FromBody] GetUSCarrierSearchCommand searchRequest, string APIkey, string EQFAPIKey, string TCCAPIKey, string TCUSAPIKey)
+        public async Task<IActionResult> GetUSCarrierSearchAsync([FromBody] GetUSCarrierSearchCommand searchRequest, 
+                                                                 string APIkey, string EQFAPIKey, string TCCAPIKey, string TCUSAPIKey)
         {
             if (searchRequest == null)
                 return BadRequest();
@@ -36,13 +36,14 @@ namespace LoadLink.LoadMatching.Api.Controllers
             if (!getUserApiKeys.Contains(APIkey))
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
-            _USCarrierSearchService.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
-            _USCarrierSearchService.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
-            _USCarrierSearchService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+            USCarrierSearchSubscriptionsStatus subscriptions = new USCarrierSearchSubscriptionsStatus();
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
+            subscriptions.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
             searchRequest.UserId = _userHelperService.GetUserId();
             
-            var result = await _USCarrierSearchService.GetListAsync(searchRequest);
+            var result = await _USCarrierSearchService.GetListAsync(searchRequest, subscriptions);
             if (result == null)
                 return NoContent();
 

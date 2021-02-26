@@ -57,6 +57,11 @@ namespace LoadLink.LoadMatching.Api.Controllers
             createFlagCommand.CreatedBy = userId;
 
             var result = await _flagService.CreateAsync(createFlagCommand);
+            //Duplicate record being flagged
+            if (createFlagCommand.Id == -1)
+            {
+                return Conflict();
+            }
 
             return Ok(result);
         }

@@ -17,14 +17,15 @@ namespace LoadLink.LoadMatching.Api.Controllers
         private readonly IUserHelperService _userHelperService;
 
         public USMemberSearchController(IUSMemberSearchService USMemberSearchService,
-            IUserHelperService userHelperService)
+                                        IUserHelperService userHelperService)
         {
             _USMemberSearchService = USMemberSearchService;
             _userHelperService = userHelperService;
         }
 
         [HttpPost("{APIkey}/{EQFAPIKey}/{TCCAPIKey}/{TCUSAPIKey}")]
-        public async Task<IActionResult> GetUSMemberSearchAsync([FromBody] GetUSMemberSearchCommand searchRequest, string APIkey, string EQFAPIKey, string TCCAPIKey, string TCUSAPIKey)
+        public async Task<IActionResult> GetUSMemberSearchAsync([FromBody] GetUSMemberSearchCommand searchRequest, 
+                                                                string APIkey, string EQFAPIKey, string TCCAPIKey, string TCUSAPIKey)
         {
             if (searchRequest == null)
                 return BadRequest();
@@ -35,14 +36,15 @@ namespace LoadLink.LoadMatching.Api.Controllers
             if (!getUserApiKeys.Contains(APIkey))
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
-            _USMemberSearchService.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
-            _USMemberSearchService.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
-            _USMemberSearchService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+            USMemberSearchSubscriptionsStatus subscriptions = new USMemberSearchSubscriptionsStatus();
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
+            subscriptions.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
             if (string.IsNullOrEmpty(searchRequest.CustCd))
                 searchRequest.CustCd = _userHelperService.GetCustCd();
 
-            var result = await _USMemberSearchService.GetListAsync(searchRequest);
+            var result = await _USMemberSearchService.GetListAsync(searchRequest, subscriptions);
             if (result == null)
                 return NoContent();
 
