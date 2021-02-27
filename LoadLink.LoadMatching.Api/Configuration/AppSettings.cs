@@ -20,7 +20,6 @@ namespace LoadLink.LoadMatching.Api.Configuration
         public ServiceCacheSettings ServiceCacheSettings { get; set; }
         public IdentityServer IdentityServer { get; set; }
         public string[] AllowedCorsOrigin { get; set; }
-        public string MileageProvider { get; set; }
         public AppSetting AppSetting { get; set; }
         public RedisConfiguration RedisConfiguration { get; set; }
     }

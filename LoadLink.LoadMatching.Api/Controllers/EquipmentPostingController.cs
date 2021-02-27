@@ -121,10 +121,8 @@ namespace LoadLink.LoadMatching.Api.Controllers
             if (!getUserApiKeys.Contains(APIkey))
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
-            var custCd = _userHelperService.GetCustCd();
-            var userId = _userHelperService.GetUserId();
-            posting.CustCD = custCd; 
-            posting.CreatedBy = userId;
+            posting.CustCD = _userHelperService.GetCustCd(); 
+            posting.CreatedBy = _userHelperService.GetUserId();
 
             return Ok(await _equipmentPostingService.CreateAsync(posting));
         }

@@ -81,7 +81,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
             var custCd = _userHelperService.GetCustCd();
-            var mileageProvider = _appSettings.MileageProvider;
+            var mileageProvider = _appSettings.AppSetting.MileageProvider;
             var leads = await _datEquipmentLiveLeadService.GetLeadsAsync(custCd, mileageProvider, leadfrom, token, subscriptions);
 
             if (leads == null)
