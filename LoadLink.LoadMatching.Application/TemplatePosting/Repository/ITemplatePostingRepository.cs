@@ -9,8 +9,8 @@ namespace LoadLink.LoadMatching.Application.TemplatePosting.Repository
     {
         Task<UspGetTemplatePostingResult> GetAsync(string custCd, int templateId);
         Task<IEnumerable<UspGetTemplatePostingResult>> GetListAsync(string custCd);
-        Task<int> CreateAsync(TemplatePostingCommand templatePosting);
-        Task<int> UpdateAsync(TemplatePostingCommand templatePosting);
+        Task<int> CreateAsync(CreateTemplatePostingSPCommand templatePosting);
+        Task<int> UpdateAsync(UpdateTemplatePostingSPCommand templatePosting);
         Task DeleteAsync(int templateId, int userId);
     }
 }

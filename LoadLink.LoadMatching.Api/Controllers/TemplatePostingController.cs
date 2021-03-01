@@ -48,7 +48,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] TemplatePostingCommand templatePosting)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateTemplatePostingCommand templatePosting)
         {
             if (templatePosting == null)
             {
@@ -65,7 +65,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] TemplatePostingCommand templatePosting)
+        public async Task<IActionResult> UpdateAsync([FromBody] UpdateTemplatePostingCommand templatePosting)
         {
             if (templatePosting == null)
             {
@@ -73,6 +73,8 @@ namespace LoadLink.LoadMatching.Api.Controllers
             }
 
             templatePosting.UpdatedBy = _userHelperService.GetUserId();
+            templatePosting.UserId = _userHelperService.GetUserId();
+            templatePosting.CustCd = _userHelperService.GetCustCd();
 
             var result = await _templatePostingService.UpdateAsync(templatePosting);
             if (result == null)
