@@ -88,7 +88,7 @@ namespace LoadLink.LoadMatching.Api.Test.Flag
         }
 
         [Fact]
-        public async Task Create_AssignedLoad()
+        public async Task Create_Flag()
         {
             // arrange
             var createCmd = new CreateFlagCommand
@@ -120,12 +120,18 @@ namespace LoadLink.LoadMatching.Api.Test.Flag
             // act
             var actionResult = await _controller.CreateAsync(createCmd);
             var okResult = actionResult as OkObjectResult;
+            var conflictResult = actionResult as ConflictResult;
 
             // assert
-            if (okResult == null)
-                Assert.IsType<BadRequestObjectResult>(actionResult);
+            if (conflictResult != null)
+                Assert.IsType<ConflictResult>(actionResult);
             else
-                Assert.IsType<OkObjectResult>(actionResult);
+            {
+                if (okResult == null)
+                    Assert.IsType<BadRequestObjectResult>(actionResult);
+                else
+                    Assert.IsType<OkObjectResult>(actionResult);
+            }
         }
 
         [Fact]

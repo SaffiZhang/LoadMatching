@@ -10,9 +10,10 @@ namespace LoadLink.LoadMatching.Application.USCarrierSearch.Models.Commands
         public string DestSt { get; set; }
         public string DestCity { get; set; }
         public int DestRadius { get; set; }
-        public int VehicleSize { get; set; }
-        public int VehicleType { get; set; }
+        public string VehicleSize { get; set; }
+        public string VehicleType { get; set; }
         public string CompanyName { get; set; }
-        public bool GetMexico { get; set; }
+        public string GetMexico { get; set; }
+
     }
 }

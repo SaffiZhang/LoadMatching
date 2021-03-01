@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace LoadLink.LoadMatching.Application.LoadPosting.Models.Commands
 {
@@ -20,7 +18,7 @@ namespace LoadLink.LoadMatching.Application.LoadPosting.Models.Commands
         [Required(ErrorMessage = "SrceSt is required")]
         public string SrceSt { get; set; }
 
-        [RegularExpression("(?:5[0-0]{2}|1[0-0]{3}|50|100|150|200|300|400)", ErrorMessage = "Invalid SrceRadius")]
+        [RegularExpression("50|100|150|200", ErrorMessage = "Invalid SrceRadius")]
         public int SrceRadius { get; set; }
 
         [Required(ErrorMessage = "DestCity is required")]
@@ -29,11 +27,11 @@ namespace LoadLink.LoadMatching.Application.LoadPosting.Models.Commands
         [Required(ErrorMessage = "DestSt is required")]
         public string DestSt { get; set; }
 
-        [RegularExpression("(?:5[0-0]{2}|1[0-0]{3}|50|100|150|200|300|400)", ErrorMessage = "Invalid DestRadius")]
+        [RegularExpression("50|100|150|200", ErrorMessage = "Invalid DestRadius")]
         public int DestRadius { get; set; }
 
         [Required(ErrorMessage = "VehicleSize is required"),
-            RegularExpression("R|A|I|U|r|a|i|u", ErrorMessage = "Invalid VehicleSize")]
+           RegularExpression("Q|H|L|T|q|h|l|t", ErrorMessage = "Invalid VehicleSize")]
         public string VehicleSize { get; set; }
 
         [Required(ErrorMessage = "VehicleType is required")]
@@ -52,16 +50,8 @@ namespace LoadLink.LoadMatching.Application.LoadPosting.Models.Commands
 
         public int CreatedBy { get; set; }
 
-
-
         public int NetworkId { get; set; }
 
-
-        //[RegularExpression("C|R", ErrorMessage = "Invalid Corridor")]
-        //public string Corridor { get; set; }
-
         public bool? GlobalExcluded { get; set; }
-
-
     }
 }

@@ -28,16 +28,17 @@ namespace LoadLink.LoadMatching.Api.Test.LoadPosting
         private readonly IUserSubscriptionService _userSubscriptionService;
         private readonly ILoadPostingService _service;
         private readonly LoadPostingController _loadPostingController;
- 
+        private readonly IOptions<AppSettings> _settings;
+
         public LoadPostingControllerTest()
         {
             var userId = 34351;
             var custCd = "TCORELL";
 
             _fakeHttpContextAccessor = new FakeContext().MockHttpContext(userId, custCd);
-            AppSettings appSettings = new AppSettings() { MileageProvider = "P" };
-            IOptions<AppSettings> options = Options.Create(appSettings);
 
+            //AppSettings
+            _settings = new DatabaseFixture().AppSettings();
 
             var mappingProfile = new LoadPostingProfile();
             var configuration = new MapperConfiguration(config => config.AddProfile(mappingProfile));
@@ -54,7 +55,7 @@ namespace LoadLink.LoadMatching.Api.Test.LoadPosting
            
             // controller
             _userHelper = new UserHelperService(_fakeHttpContextAccessor.Object, _userSubscriptionService);
-            _loadPostingController = new LoadPostingController(_service, _userHelper, options);
+            _loadPostingController = new LoadPostingController(_service, _userHelper, _settings);
         }
 
         [Fact]

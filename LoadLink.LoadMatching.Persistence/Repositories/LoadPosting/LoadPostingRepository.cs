@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace LoadLink.LoadMatching.Persistence.Repositories.LoadPosting
 {
-
     public class LoadPostingRepository : ILoadPostingRepository
     {
 
@@ -23,15 +22,17 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.LoadPosting
         public async Task<int> CreateAsync(UspCreateLoadPostingCommand createCommand)
         {
             var proc = "dbo.usp_CreateLoad";
+
+            createCommand.Comment = string.IsNullOrEmpty(createCommand.Comment) ?
+                                            createCommand.Comment : await CleanseComment(createCommand.Comment);
             var param = new DynamicParameters(createCommand);
 
             param.Add("@Token", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+
             await SqlMapper.ExecuteAsync(_dbConnection, sql: proc, param: param, commandType: CommandType.StoredProcedure);
 
             return param.Get<int>("@Token");
         }
-
-
 
         public async Task DeleteAsync(int token, string custCd, int userId)
         {
@@ -42,11 +43,9 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.LoadPosting
             param.Add("@UserId", userId);
 
             await SqlMapper.ExecuteAsync(_dbConnection, sql: proc, param: param, commandType: CommandType.StoredProcedure);
-
         }
 
         public async Task<UspGetLoadPostingResult> GetAsync(int token, string custCd, string mileageProvider)
-
         {
             var proc = "dbo.usp_GetLoadPosting";
             var param = new DynamicParameters();
@@ -82,7 +81,6 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.LoadPosting
             param.Add("@PStatus", pstatus);
 
             await SqlMapper.ExecuteAsync(_dbConnection, sql: proc, param: param, commandType: CommandType.StoredProcedure);
-
         }
 
         public async Task UpdateLeadCount(int token, int initialCount)
@@ -93,7 +91,21 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.LoadPosting
             param.Add("@InitialLeadsCount", initialCount);
 
             await SqlMapper.ExecuteAsync(_dbConnection, sql: proc, param: param, commandType: CommandType.StoredProcedure);
+        }
 
+        private async Task<string> CleanseComment(string comment)
+        {
+            var proc = "usp_GetBadWord";
+            var param = new DynamicParameters();
+            param.Add("@Comment", comment);
+
+            var result = await SqlMapper.QueryAsync(
+               _dbConnection, sql: proc, param, commandType: CommandType.StoredProcedure);
+
+            if (result != null)
+                comment = string.Empty;
+
+            return comment;
         }
     }
 }

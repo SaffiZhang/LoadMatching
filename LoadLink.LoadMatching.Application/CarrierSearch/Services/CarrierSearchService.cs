@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LoadLink.LoadMatching.Application.CarrierSearch.Models.Commands;
 using LoadLink.LoadMatching.Application.CarrierSearch.Models.Queries;
 using LoadLink.LoadMatching.Application.CarrierSearch.Repository;
 using LoadLink.LoadMatching.Application.Common;
@@ -14,18 +15,14 @@ namespace LoadLink.LoadMatching.Application.CarrierSearch.Services
         private readonly ICarrierSearchRepository _carrierSearcRepository;
         private readonly IMapper _mapper;
 
-        public bool HasEQSubscription { get; set; } = false;
-        public bool HasTCSubscription { get; set; } = false;
-        public bool HasTCUSSubscription { get; set; } = false;
-
-
         public CarrierSearchService(ICarrierSearchRepository carrierSearchRepository, IMapper mapper)
         {
             _carrierSearcRepository = carrierSearchRepository;
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<GetCarrierSearchResult>> GetCarrierSearchAsync(GetCarrierSearchRequest searchrequest)
+        public async Task<IEnumerable<GetCarrierSearchResult>> GetCarrierSearchAsync(GetCarrierSearchRequest searchrequest,
+                                                                                     CarrierSearchSubscriptionsStatus subscriptions)
         {
             var searchQuery = new GetCarrierSearchQuery()
             {
@@ -54,14 +51,12 @@ namespace LoadLink.LoadMatching.Application.CarrierSearch.Services
             var resultList = result.ToList();
             resultList.ForEach(
                 row =>  {
-                        row.Equifax = HasEQSubscription ? row.Equifax : -1;
-                        row.TCC = HasTCSubscription ? row.TCC : -1;
-                        row.TCUS = HasTCUSSubscription ? row.TCUS : -1;
+                        row.Equifax = subscriptions.HasEQSubscription ? row.Equifax : -1;
+                        row.TCC = subscriptions.HasTCSubscription ? row.TCC : -1;
+                        row.TCUS = subscriptions.HasTCUSSubscription ? row.TCUS : -1;
                         });
            
-            return _mapper.Map<IEnumerable<GetCarrierSearchResult>>(resultList);
-               
+            return _mapper.Map<IEnumerable<GetCarrierSearchResult>>(resultList);             
         }
-
     }
 }

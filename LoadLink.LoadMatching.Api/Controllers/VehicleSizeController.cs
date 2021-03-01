@@ -2,7 +2,6 @@
 using LoadLink.LoadMatching.Application.VehicleSize.Services;
 using Microsoft.AspNetCore.Mvc;
 using LoadLink.LoadMatching.Api.Services;
-using LoadLink.LoadMatching.Api.Infrastructure.Http;
 using System;
 
 namespace LoadLink.LoadMatching.Api.Controllers
@@ -15,7 +14,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
         private readonly IUserHelperService _userHelperService;
 
         public VehicleSizeController(IVehicleSizeService vehicleSizeService,
-            IUserHelperService userHelperService)
+                                        IUserHelperService userHelperService)
         {
             _vehicleSizeService = vehicleSizeService;
             _userHelperService = userHelperService;
@@ -34,6 +33,9 @@ namespace LoadLink.LoadMatching.Api.Controllers
         [HttpGet("PostType/{postType}")]
         public async Task<IActionResult> GetListByPostTypeAsync(string postType)
         {
+            if (String.IsNullOrEmpty(postType))
+                return BadRequest("Invalid PostType");
+
             var result = await _vehicleSizeService.GetListByPostTypeAsync(postType);
             if (result == null)
                 return NoContent();

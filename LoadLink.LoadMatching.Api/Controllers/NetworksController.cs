@@ -5,7 +5,6 @@ using LoadLink.LoadMatching.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.JsonPatch;
 using AutoMapper;
-using System.Dynamic;
 
 namespace LoadLink.LoadMatching.Api.Controllers
 {
@@ -17,10 +16,9 @@ namespace LoadLink.LoadMatching.Api.Controllers
         private readonly IUserHelperService _userHelperService;
         private readonly IMapper _mapper;
 
-        public NetworksController(
-            INetworksService networksService,
-            IUserHelperService userHelperService,
-            IMapper mapper)
+        public NetworksController(INetworksService networksService,
+                                    IUserHelperService userHelperService,
+                                    IMapper mapper)
         {
             _networksService = networksService;
             _userHelperService = userHelperService;
@@ -30,6 +28,9 @@ namespace LoadLink.LoadMatching.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync(int id)
         {
+            if (id <= 0)
+                return BadRequest();
+
             var result = await _networksService.GetAsync(id);
             if (result == null)
                 return NoContent();
@@ -54,13 +55,14 @@ namespace LoadLink.LoadMatching.Api.Controllers
         public async Task<IActionResult> CreateAsync([FromBody] NetworksCommand networks)
         {
             if (networks == null)
-            {
                 return BadRequest();
-            }
 
-            networks.CustCD = _userHelperService.GetCustCd();
-            networks.UserId = _userHelperService.GetUserId();
+            if (!(networks.UserId.HasValue) || networks.UserId == 0)
+                networks.UserId = _userHelperService.GetUserId();
 
+            if (string.IsNullOrEmpty(networks.CustCD))
+                networks.CustCD = _userHelperService.GetCustCd();
+            
             var result = await _networksService.CreateAsync(networks);
             if (result == null)
                 return NoContent();
@@ -72,36 +74,50 @@ namespace LoadLink.LoadMatching.Api.Controllers
         public async Task<IActionResult> UpdateAsync(int id, [FromBody] PatchNetworksCommand networksPatch)
         {
             if (networksPatch == null)
-            {
                 return BadRequest();
-            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            //Ensure record to be updated exists
+            if (await _networksService.GetAsync(id) == null)
+                return NoContent();
 
             await _networksService.UpdateAsync(id, networksPatch.Name);
-            
-            return Ok();
+            return NoContent();
         }
 
         [HttpPatch("{id}")]
         public async Task<IActionResult> PatchAsync(int id, [FromBody] JsonPatchDocument<PatchNetworksCommand> networksPatch)
         {
-            if (networksPatch == null || networksPatch.Operations.Count == 0)
-            {
+            if (networksPatch == null)
                 return BadRequest();
-            }
-            
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            //Ensure record to be updated exists
+            if (await _networksService.GetAsync(id) == null)
+                return NoContent();
+
             var value = (PatchNetworksCommand)networksPatch.Operations[0].value;
 
             await _networksService.UpdateAsync(id, value.Name);
-
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            await _networksService.DeleteAsync(id);
+            if (id <= 0)
+                return BadRequest();
 
-            return Ok();
+            //Check if posting exsits before delete
+            var network = await _networksService.GetAsync(id);
+            if (network == null)
+                return NoContent();
+
+            await _networksService.DeleteAsync(id);
+            return NoContent();
         }
     }
 }

@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CarrierSearch\Models\Commands\" />
     <Folder Include="CarrierSearch\Services\" />
   </ItemGroup>
 

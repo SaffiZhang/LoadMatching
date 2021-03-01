@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
+using LoadLink.LoadMatching.Application.MemberSearch.Models.Commands;
 using LoadLink.LoadMatching.Application.MemberSearch.Models.Queries;
 using LoadLink.LoadMatching.Application.MemberSearch.Repository;
-using LoadLink.LoadMatching.Application.Common;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,18 +13,14 @@ namespace LoadLink.LoadMatching.Application.MemberSearch.Services
         private readonly IMemberSearchRepository _memberSearchRepository;
         private readonly IMapper _mapper;
 
-        public bool HasEQSubscription { get; set; } = false;
-        public bool HasTCSubscription { get; set; } = false;
-        public bool HasTCUSSubscription { get; set; } = false;
-
-
         public MemberSearchService(IMemberSearchRepository memberSearchRepository, IMapper mapper)
         {
             _memberSearchRepository = memberSearchRepository;
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<GetMemberSearchResult>> GetMemberSearch(GetMemberSearchRequest searchrequest)
+        public async Task<IEnumerable<GetMemberSearchResult>> GetMemberSearch(GetMemberSearchRequest searchrequest,
+                                                                                MemberSearchSubscriptionsStatus subscriptions)
         {
             var searchQuery = new GetMemberSearchQuery()
             {
@@ -48,9 +43,9 @@ namespace LoadLink.LoadMatching.Application.MemberSearch.Services
             var resultList = result.ToList();
             resultList.ForEach(
                 row =>  {
-                        row.Equifax = HasEQSubscription ? row.Equifax : -1;
-                        row.TCC = HasTCSubscription ? row.TCC : -1;
-                        row.TCUS = HasTCUSSubscription ? row.TCUS : -1;
+                        row.Equifax = subscriptions.HasEQSubscription ? row.Equifax : -1;
+                        row.TCC = subscriptions.HasTCSubscription ? row.TCC : -1;
+                        row.TCUS = subscriptions.HasTCUSSubscription ? row.TCUS : -1;
                         });
            
             return _mapper.Map<IEnumerable<GetMemberSearchResult>>(resultList);              
