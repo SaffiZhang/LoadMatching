@@ -9,7 +9,7 @@ namespace LoadLink.LoadMatching.Application.TemplatePosting.Profiles
         public TemplatePostingProfile()
         {
             CreateMap<UspGetTemplatePostingResult, GetTemplatePostingQuery>();
-            CreateMap<TemplatePostingCommand, UspGetTemplatePostingResult>();
+            CreateMap<UpdateTemplatePostingCommand, UspGetTemplatePostingResult>();
         }
     }
 }

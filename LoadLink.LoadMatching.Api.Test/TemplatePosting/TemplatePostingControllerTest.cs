@@ -85,7 +85,7 @@ namespace LoadLink.LoadMatching.Api.Test.TemplatePosting
         public async Task Create_Template_Posting()
         {
             // arrange
-            var templatePostingCommand = new TemplatePostingCommand
+            var templatePostingCommand = new CreateTemplatePostingCommand
             {
                 TemplateName = "TestMontTor",
                 UserId = 34351,
@@ -123,30 +123,27 @@ namespace LoadLink.LoadMatching.Api.Test.TemplatePosting
         public async Task Update_Template_Posting()
         {
             // arrange
-            var templatePostingCommand = new TemplatePostingCommand
+            var templatePostingCommand = new UpdateTemplatePostingCommand
             {
-                TemplateID = 110008,
-                TemplateName = "TestMontTor2",
-                UserId = 34351,
+                TemplateID = 110031,
+                TemplateName = "Template-110031",
                 PostType = "E",
                 DateAvail = DateTime.Now,
-                SrceID = 1003495,
                 SrceCity = "Montreal",
                 SrceSt = "QC",
-                SrceRadius = 50,
-                DestID = 1002770,
+                SrceRadius = 150,
                 DestCity = "Toronto",
                 DestSt = "ON",
-                DestRadius = 50,
-                VehicleSize = "15",
-                VehicleType = "1",
+                DestRadius = 100,
+                VehicleSize = " ", //15
+                VehicleType = "V", //1
                 Comment = "Montreal to Toronto",
                 PostMode = "A",
                 ClientRefNum = "Client Ref Number",
-                PostingAttrib = "0",
+                PostingAttrib = "",
                 NetworkId = 0,
                 Corridor = "C",
-                CustCd = "TCORELL",
+               // CustCd = "TCORELL",
                 CustomerTracking = false
             };
 

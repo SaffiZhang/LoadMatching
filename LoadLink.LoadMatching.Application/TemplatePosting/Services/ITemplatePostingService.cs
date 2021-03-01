@@ -8,8 +8,8 @@ namespace LoadLink.LoadMatching.Application.TemplatePosting.Services
     {
         Task<GetTemplatePostingQuery> GetAsync(string custCd, int templateId);
         Task<IEnumerable<GetTemplatePostingQuery>> GetListAsync(string custCd);
-        Task<TemplatePostingCommand> CreateAsync(TemplatePostingCommand templatePosting);
-        Task<TemplatePostingCommand> UpdateAsync(TemplatePostingCommand templatePosting);
+        Task<CreateTemplatePostingCommand> CreateAsync(CreateTemplatePostingCommand templatePosting);
+        Task<UpdateTemplatePostingCommand> UpdateAsync(UpdateTemplatePostingCommand templatePosting);
         Task DeleteAsync(int templateId, int userId);
     }
 }
