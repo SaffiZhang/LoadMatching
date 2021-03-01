@@ -48,6 +48,8 @@ namespace LoadLink.LoadMatching.Api
                 setup.InputFormatters.Insert(0, StartupHelper.GetJsonPatchInputFormatter());
             }).AddFluentValidation();
 
+            services.AddMvc();
+
             services.AddValidators();
 
             services.AddSwagger();
