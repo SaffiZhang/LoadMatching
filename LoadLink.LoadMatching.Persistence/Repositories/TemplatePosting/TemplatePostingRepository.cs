@@ -19,33 +19,10 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.TemplatePosting
             _dbConnection = new SqlConnection(connectionFactory.ConnectionString);
         }
 
-        public async Task<int> CreateAsync(TemplatePostingCommand templatePosting)
+        public async Task<int> CreateAsync(CreateTemplatePostingSPCommand templatePosting)
         {
             var proc = "dbo.usp_CreateTemplatePosting";
-            var param = new DynamicParameters();
-
-            param.Add("@TemplateName", templatePosting.TemplateName);
-            param.Add("@PostType", templatePosting.PostType);
-            param.Add("@UserId", templatePosting.UserId);
-            param.Add("@DateAvail", templatePosting.DateAvail);
-            param.Add("@SrceId", templatePosting.SrceID);
-            param.Add("@SrceCity", templatePosting.SrceCity);
-            param.Add("@SrceSt", templatePosting.SrceSt);
-            param.Add("@SrceRadius", templatePosting.SrceRadius);
-            param.Add("@DestId", templatePosting.DestID);
-            param.Add("@DestCity", templatePosting.DestCity);
-            param.Add("@DestSt", templatePosting.DestSt);
-            param.Add("@DestRadius", templatePosting.DestRadius);
-            param.Add("@VSize", templatePosting.VehicleSizeConverted);
-            param.Add("@VType", templatePosting.VehicleTypeConverted);
-            param.Add("@Comment", templatePosting.Comment);
-            param.Add("@PostMode", templatePosting.PostMode);
-            param.Add("@ClientRefNum", templatePosting.ClientRefNum);
-            param.Add("@PAttrib", templatePosting.PostingAttribConverted);
-            param.Add("@NetworkId", templatePosting.NetworkId);
-            param.Add("@Corridor", templatePosting.Corridor);
-            param.Add("@CustCd", templatePosting.CustCd);
-            param.Add("@CustomerTracking", templatePosting.CustomerTracking);
+            var param = new DynamicParameters(templatePosting);
 
             param.Add("@TemplateId", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
@@ -93,39 +70,14 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.TemplatePosting
             return result;
         }
 
-        public async Task<int> UpdateAsync(TemplatePostingCommand templatePosting)
+        public async Task<int> UpdateAsync(UpdateTemplatePostingSPCommand templatePosting)
         {
             var proc = "dbo.usp_UpdateTemplatePosting";
-            var param = new DynamicParameters();
-
-            param.Add("@TemplateId", templatePosting.TemplateID);
-            param.Add("@TemplateName", templatePosting.TemplateName);
-            param.Add("@PostType", templatePosting.PostType);
-            param.Add("@UserId", templatePosting.UserId);
-            param.Add("@DateAvail", templatePosting.DateAvail);
-            param.Add("@SrceId", templatePosting.SrceID);
-            param.Add("@SrceCity", templatePosting.SrceCity);
-            param.Add("@SrceSt", templatePosting.SrceSt);
-            param.Add("@SrceRadius", templatePosting.SrceRadius);
-            param.Add("@DestId", templatePosting.DestID);
-            param.Add("@DestCity", templatePosting.DestCity);
-            param.Add("@DestSt", templatePosting.DestSt);
-            param.Add("@DestRadius", templatePosting.DestRadius);
-            param.Add("@VSize", templatePosting.VehicleSizeConverted);
-            param.Add("@VType", templatePosting.VehicleTypeConverted);
-            param.Add("@Comment", templatePosting.Comment);
-            param.Add("@PostMode", templatePosting.PostMode);
-            param.Add("@ClientRefNum", templatePosting.ClientRefNum);
-            param.Add("@PAttrib", templatePosting.PostingAttribConverted);
-            param.Add("@NetworkId", templatePosting.NetworkId);
-            param.Add("@Corridor", templatePosting.Corridor);
-            param.Add("@CustCd", templatePosting.CustCd);
-            param.Add("@CustomerTracking", templatePosting.CustomerTracking);
+            var param = new DynamicParameters(templatePosting);
 
             param.Add("@ReturnValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
-
             await SqlMapper.ExecuteAsync(_dbConnection, sql: proc, param: param, commandType: CommandType.StoredProcedure);
-
+  
             return param.Get<int>("@ReturnValue");
         }
     }

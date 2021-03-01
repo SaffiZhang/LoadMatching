@@ -20,13 +20,36 @@ namespace LoadLink.LoadMatching.Application.TemplatePosting.Services
             _mapper = mapper;
         }
 
-        public async Task<TemplatePostingCommand> CreateAsync(TemplatePostingCommand templatePosting)
+        public async Task<CreateTemplatePostingCommand> CreateAsync(CreateTemplatePostingCommand templatePosting)
         {
-            templatePosting.VehicleSizeConverted = templatePosting.PostType == "E" ? CommonLM.EquipmentVSizeStringToNum(templatePosting.VehicleSize) : CommonLM.LoadVSizeStringToNum(templatePosting.VehicleSize);
-            templatePosting.VehicleTypeConverted = CommonLM.VTypeStringToNum(templatePosting.VehicleType);
-            templatePosting.PostingAttribConverted = CommonLM.PostingAttributeStringToNum(templatePosting.PostingAttrib);
+            var tmpltPostingCmd = new CreateTemplatePostingSPCommand()
+            {
 
-            templatePosting.TemplateID = await _TemplatePostingRepository.CreateAsync(templatePosting);
+                UserId = templatePosting.UserId,
+                TemplateID = templatePosting.TemplateID,
+                TemplateName = templatePosting.TemplateName,
+                PostType = templatePosting.PostType,
+                DateAvail = templatePosting.DateAvail,
+                SrceID = templatePosting.SrceID,
+                SrceCity = templatePosting.SrceCity,
+                SrceSt = templatePosting.SrceSt,
+                SrceRadius = templatePosting.SrceRadius,
+                DestID = templatePosting.DestID,
+                DestCity = templatePosting.DestCity,
+                DestSt = templatePosting.DestSt,
+                DestRadius = templatePosting.DestRadius,
+                VSize = templatePosting.PostType == "E" ? CommonLM.EquipmentVSizeStringToNum(templatePosting.VehicleSize) : CommonLM.LoadVSizeStringToNum(templatePosting.VehicleSize),
+                VType = CommonLM.VTypeStringToNum(templatePosting.VehicleType),
+                PAttrib = CommonLM.PostingAttributeStringToNum(templatePosting.PostingAttrib),
+                Comment = templatePosting.Comment,
+                PostMode = templatePosting.PostMode,
+                ClientRefNum = templatePosting.ClientRefNum,
+                CustCd = templatePosting.CustCd,
+                Corridor = templatePosting.Corridor,
+                CustomerTracking = templatePosting.CustomerTracking,
+                NetworkId = templatePosting.NetworkId
+            };
+            templatePosting.TemplateID = await _TemplatePostingRepository.CreateAsync(tmpltPostingCmd);
 
             return templatePosting;
         }
@@ -55,13 +78,37 @@ namespace LoadLink.LoadMatching.Application.TemplatePosting.Services
             return _mapper.Map<IEnumerable<GetTemplatePostingQuery>>(result);
         }
 
-        public async Task<TemplatePostingCommand> UpdateAsync(TemplatePostingCommand templatePosting)
+        public async Task<UpdateTemplatePostingCommand> UpdateAsync(UpdateTemplatePostingCommand templatePosting)
         {
-            templatePosting.VehicleSizeConverted = templatePosting.PostType == "E" ? CommonLM.EquipmentVSizeStringToNum(templatePosting.VehicleSize) : CommonLM.LoadVSizeStringToNum(templatePosting.VehicleSize);
-            templatePosting.VehicleTypeConverted = CommonLM.VTypeStringToNum(templatePosting.VehicleType);
-            templatePosting.PostingAttribConverted = CommonLM.PostingAttributeStringToNum(templatePosting.PostingAttrib);
+            var tmpltPostingCmd = new UpdateTemplatePostingSPCommand()
+            {
 
-            templatePosting.TemplateID = await _TemplatePostingRepository.UpdateAsync(templatePosting);
+                UserId = templatePosting.UserId,
+                TemplateID = templatePosting.TemplateID,
+                TemplateName = templatePosting.TemplateName,
+                PostType = templatePosting.PostType,
+                DateAvail = templatePosting.DateAvail,
+                SrceID = templatePosting.SrceID,
+                SrceCity = templatePosting.SrceCity,
+                SrceSt = templatePosting.SrceSt,
+                SrceRadius = templatePosting.SrceRadius,
+                DestID = templatePosting.DestID,
+                DestCity = templatePosting.DestCity,
+                DestSt = templatePosting.DestSt,
+                DestRadius = templatePosting.DestRadius,
+                VSize = templatePosting.PostType == "E" ? CommonLM.EquipmentVSizeStringToNum(templatePosting.VehicleSize) : CommonLM.LoadVSizeStringToNum(templatePosting.VehicleSize),
+                VType = CommonLM.VTypeStringToNum(templatePosting.VehicleType),
+                PAttrib = CommonLM.PostingAttributeStringToNum(templatePosting.PostingAttrib),
+                Comment = templatePosting.Comment,
+                PostMode = templatePosting.PostMode,
+                ClientRefNum = templatePosting.ClientRefNum,
+                CustCd = templatePosting.CustCd,
+                Corridor = templatePosting.Corridor,
+                CustomerTracking = templatePosting.CustomerTracking,
+                NetworkId = templatePosting.NetworkId
+            };
+           
+            templatePosting.TemplateID = await _TemplatePostingRepository.UpdateAsync(tmpltPostingCmd);
 
             return templatePosting;
         }
