@@ -3,8 +3,6 @@ using LoadLink.LoadMatching.Application.TemplatePosting.Models.Commands;
 using LoadLink.LoadMatching.Application.TemplatePosting.Services;
 using LoadLink.LoadMatching.Api.Services;
 using Microsoft.AspNetCore.Mvc;
-using LoadLink.LoadMatching.Api.Infrastructure.Http;
-using System;
 
 namespace LoadLink.LoadMatching.Api.Controllers
 {
@@ -15,9 +13,8 @@ namespace LoadLink.LoadMatching.Api.Controllers
         private readonly ITemplatePostingService _templatePostingService;
         private readonly IUserHelperService _userHelperService;
 
-        public TemplatePostingController(
-            ITemplatePostingService TemplatePostingService,
-            IUserHelperService userHelperService)
+        public TemplatePostingController(ITemplatePostingService TemplatePostingService,
+                                            IUserHelperService userHelperService)
         {
             _templatePostingService = TemplatePostingService;
             _userHelperService = userHelperService;
@@ -84,9 +81,19 @@ namespace LoadLink.LoadMatching.Api.Controllers
         [HttpDelete("{templateid}")]
         public async Task<IActionResult> DeleteAsync(int templateid)
         {
+            if (templateid <= 0)
+                return BadRequest("Invalid templateId");
+
+            var custcd = _userHelperService.GetCustCd();
+
+            //Check if posting exsits before delete
+            var posting = await _templatePostingService.GetAsync(custcd, templateid);
+            if (posting == null)
+                return NoContent();
+
             await _templatePostingService.DeleteAsync(templateid, _userHelperService.GetUserId());
 
-            return Ok();
+            return NoContent();
         }
     }
 }

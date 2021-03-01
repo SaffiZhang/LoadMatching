@@ -29,7 +29,7 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.EquipmentLiveLead
         private readonly IUserSubscriptionService _userSubscriptionService;
         private readonly IEquipmentLiveLeadService _service;
         private readonly EquipmentLiveLeadController _datEquipmentLiveLeadController;
-
+        private readonly IOptions<AppSettings> _settings;
 
         public EquipmentLiveLeadControllerTest()
         {
@@ -38,8 +38,7 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.EquipmentLiveLead
             _fakeHttpContextAccessor = new FakeContext().MockHttpContext(userId, custCd);
 
             //AppSettings
-            AppSettings appSettings = new AppSettings() { MileageProvider = "P" };
-            IOptions<AppSettings> options = Options.Create(appSettings);
+            _settings = new DatabaseFixture().AppSettings();
 
             //profile
             var EquipmentLiveLeadProfile = new EquipmentLiveLeadProfile();
@@ -57,7 +56,7 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.EquipmentLiveLead
 
             // controller
             _userHelper = new UserHelperService(_fakeHttpContextAccessor.Object, _userSubscriptionService);
-            _datEquipmentLiveLeadController = new EquipmentLiveLeadController(_service, _userHelper, options);
+            _datEquipmentLiveLeadController = new EquipmentLiveLeadController(_service, _userHelper, _settings);
         }
 
         [Fact]
@@ -69,13 +68,12 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.EquipmentLiveLead
             var LLB_TCC = "LLB_TCC";
             var LLB_TCUS = "LLB_TCUS";
             var LLB_API = "LLB_LiveLead";
-            var LLB_DAT = "LLB_DAT";
             var leadFrom = DateTime.Parse("2021-02-11 20:37:00.0000000");
 
             //Please note this test is just to allow the CIDC to pass - s
 
             // act
-            var actionResult = await _datEquipmentLiveLeadController.GetList(leadFrom, LLB_DAT, LLB_API, LLB_QP, LLB_EQF, LLB_TCUS, LLB_TCC);
+            var actionResult = await _datEquipmentLiveLeadController.GetList(leadFrom, LLB_API, LLB_QP, LLB_EQF, LLB_TCUS, LLB_TCC);
             var okResult = actionResult as OkObjectResult;
 
             // assert
@@ -102,11 +100,10 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.EquipmentLiveLead
             var LLB_TCUS = "LLB_TCUS";
             var token = 29913888;
             var LLB_API = "LLB_LiveLead";
-            var LLB_DAT = "LLB_DAT";
             var leadFrom = DateTime.Parse("2021-02-11 20:37:00.0000000");
 
             // act
-            var actionResult = await _datEquipmentLiveLeadController.GetByToken(leadFrom, token, LLB_API, LLB_DAT, LLB_QP, LLB_EQF, LLB_TCUS, LLB_TCC);
+            var actionResult = await _datEquipmentLiveLeadController.GetByToken(leadFrom, token, LLB_API, LLB_QP, LLB_EQF, LLB_TCUS, LLB_TCC);
             var okResult = actionResult as OkObjectResult;
 
             // assert

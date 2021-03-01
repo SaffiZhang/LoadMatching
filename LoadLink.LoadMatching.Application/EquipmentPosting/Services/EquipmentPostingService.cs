@@ -20,35 +20,31 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Services
             _mapper = mapper;
         }
 
-
         public async Task<CreateEquipmentPostingCommand> CreateAsync(CreateEquipmentPostingCommand createCommand)
         {   
             var result = createCommand;
-            var uspCreateCommand = new UspCreateEquipmentPostingCommand { 
-            
-            CustCD = createCommand.CustCD,
-            DateAvail = createCommand.DateAvail,
-            SrceCity = createCommand.SrceCity,
-            SrceSt = createCommand.SrceSt,
-            SrceRadius = createCommand.SrceRadius,
-            DestCity = createCommand.DestCity,
-            DestSt = createCommand.DestSt,
-            DestRadius = createCommand.DestRadius,
-            VSize = CommonLM.EquipmentVSizeStringToNum(createCommand.VehicleSize),
-            VType = CommonLM.VTypeStringToNum(createCommand.VehicleSize),
-            Comment = createCommand.Comment,
-            PostMode = createCommand.PostMode,
-            ClientRefNum = createCommand.ClientRefNum,
-            ProductName = createCommand.ProductName,
-            PAttrib = CommonLM.PostingAttributeStringToNum(createCommand.PostingAttrib),
-            CreatedBy = createCommand.CreatedBy,
-            NetworkId = createCommand.NetworkId,
-            Corridor = createCommand.Corridor,
-            GlobalExcluded = createCommand.GlobalExcluded == true ? 1 : 0,
-            CustomerTracking = createCommand.CustomerTracking == true ? 1 : 0
-
-
-
+            var uspCreateCommand = new UspCreateEquipmentPostingCommand 
+            {        
+                CustCD = createCommand.CustCD,
+                DateAvail = createCommand.DateAvail,
+                SrceCity = createCommand.SrceCity,
+                SrceSt = createCommand.SrceSt,
+                SrceRadius = createCommand.SrceRadius,
+                DestCity = createCommand.DestCity,
+                DestSt = createCommand.DestSt,
+                DestRadius = createCommand.DestRadius,
+                VSize = CommonLM.EquipmentVSizeStringToNum(createCommand.VehicleSize),
+                VType = CommonLM.VTypeStringToNum(createCommand.VehicleSize),
+                Comment = createCommand.Comment,
+                PostMode = createCommand.PostMode,
+                ClientRefNum = createCommand.ClientRefNum,
+                ProductName = createCommand.ProductName,
+                PAttrib = CommonLM.PostingAttributeStringToNum(createCommand.PostingAttrib),
+                CreatedBy = createCommand.CreatedBy,
+                NetworkId = createCommand.NetworkId,
+                Corridor = createCommand.Corridor,
+                GlobalExcluded = createCommand.GlobalExcluded == true ? 1 : 0,
+                CustomerTracking = createCommand.CustomerTracking ? 1 : 0
             };
 
             var createResult = await _equipmentPostingRepository.CreateAsync(uspCreateCommand);
@@ -93,6 +89,5 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Services
         {
             await _equipmentPostingRepository.UpdateLeadCount(token, initialCount);
         }
-    
     }
 }

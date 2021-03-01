@@ -1,5 +1,6 @@
-﻿using LoadLink.LoadMatching.Api.Infrastructure.Http;
+﻿
 using LoadLink.LoadMatching.Api.Services;
+using LoadLink.LoadMatching.Application.MemberSearch.Models.Commands;
 using LoadLink.LoadMatching.Application.MemberSearch.Models.Queries;
 using LoadLink.LoadMatching.Application.MemberSearch.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -17,29 +18,30 @@ namespace LoadLink.LoadMatching.Api.Controllers
         private readonly IUserHelperService _userHelperService;
 
         public MemberSearchController(IMemberSearchService memberSearchService,
-            IUserHelperService userHelperService)
+                                        IUserHelperService userHelperService)
         {
             _memberSearchService = memberSearchService;
             _userHelperService = userHelperService;
         }
 
-
         [HttpGet("{EQFAPIKey}/{TCCAPIKey}/{TCUSAPIKey}")]
-        public async Task<IActionResult> Search([FromQuery] GetMemberSearchRequest searchRequest,  string EQFAPIKey, string TCCAPIKey, string TCUSAPIKey)
+        public async Task<IActionResult> Search([FromQuery] GetMemberSearchRequest searchRequest,  
+                                                string EQFAPIKey, string TCCAPIKey, string TCUSAPIKey)
         {
             if (searchRequest == null)
                 return BadRequest();
 
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
-            _memberSearchService.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
-            _memberSearchService.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
-            _memberSearchService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+            MemberSearchSubscriptionsStatus subscriptions = new MemberSearchSubscriptionsStatus();
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
+            subscriptions.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
             if (string.IsNullOrEmpty(searchRequest.CustCd))
                 searchRequest.CustCd = _userHelperService.GetCustCd();
 
-            var result = await _memberSearchService.GetMemberSearch(searchRequest);
+            var result = await _memberSearchService.GetMemberSearch(searchRequest, subscriptions);
             if (result == null)
                 return NoContent();
 
@@ -47,20 +49,23 @@ namespace LoadLink.LoadMatching.Api.Controllers
         }
         
         [HttpPost("{EQFAPIKey}/{TCCAPIKey}/{TCUSAPIKey}")]
-        public async Task<IActionResult> MemberSearchRequest([FromBody] GetMemberSearchRequest searchRequest,  string EQFAPIKey, string TCCAPIKey, string TCUSAPIKey)
+        public async Task<IActionResult> MemberSearchRequest([FromBody] GetMemberSearchRequest searchRequest,  
+                                                                string EQFAPIKey, string TCCAPIKey, string TCUSAPIKey)
         {
             if (searchRequest == null)
                 return BadRequest();
 
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
-            _memberSearchService.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
-            _memberSearchService.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
-            _memberSearchService.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+
+            MemberSearchSubscriptionsStatus subscriptions = new MemberSearchSubscriptionsStatus();
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
+            subscriptions.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
             if (string.IsNullOrEmpty(searchRequest.CustCd))
                 searchRequest.CustCd = _userHelperService.GetCustCd();
 
-            var result = await _memberSearchService.GetMemberSearch(searchRequest);
+            var result = await _memberSearchService.GetMemberSearch(searchRequest, subscriptions);
             if (result == null)
                 return NoContent();
 

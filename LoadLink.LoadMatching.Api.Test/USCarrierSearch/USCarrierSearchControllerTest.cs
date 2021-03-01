@@ -68,10 +68,10 @@ namespace LoadLink.LoadMatching.Api.Test.USCarrierSearch
                 DestSt = "",
                 DestCity = "",
                 DestRadius = 0,
-                VehicleType = 0,
-                VehicleSize = 0,
+                VehicleType = "V",
+                VehicleSize = "U",
                 CompanyName = "",
-                GetMexico = true
+                GetMexico = "Y"
             };
 
             // act

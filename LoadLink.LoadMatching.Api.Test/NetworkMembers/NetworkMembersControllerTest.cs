@@ -113,7 +113,7 @@ namespace LoadLink.LoadMatching.Api.Test.NetworkMembers
             var actionResult = await _networkMembersController.DeleteAsync(networksId,custCd);
 
             // assert
-            Assert.IsType<OkResult>(actionResult);
+            Assert.IsType<NoContentResult>(actionResult);
         }
     }
 }

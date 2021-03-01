@@ -2,8 +2,6 @@
 using LoadLink.LoadMatching.Application.RepostAll.Services;
 using LoadLink.LoadMatching.Api.Services;
 using Microsoft.AspNetCore.Mvc;
-using LoadLink.LoadMatching.Api.Infrastructure.Http;
-using System;
 
 namespace LoadLink.LoadMatching.Api.Controllers
 {
@@ -28,8 +26,8 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var userId = _userHelperService.GetUserId();
 
             var result = await _repostAllService.RepostAllAsync(custCd, userId);
-            if (result == 0)
-                return NoContent();
+            if (result != 1)
+                return BadRequest();
 
             return Ok(result);
         }

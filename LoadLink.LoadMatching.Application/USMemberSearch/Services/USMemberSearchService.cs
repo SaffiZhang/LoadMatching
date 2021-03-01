@@ -13,17 +13,14 @@ namespace LoadLink.LoadMatching.Application.USMemberSearch.Services
         private readonly IUSMemberSearchRepository _USMemberSearchRepository;
         private readonly IMapper _mapper;
 
-        public bool HasEQSubscription { get; set; } = false;
-        public bool HasTCSubscription { get; set; } = false;
-        public bool HasTCUSSubscription { get; set; } = false;
-
         public USMemberSearchService(IUSMemberSearchRepository USMemberSearchRepository, IMapper mapper)
         {
             _USMemberSearchRepository = USMemberSearchRepository;
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<GetUSMemberSearchQuery>> GetListAsync(GetUSMemberSearchCommand searchRequest)
+        public async Task<IEnumerable<GetUSMemberSearchQuery>> GetListAsync(GetUSMemberSearchCommand searchRequest,
+                                                                            USMemberSearchSubscriptionsStatus subscriptions)
         {
             var result = await _USMemberSearchRepository.GetListAsync(searchRequest);
             if (!result.Any())
@@ -34,9 +31,9 @@ namespace LoadLink.LoadMatching.Application.USMemberSearch.Services
             var resultList = result.ToList();
             resultList.ForEach(
                 row => {
-                    row.Equifax = HasEQSubscription ? row.Equifax : -1;
-                    row.TCC = HasTCSubscription ? row.TCC : -1;
-                    row.TCUS = HasTCUSSubscription ? row.TCUS : -1;
+                    row.Equifax = subscriptions.HasEQSubscription ? row.Equifax : -1;
+                    row.TCC = subscriptions.HasTCSubscription ? row.TCC : -1;
+                    row.TCUS = subscriptions.HasTCUSSubscription ? row.TCUS : -1;
                 });
 
             return _mapper.Map<IEnumerable<GetUSMemberSearchQuery>>(result);

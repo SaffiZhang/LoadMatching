@@ -17,13 +17,15 @@ namespace LoadLink.LoadMatching.Api.Controllers
     {
         private readonly ILiveLeadService _liveLeadService;
         private readonly IUserHelperService _userHelperService;
-        private readonly IOptions<AppSettings> _appSettings;
+        private readonly AppSettings _appSettings;
 
-        public LiveLeadController(ILiveLeadService liveLeadService, IUserHelperService userHelperService, IOptions<AppSettings> appSettings)
+        public LiveLeadController(ILiveLeadService liveLeadService, 
+                                    IUserHelperService userHelperService, 
+                                    IOptions<AppSettings> appSettings)
         {
             _liveLeadService = liveLeadService;
             _userHelperService = userHelperService;
-            _appSettings = appSettings;
+            _appSettings = appSettings.Value;
         }
 
         [HttpPost()]
@@ -34,45 +36,47 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
-            // check subscription - load leads
+            // check subscription - load leads (Type 0)
             if (LLRequest.Type == 0 && !getUserApiKeys.Contains(LLRequest.Broker.B_LLAPIKey))
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
-            // check subscription - equipment leads
+            // check subscription - equipment leads (Type 1)
             else if (LLRequest.Type == 1 && !getUserApiKeys.Contains(LLRequest.Carrier.C_LLAPIKey))
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+            // check subscription - Both Load & Equipment leads (Type 2)
+            else if (LLRequest.Type == 2 && (!getUserApiKeys.Contains(LLRequest.Broker.B_LLAPIKey) || !getUserApiKeys.Contains(LLRequest.Carrier.C_LLAPIKey)))
+                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
-
-            _liveLeadService.B_DATAPIKey_Status = getUserApiKeys.Contains(LLRequest.Broker.B_DATAPIKey);
-            _liveLeadService.B_EQFAPIKey_Status = getUserApiKeys.Contains(LLRequest.Broker.B_EQFAPIKey);
-            _liveLeadService.B_QPAPIKey_Status = getUserApiKeys.Contains(LLRequest.Broker.B_QPAPIKey);
-            _liveLeadService.B_TCCAPIKey_Status = getUserApiKeys.Contains(LLRequest.Broker.B_TCCAPIKey);
-            _liveLeadService.B_TCUSAPIKey_Status = getUserApiKeys.Contains(LLRequest.Broker.B_TCUSAPIKey);
-            _liveLeadService.C_DATAPIKey_Status = getUserApiKeys.Contains(LLRequest.Carrier.C_DATAPIKey);
-            _liveLeadService.C_EQFAPIKey_Status = getUserApiKeys.Contains(LLRequest.Carrier.C_EQFAPIKey);
-            _liveLeadService.C_QPAPIKey_Status = getUserApiKeys.Contains(LLRequest.Carrier.C_QPAPIKey);
-            _liveLeadService.C_TCCAPIKey_Status = getUserApiKeys.Contains(LLRequest.Carrier.C_TCCAPIKey);
-            _liveLeadService.C_TCUSAPIKey_Status = getUserApiKeys.Contains(LLRequest.Carrier.C_TCUSAPIKey);
+            //features subscription statuses
+            LiveLeadSubscriptionsStatus subscriptions = new LiveLeadSubscriptionsStatus();
+            subscriptions.B_DATAPIKey_Status = getUserApiKeys.Contains(LLRequest.Broker.B_DATAPIKey);
+            subscriptions.B_EQFAPIKey_Status = getUserApiKeys.Contains(LLRequest.Broker.B_EQFAPIKey);
+            subscriptions.B_QPAPIKey_Status = getUserApiKeys.Contains(LLRequest.Broker.B_QPAPIKey);
+            subscriptions.B_TCCAPIKey_Status = getUserApiKeys.Contains(LLRequest.Broker.B_TCCAPIKey);
+            subscriptions.B_TCUSAPIKey_Status = getUserApiKeys.Contains(LLRequest.Broker.B_TCUSAPIKey);
+            subscriptions.C_DATAPIKey_Status = getUserApiKeys.Contains(LLRequest.Carrier.C_DATAPIKey);
+            subscriptions.C_EQFAPIKey_Status = getUserApiKeys.Contains(LLRequest.Carrier.C_EQFAPIKey);
+            subscriptions.C_QPAPIKey_Status = getUserApiKeys.Contains(LLRequest.Carrier.C_QPAPIKey);
+            subscriptions.C_TCCAPIKey_Status = getUserApiKeys.Contains(LLRequest.Carrier.C_TCCAPIKey);
+            subscriptions.C_TCUSAPIKey_Status = getUserApiKeys.Contains(LLRequest.Carrier.C_TCUSAPIKey);
 
             var custCd = _userHelperService.GetCustCd();
-            var mileageProvider = _appSettings.Value.MileageProvider;
-            var LiveLeads = await _liveLeadService.GetLiveLeads(LLRequest,mileageProvider,custCd);
+            var mileageProvider = _appSettings.AppSetting.MileageProvider;
+
+            var LiveLeads = await _liveLeadService.GetLiveLeads(LLRequest, mileageProvider, custCd, subscriptions);
 
             if (LiveLeads == null)
                 return NoContent();
 
             return Ok(LiveLeads);
-
         }
 
         [HttpGet("ServerTime")]
         public async Task<IActionResult> GetServerTime()
         {
-
             DateTime ServTime;
             ServTime = await _liveLeadService.GetServerTime();
 
             return Ok(ServTime);
-
         }
     }
 }

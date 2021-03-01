@@ -11,32 +11,17 @@ namespace LoadLink.LoadMatching.Application.LiveLead.Services
 {
     public class LiveLeadService : ILiveLeadService
     {
-
         private readonly ILiveLeadRepository _liveLeadRepository;
         private readonly IMapper _mapper;
-
-
-        public bool B_QPAPIKey_Status { get; set; } = false;
-        public bool B_EQFAPIKey_Status { get; set; } = false;
-        public bool B_TCCAPIKey_Status { get; set; } = false;
-        public bool B_TCUSAPIKey_Status { get; set; } = false;
-        public bool B_DATAPIKey_Status { get; set; } = false;
-        public bool C_QPAPIKey_Status { get; set; } = false;
-        public bool C_EQFAPIKey_Status { get; set; } = false;
-        public bool C_TCCAPIKey_Status { get; set; } = false;
-        public bool C_TCUSAPIKey_Status { get; set; } = false;
-        public bool C_DATAPIKey_Status { get; set; } = false;
-
-
 
         public LiveLeadService(ILiveLeadRepository liveLeadLiveLeadRepository, IMapper mapper)
         {
             _liveLeadRepository = liveLeadLiveLeadRepository;
             _mapper = mapper;
-
         }
 
-        public async Task<IEnumerable<GetLiveLeadResult>> GetLiveLeads(GetLiveLeadRequest LLRequest, string mileageProvider, string custCd)
+        public async Task<IEnumerable<GetLiveLeadResult>> GetLiveLeads(GetLiveLeadRequest LLRequest, string mileageProvider, 
+                                                                        string custCd, LiveLeadSubscriptionsStatus subscriptions)
         {
             var query = new GetLiveLeadQuery()
             {
@@ -44,8 +29,8 @@ namespace LoadLink.LoadMatching.Application.LiveLead.Services
                 MileageProvider = mileageProvider,
                 LeadFrom = LLRequest.LeadFrom,
                 LeadType = LLRequest.Type,
-                GetBDAT = B_DATAPIKey_Status == true ? 1 : 0,
-                GetCDAT = C_DATAPIKey_Status == true ? 1 : 0
+                GetBDAT = subscriptions.B_DATAPIKey_Status ? 1 : 0,
+                GetCDAT = subscriptions.C_DATAPIKey_Status ? 1 : 0
             };
 
             var result = await _liveLeadRepository.GetLiveLeads(query);
@@ -59,10 +44,10 @@ namespace LoadLink.LoadMatching.Application.LiveLead.Services
             var resultList = result.ToList();
             resultList.ForEach(
                 row => {
-                    row.QPStatus = ((row.PType == "L" && C_QPAPIKey_Status) || (row.PType == "E" && B_QPAPIKey_Status)) ? row.QPStatus : 0;
-                    row.Equifax = ((row.PType == "L" && C_EQFAPIKey_Status) || (row.PType == "E" && B_EQFAPIKey_Status)) ? row.Equifax : -1;
-                    row.TCC = ((row.PType == "L" && C_TCCAPIKey_Status) || (row.PType == "E" && B_TCCAPIKey_Status))? row.TCC : -1;
-                    row.TCUS = ((row.PType == "L" && C_TCUSAPIKey_Status) || (row.PType == "E" && B_TCUSAPIKey_Status)) ? row.TCUS : -1;
+                    row.QPStatus = ((row.PType == "L" && subscriptions.C_QPAPIKey_Status) || (row.PType == "E" && subscriptions.B_QPAPIKey_Status)) ? row.QPStatus : 0;
+                    row.Equifax = ((row.PType == "L" && subscriptions.C_EQFAPIKey_Status) || (row.PType == "E" && subscriptions.B_EQFAPIKey_Status)) ? row.Equifax : -1;
+                    row.TCC = ((row.PType == "L" && subscriptions.C_TCCAPIKey_Status) || (row.PType == "E" && subscriptions.B_TCCAPIKey_Status))? row.TCC : -1;
+                    row.TCUS = ((row.PType == "L" && subscriptions.C_TCUSAPIKey_Status) || (row.PType == "E" && subscriptions.B_TCUSAPIKey_Status)) ? row.TCUS : -1;
                 });
 
             return _mapper.Map<IEnumerable<GetLiveLeadResult>>(resultList);

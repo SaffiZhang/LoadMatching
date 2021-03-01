@@ -28,16 +28,16 @@ namespace LoadLink.LoadMatching.Api.Test.EquipmentPosting
         private readonly IUserSubscriptionService _userSubscriptionService;
         private readonly IEquipmentPostingService _service;
         private readonly EquipmentPostingController _equipmentPostingController;
- 
+        private readonly IOptions<AppSettings> _settings;
+
         public EquipmentPostingControllerTest()
         {
             var userId = 34351;
             var custCd = "TCORELL";
-
             _fakeHttpContextAccessor = new FakeContext().MockHttpContext(userId, custCd);
-            AppSettings appSettings = new AppSettings() { MileageProvider = "P" };
-            IOptions<AppSettings> options = Options.Create(appSettings);
 
+            //AppSettings
+            _settings = new DatabaseFixture().AppSettings();
 
             var mappingProfile = new EquipmentPostingProfile();
             var configuration = new MapperConfiguration(config => config.AddProfile(mappingProfile));
@@ -54,7 +54,7 @@ namespace LoadLink.LoadMatching.Api.Test.EquipmentPosting
            
             // controller
             _userHelper = new UserHelperService(_fakeHttpContextAccessor.Object, _userSubscriptionService);
-            _equipmentPostingController = new EquipmentPostingController(_service, _userHelper, options);
+            _equipmentPostingController = new EquipmentPostingController(_service, _userHelper, _settings);
         }
 
         [Fact]

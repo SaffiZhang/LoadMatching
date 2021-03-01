@@ -16,10 +16,9 @@ namespace LoadLink.LoadMatching.Api.Controllers
         private readonly IUserHelperService _userHelperService;
         private readonly IMapper _mapper;
 
-        public NetworkMembersController(
-            INetworkMembersService networksService,
-            IUserHelperService userHelperService,
-            IMapper mapper)
+        public NetworkMembersController(INetworkMembersService networksService,
+                                        IUserHelperService userHelperService,
+                                        IMapper mapper)
         {
             _networkMembersService = networksService;
             _userHelperService = userHelperService;
@@ -29,7 +28,6 @@ namespace LoadLink.LoadMatching.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync(int id)
         {
-
             if (id <= 0)
                 return BadRequest();
 
@@ -45,34 +43,21 @@ namespace LoadLink.LoadMatching.Api.Controllers
         {
             var custCd = _userHelperService.GetCustCd();
 
-            if (networkId != 0)
-            {
+            //NetworkId is 0/-1 get all network members for the customer.
+            var result = (networkId <= 0) ? await _networkMembersService.GetList(custCd) 
+                                            : await _networkMembersService.GetList(networkId, custCd);
+            
+            if (result == null)
+                return NoContent();
 
-                var result = await _networkMembersService.GetList(networkId, custCd);
-
-                if (result == null)
-                    return NoContent();
-
-                return Ok(result);
-            }
-            else {
-
-                var result = await _networkMembersService.GetList(custCd);
-
-                if (result == null)
-                    return NoContent();
-
-                return Ok(result);
-            }
+            return Ok(result);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] CreateNetworkMembersCommand createCommand)
         {
             if (createCommand == null)
-            {
                 return BadRequest();
-            }
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -84,9 +69,6 @@ namespace LoadLink.LoadMatching.Api.Controllers
             return Ok(result);
         }
 
-
-
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int networkId, string id)
         {
@@ -95,7 +77,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             await _networkMembersService.Delete(networkId, id);
 
-            return Ok();
+            return NoContent();
         }
     }
 }

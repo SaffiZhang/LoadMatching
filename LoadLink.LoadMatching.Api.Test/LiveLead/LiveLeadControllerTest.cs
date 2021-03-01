@@ -28,7 +28,7 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.LiveLead
         private readonly IUserSubscriptionService _userSubscriptionService;
         private readonly ILiveLeadService _service;
         private readonly LiveLeadController _liveLeadController;
-
+        private readonly IOptions<AppSettings> _settings;
 
         public LiveLeadControllerTest()
         {
@@ -37,8 +37,7 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.LiveLead
             _fakeHttpContextAccessor = new FakeContext().MockHttpContext(userId, custCd);
 
             //AppSettings
-            AppSettings appSettings = new AppSettings() { MileageProvider = "P" };
-            IOptions<AppSettings> options = Options.Create(appSettings);
+            _settings = new DatabaseFixture().AppSettings();
 
             //profile
             var LiveLeadProfile = new LiveLeadProfile();
@@ -56,7 +55,7 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.LiveLead
 
             // controller
             _userHelper = new UserHelperService(_fakeHttpContextAccessor.Object, _userSubscriptionService);
-            _liveLeadController = new LiveLeadController(_service, _userHelper, options);
+            _liveLeadController = new LiveLeadController(_service, _userHelper, _settings);
         }
 
         [Fact]
@@ -65,17 +64,26 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.LiveLead
             // arrange
 
             var request = new GetLiveLeadRequest() {
-                LeadFrom = DateTime.Parse("2021-02-18 13:31:00.0000000"),
-                Type = 0,
-                Broker = new Broker() {
+                LeadFrom = DateTime.Parse("2021-02-26 12:37:00.0000000"),
+                Type = 2,
+                Broker = new Broker()
+                {
                     B_LLAPIKey = "LLB_LiveLead",
                     B_DATAPIKey = "LLB_DAT",
-                    B_EQFAPIKey = "LLB_EQF",
+                    //B_EQFAPIKey = "LLB_EQF",
                     B_QPAPIKey = "LLB_QP",
                     B_TCCAPIKey = "LLB_TCC",
                     B_TCUSAPIKey = "LLB_TCUS"
+                },
+                Carrier = new Carrier()
+                {
+                    C_LLAPIKey = "LLB_LiveLead",
+                    C_DATAPIKey = "LLB_DAT",
+                    C_EQFAPIKey = "LLB_EQF",
+                    C_QPAPIKey = "LLB_QP",
+                    //C_TCCAPIKey = "LLB_TCC",
+                    C_TCUSAPIKey = "LLB_TCUS"
                 }
- 
             };
 
 
@@ -94,7 +102,7 @@ namespace EquipmentLink.EquipmentMatching.Api.Test.LiveLead
             {
                 // assert
                 var viewResult = Assert.IsType<OkObjectResult>(actionResult);
-                var model = Assert.IsAssignableFrom<IEnumerable<GetLiveLeadQuery>>(viewResult.Value);
+                var model = Assert.IsAssignableFrom<IEnumerable<GetLiveLeadResult>>(viewResult.Value);
                 Assert.NotNull(model);
             }
         }
