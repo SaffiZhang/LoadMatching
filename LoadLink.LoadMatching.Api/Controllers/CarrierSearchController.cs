@@ -23,10 +23,9 @@ namespace LoadLink.LoadMatching.Api.Controllers
             _userHelperService = userHelperService;
             _carrierSerarchService = carrierSearchService;
         }
-
-        [HttpPost("{APIkey}/{EQFAPIKey}/{TCCAPIKey}/{TCUSAPIKey}")]
-        public async Task<IActionResult> SearchAsync([FromBody] GetCarrierSearchRequest searchrequest, 
-                                                        string APIkey, string EQFAPIKey, string TCCAPIKey, string TCUSAPIKey)
+                            
+        [HttpGet("{APIkey}/{EQFAPIKey}/{TCCAPIKey}/{TCUSAPIKey}")]
+        public async Task<IActionResult> Search([FromQuery] GetCarrierSearchRequest searchrequest, string APIkey, string EQFAPIKey, string TCCAPIKey, string TCUSAPIKey)
         {
             if (searchrequest == null)
                 return BadRequest();
