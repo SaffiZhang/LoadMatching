@@ -25,12 +25,12 @@ namespace LoadLink.LoadMatching.Application.MemberSearch.Services
             var searchQuery = new GetMemberSearchQuery()
             {
                CompanyName = searchrequest.CompanyName,
-               ProvSt = searchrequest.ProvSt,
-               City = searchrequest.City,
-               Phone = searchrequest.Phone,
+               ProvSt = searchrequest.ProvSt == null ? "" : searchrequest.ProvSt,
+               City = searchrequest.City == null ? "" : searchrequest.City,
+               Phone = searchrequest.Phone == null ? "" : searchrequest.Phone,
                MemberType = searchrequest.MemberType == "" ? "All" : searchrequest.MemberType,
                GetLinkUS = searchrequest.GetLinkUS == "Y" ? 1 : 0,
-               ShowExcluded = searchrequest.ShowExcluded,
+               ShowExcluded = (int) searchrequest.ShowExcluded,
                CustCd = searchrequest.CustCd
             };
 
