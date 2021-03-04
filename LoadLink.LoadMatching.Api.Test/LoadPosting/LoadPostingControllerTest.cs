@@ -126,16 +126,15 @@ namespace LoadLink.LoadMatching.Api.Test.LoadPosting
                     DestCity =  "Chicago",
                     DestSt =  "IL",
                     DestRadius =  500,
-                    VehicleSize =  "U",
-                    VehicleType =  "FS",
-                    Comment =  "ll test ",
+                    VehicleSize =  "T",
+                    VehicleType =  "V",
+                    Comment =  "testing create in UnitTest3",
                     PostMode =  "A",
                     ClientRefNum =  "Client Ref",
                     ProductName =  "WEBAPI",
                     PostingAttrib =  "",
                     NetworkId =  0,
-                    GlobalExcluded =  true
-
+                    GlobalExcluded =  false
             };
 
             // act

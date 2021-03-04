@@ -54,7 +54,7 @@ namespace LoadLink.LoadMatching.Api.Test.LeadCount
         {
             // arrange
             var LLB_DAT = "LLC_DAT";
-            var type = "L";
+            var type = "E";
             var token = 9309169;
 
             // act

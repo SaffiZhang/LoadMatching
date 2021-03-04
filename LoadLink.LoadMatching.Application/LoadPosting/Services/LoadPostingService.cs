@@ -35,7 +35,7 @@ namespace LoadLink.LoadMatching.Application.LoadPosting.Services
             DestSt = createCommand.DestSt,
             DestRadius = createCommand.DestRadius,
             VSize = CommonLM.LoadVSizeStringToNum(createCommand.VehicleSize),
-            VType = CommonLM.VTypeStringToNum(createCommand.VehicleSize),
+            VType = CommonLM.VTypeStringToNum(createCommand.VehicleType),
             Comment = createCommand.Comment,
             PostMode = createCommand.PostMode,
             ClientRefNum = createCommand.ClientRefNum,
@@ -61,22 +61,34 @@ namespace LoadLink.LoadMatching.Application.LoadPosting.Services
             await _loadPostingRepository.DeleteAsync(token, custCd, userId);
         }
 
-        public async Task<GetLoadPostingQuery> GetAsync(int token, string custCd, string mileageProvider)
+        public async Task<GetLoadPostingQuery> GetAsync(int token, string custCd, string mileageProvider, int leadsCap)
         {
             var result = await _loadPostingRepository.GetAsync(token ,custCd, mileageProvider);
             if (result == null)
                 return null;
 
-            return _mapper.Map<GetLoadPostingQuery>(result);
+            var ret = _mapper.Map<GetLoadPostingQuery>(result);
+
+            ret.DisplayLeadsCount = (leadsCap > 0 && ret.LeadsCount >= leadsCap) ? leadsCap : ret.LeadsCount;
+
+            return ret;
         }
 
-        public async Task<IEnumerable<GetLoadPostingQuery>> GetListAsync(string custCd, string mileageProvider, bool? getDAT = false)
+        public async Task<IEnumerable<GetLoadPostingQuery>> GetListAsync(string custCd, string mileageProvider, int leadsCap, bool? getDAT = false)
         {
             var result = await _loadPostingRepository.GetListAsync( custCd, mileageProvider, getDAT);
             if (!result.Any())
                 return null;
 
-            return _mapper.Map<IEnumerable<GetLoadPostingQuery>>(result);
+            var ret = _mapper.Map<IEnumerable<GetLoadPostingQuery>>(result);
+
+            var resultList = ret.ToList();
+            resultList.ForEach(
+                row => {
+                    row.DisplayLeadsCount = (leadsCap > 0 && row.LeadsCount >= leadsCap) ? leadsCap : row.LeadsCount;
+                });
+
+            return ret;
         }
 
         public async Task UpdateAsync(int token, string pstatus)

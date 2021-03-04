@@ -6,6 +6,7 @@ using LoadLink.LoadMatching.Persistence.Data;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LoadLink.LoadMatching.Persistence.Repositories.EquipmentPosting
@@ -101,7 +102,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.EquipmentPosting
             var result = await SqlMapper.QueryAsync(
                _dbConnection, sql: proc, param, commandType: CommandType.StoredProcedure);
 
-            if (result != null)
+            if (result.Any())
                 comment = string.Empty;
 
             return comment;
