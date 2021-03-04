@@ -42,13 +42,12 @@ namespace LoadLink.LoadMatching.Api.Controllers
             //Get the result
             var custCd = _userHelperService.GetCustCd();
             var mileageProvider = _appSettings.AppSetting.MileageProvider;
+            var leadsCap = _appSettings.AppSetting.LeadsCap;
 
-            var postings = await _equipmentPostingService.GetListAsync(custCd, mileageProvider, false);
+            var postings = await _equipmentPostingService.GetListAsync(custCd, mileageProvider, leadsCap, false);
 
             if (postings == null)
-            {
                 return NoContent();
-            }
 
             return Ok(postings);
         }
@@ -65,13 +64,12 @@ namespace LoadLink.LoadMatching.Api.Controllers
             //Get the result
             var custCd = _userHelperService.GetCustCd();
             var mileageProvider = _appSettings.AppSetting.MileageProvider;
+            var leadsCap = _appSettings.AppSetting.LeadsCap;
 
-            var postings = await _equipmentPostingService.GetListAsync(custCd, mileageProvider, GETDAT);
+            var postings = await _equipmentPostingService.GetListAsync(custCd, mileageProvider, leadsCap, GETDAT);
 
             if (postings == null)
-            {
                 return NoContent();
-            }
 
             return Ok(postings);
         }
@@ -91,13 +89,12 @@ namespace LoadLink.LoadMatching.Api.Controllers
             //Get the result
             var custCd = _userHelperService.GetCustCd();
             var mileageProvider = _appSettings.AppSetting.MileageProvider;
+            var leadsCap = _appSettings.AppSetting.LeadsCap;
 
-            var posting = await _equipmentPostingService.GetAsync(token, custCd, mileageProvider);
+            var posting = await _equipmentPostingService.GetAsync(token, custCd, mileageProvider, leadsCap);
 
             if (posting == null)
-            {
                 return NoContent();
-            }
 
             return Ok(posting);
         }
@@ -144,6 +141,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
                 throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
 
             await _equipmentPostingService.UpdateAsync(token, equipmentPosting.PStatus);
+
             return NoContent();
         }
         
@@ -154,6 +152,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
                 return BadRequest("Invalid Equipment Token");
 
             await _equipmentPostingService.UpdateLeadCount(token, InitialLeadsCount);
+
             return NoContent();           
         }
 
@@ -173,8 +172,9 @@ namespace LoadLink.LoadMatching.Api.Controllers
             //Get the Posting the update needs to be applied on
             var custCd = _userHelperService.GetCustCd();
             var mileageProvider = _appSettings.AppSetting.MileageProvider;
-             
-            var equipmentPostingToUpdate = await _equipmentPostingService.GetAsync(token, custCd, mileageProvider);
+            var leadsCap = _appSettings.AppSetting.LeadsCap;
+
+            var equipmentPostingToUpdate = await _equipmentPostingService.GetAsync(token, custCd, mileageProvider, leadsCap);
             //Ensure record to be updated exists
             if (equipmentPostingToUpdate == null)
                 return NoContent();
@@ -184,11 +184,10 @@ namespace LoadLink.LoadMatching.Api.Controllers
             patchDoc.ApplyTo(equipmentPostingToPatch, ModelState);
 
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             await _equipmentPostingService.UpdateAsync(token, equipmentPostingToPatch.PStatus);
+
             return NoContent();
         }
 
@@ -207,15 +206,16 @@ namespace LoadLink.LoadMatching.Api.Controllers
             //Check if posting exsits before delete
             var custCd = _userHelperService.GetCustCd();
             var mileageProvider = _appSettings.AppSetting.MileageProvider;
+            var leadsCap = _appSettings.AppSetting.LeadsCap;
             var userId = _userHelperService.GetUserId();
-            var posting = await _equipmentPostingService.GetAsync(token, custCd, mileageProvider);
+
+            var posting = await _equipmentPostingService.GetAsync(token, custCd, mileageProvider, leadsCap);
 
             if (posting == null)
-            {
                 return NoContent();
-            }
 
             await  _equipmentPostingService.DeleteAsync(token, custCd, userId);
+
             return NoContent();
         }
 

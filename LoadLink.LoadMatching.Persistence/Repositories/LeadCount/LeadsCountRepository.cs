@@ -35,7 +35,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.LeadCount
 
         public async Task<IEnumerable<UspGetEquipmentLeadsCountResult>> GetEquipLeadsCountAsync(int userId, int token, bool getDAT)
         {
-            var proc = "dbo.usp_GetDATLoadLead";
+            var proc = "dbo.usp_GetEquipmentLeadsCount";
 
             var param = new DynamicParameters();
             param.Add("@UserID", userId);
