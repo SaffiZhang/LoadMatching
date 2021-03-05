@@ -9,7 +9,7 @@ namespace LoadLink.LoadMatching.Application.Flag.Models.Commands
         public string ContactCustCD { get; set; }
         public int LToken { get; set; }
         public int EToken { get; set; }
-        public DateTime? LPostedDate { get; set; }
+        public DateTime LPostedDate { get; set; }
         public string LSrcCity { get; set; }
         public string LSrcSt { get; set; }
         public string LDestCity { get; set; }
@@ -18,7 +18,7 @@ namespace LoadLink.LoadMatching.Application.Flag.Models.Commands
         public string LVType { get; set; }
         public string LPAttrib { get; set; }
         public string LComment { get; set; }
-        public DateTime? PPostedDate { get; set; }
+        public DateTime PPostedDate { get; set; }
         public string PSrcCity { get; set; }
         public string PSrcSt { get; set; }
         public string PDestCity { get; set; }
