@@ -32,7 +32,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.USCarrierSearch
             param.Add("@DestSt", searchRequest.DestSt);
             param.Add("@DestCity", searchRequest.DestCity);
             param.Add("@DestRadius", searchRequest.DestRadius);
-            param.Add("@VType", CommonLM.VTypeStringToNum(searchRequest.VehicleType));
+            param.Add("@VType", CommonLM.VTypeStringToNum(string.IsNullOrEmpty(searchRequest.VehicleType) ? "" : searchRequest.VehicleType));
             param.Add("@VSize", CommonLM.EquipmentVSizeStringToNum(searchRequest.VehicleSize));
             param.Add("@CompanyName", searchRequest.CompanyName);
             param.Add("@GetMexico", searchRequest.GetMexico == "Y" ? 1 : 0);
