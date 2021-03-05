@@ -76,7 +76,7 @@ namespace LoadLink.LoadMatching.Api.Test.CarrierSearch
             };
 
             // act
-            var actionResult = await _carrierSearchController.Search(searchRequest, apiKey, LLB_EQF, LLB_TCC, LLB_TCUS);
+            var actionResult = await _carrierSearchController.SearchAsync(searchRequest, apiKey, LLB_EQF, LLB_TCC, LLB_TCUS);
 
             // assert
             var viewResult = Assert.IsType<OkObjectResult>(actionResult);
@@ -116,7 +116,7 @@ namespace LoadLink.LoadMatching.Api.Test.CarrierSearch
             var timer = Stopwatch.StartNew();
             for (int i = 0; i < numberOfRequests; i++)
             {
-                await _carrierSearchController.Search(searchRequest, apiKey, LLB_EQF, LLB_TCC, LLB_TCUS);
+                await _carrierSearchController.SearchAsync(searchRequest, apiKey, LLB_EQF, LLB_TCC, LLB_TCUS);
             }
             timer.Stop();
 
