@@ -24,26 +24,26 @@ namespace LoadLink.LoadMatching.Application.LoadPosting.Services
         public async Task<CreateLoadPostingCommand> CreateAsync(CreateLoadPostingCommand createCommand)
         {   
             var result = createCommand;
-            var uspCreateCommand = new UspCreateLoadPostingCommand { 
-            
-            CustCD = createCommand.CustCD,
-            DateAvail = createCommand.DateAvail,
-            SrceCity = createCommand.SrceCity,
-            SrceSt = createCommand.SrceSt,
-            SrceRadius = createCommand.SrceRadius,
-            DestCity = createCommand.DestCity,
-            DestSt = createCommand.DestSt,
-            DestRadius = createCommand.DestRadius,
-            VSize = CommonLM.LoadVSizeStringToNum(createCommand.VehicleSize),
-            VType = CommonLM.VTypeStringToNum(createCommand.VehicleType),
-            Comment = createCommand.Comment,
-            PostMode = createCommand.PostMode,
-            ClientRefNum = createCommand.ClientRefNum,
-            ProductName = createCommand.ProductName,
-            PAttrib = CommonLM.PostingAttributeStringToNum(createCommand.PostingAttrib),
-            CreatedBy = createCommand.CreatedBy,
-            NetworkId = createCommand.NetworkId,
-            GlobalExcluded = createCommand.GlobalExcluded == true ? 1 : 0
+            var uspCreateCommand = new UspCreateLoadPostingCommand 
+            {  
+                CustCD = createCommand.CustCD,
+                DateAvail = createCommand.DateAvail,
+                SrceCity = createCommand.SrceCity,
+                SrceSt = createCommand.SrceSt,
+                SrceRadius = createCommand.SrceRadius,
+                DestCity = createCommand.DestCity,
+                DestSt = createCommand.DestSt,
+                DestRadius = createCommand.DestRadius,
+                VSize = CommonLM.LoadVSizeStringToNum(createCommand.VehicleSize),
+                VType = CommonLM.VTypeStringToNum(string.IsNullOrEmpty(createCommand.VehicleType) ? "" : createCommand.VehicleType),
+                Comment = createCommand.Comment,
+                PostMode = createCommand.PostMode,
+                ClientRefNum = createCommand.ClientRefNum,
+                ProductName = createCommand.ProductName,
+                PAttrib = CommonLM.PostingAttributeStringToNum(string.IsNullOrEmpty(createCommand.PostingAttrib) ? "" : createCommand.PostingAttrib),
+                CreatedBy = createCommand.CreatedBy,
+                NetworkId = createCommand.NetworkId,
+                GlobalExcluded = createCommand.GlobalExcluded == true ? 1 : 0
             };
 
             var createResult = await _loadPostingRepository.CreateAsync(uspCreateCommand);

@@ -139,6 +139,8 @@ using LoadLink.LoadMatching.Application.LiveLead.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.LiveLead;
 using LoadLink.LoadMatching.Application.LiveLead.Services;
 
+using Sentry;
+
 namespace LoadLink.LoadMatching.Api.Helpers
 {
     public static class StartupHelper
@@ -356,9 +358,9 @@ namespace LoadLink.LoadMatching.Api.Helpers
                           var error = new FluentValidation.Results.ValidationFailure("BusinessValidation", exception.Message);
 
                           // centralized logging  here
-                          Sentry.SentrySdk.CaptureEvent(new Sentry.SentryEvent(exception));
+                          Sentry.SentryId eventId = Sentry.SentrySdk.CaptureEvent(new Sentry.SentryEvent(exception));
 
-                          errorText = System.Text.Json.JsonSerializer.Serialize(new List<dynamic> { error });
+                          errorText = System.Text.Json.JsonSerializer.Serialize(new List<dynamic> { error, "EventId:" + eventId });
 
                           await context.Response.WriteAsync(errorText, Encoding.UTF8);
 

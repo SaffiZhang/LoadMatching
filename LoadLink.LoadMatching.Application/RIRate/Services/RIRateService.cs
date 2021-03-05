@@ -20,7 +20,7 @@ namespace LoadLink.LoadMatching.Application.RIRate.Services
 
         public async Task<GetRIRateQuery> GetAsync(GetRIRateCommand requestLane)
         {
-            requestLane.VehicleTypeConverted = CommonLM.VTypeStringToNum(requestLane.VehicleType);
+            requestLane.VehicleTypeConverted = CommonLM.VTypeStringToNum(string.IsNullOrEmpty(requestLane.VehicleType) ? "" : requestLane.VehicleType);
 
             var result = await _riRateRepository.GetAsync(requestLane);
 
