@@ -34,11 +34,11 @@ namespace LoadLink.LoadMatching.Application.CarrierSearch.Services
                 DestCity = searchrequest.DestCity,
                 DestRadius = searchrequest.DestRadius,
                 VSize = CommonLM.EquipmentVSizeStringToNum(searchrequest.VehicleSize),
-                VType = CommonLM.VTypeStringToNum(searchrequest.VehicleType),
+                VType = CommonLM.VTypeStringToNum(string.IsNullOrEmpty(searchrequest.VehicleType) ? "" : searchrequest.VehicleType),
                 CompanyName = searchrequest.CompanyName,
                 GetDat = searchrequest.GetDat == "Y" ? 1 : 0,
                 GetMexico = searchrequest.GetMexico == "Y" ? 1 : 0,
-                PAttrib = CommonLM.PostingAttributeStringToNum(searchrequest.PostingAttrib),
+                PAttrib = CommonLM.PostingAttributeStringToNum(string.IsNullOrEmpty(searchrequest.PostingAttrib) ? "" : searchrequest.PostingAttrib),
                 ServerName = Environment.MachineName
             };
 

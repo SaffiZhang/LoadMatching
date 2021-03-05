@@ -20,7 +20,7 @@ namespace LoadLink.LoadMatching.Application.PDRatio.Services
 
         public async Task<GetPDRatioQuery> GetAsync(GetPDRatioCommand requestLane)
         {
-            requestLane.VehicleTypeConverted = CommonLM.VTypeStringToNum(requestLane.VehicleType);
+            requestLane.VehicleTypeConverted = CommonLM.VTypeStringToNum(string.IsNullOrEmpty(requestLane.VehicleType) ? "" : requestLane.VehicleType);
 
             var result = await _pdRatioRepository.GetAsync(requestLane);
 
