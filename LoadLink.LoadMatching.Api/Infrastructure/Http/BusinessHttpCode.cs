@@ -20,4 +20,10 @@ namespace LoadLink.LoadMatching.Api.Infrastructure.Http
         // Add more business http code here
     }
 
+    public class ResponceNotSubscribed
+    {
+        public int ResponseCode { get; } = 700;
+        public string ResponseMessage { get; } = "You are not subscribed to the service.";
+    }
+
 }
