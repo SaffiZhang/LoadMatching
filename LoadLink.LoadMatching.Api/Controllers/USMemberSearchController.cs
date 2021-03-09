@@ -15,6 +15,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
     {
         private readonly IUSMemberSearchService _USMemberSearchService;
         private readonly IUserHelperService _userHelperService;
+        private readonly ResponceNotSubscribed notSubscribedResponse = new ResponceNotSubscribed();
 
         public USMemberSearchController(IUSMemberSearchService USMemberSearchService,
                                         IUserHelperService userHelperService)
@@ -34,7 +35,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             // check carrier search feature access
             if (!getUserApiKeys.Contains(APIkey))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(notSubscribedResponse);
 
             USMemberSearchSubscriptionsStatus subscriptions = new USMemberSearchSubscriptionsStatus();
             subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
