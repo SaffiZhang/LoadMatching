@@ -52,11 +52,16 @@ namespace LoadLink.LoadMatching.Api.Controllers
                 return BadRequest();
             }
 
+            templatePosting.UserId = _userHelperService.GetUserId();
             templatePosting.CreatedBy = _userHelperService.GetUserId();
+            templatePosting.CustCd = _userHelperService.GetCustCd();
 
             var result = await _templatePostingService.CreateAsync(templatePosting);
+
             if (result == null)
                 return NoContent();
+            if (result.TemplateID == -1)
+                return BadRequest("Create Template Posting failed.");
 
             return Ok(result);
         }
@@ -74,8 +79,11 @@ namespace LoadLink.LoadMatching.Api.Controllers
             templatePosting.CustCd = _userHelperService.GetCustCd();
 
             var result = await _templatePostingService.UpdateAsync(templatePosting);
+
             if (result == null)
                 return NoContent();
+            if (result.TemplateID == -1)
+                return BadRequest("Update Template Posting failed.");
 
             return Ok(result);
         }

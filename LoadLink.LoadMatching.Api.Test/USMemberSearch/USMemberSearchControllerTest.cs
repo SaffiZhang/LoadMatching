@@ -29,7 +29,7 @@ namespace LoadLink.LoadMatching.Api.Test.USMemberSearch
 
         public USMemberSearchControllerTest()
         {
-            var userId = 34186;
+            var userId = 34350;
             var custCd = "TCORELL";
             _fakeHttpContextAccessor = new FakeContext().MockHttpContext(userId, custCd);
 
@@ -55,17 +55,17 @@ namespace LoadLink.LoadMatching.Api.Test.USMemberSearch
         public async Task GetUSMemberSearchListAsync()
         {
             // arrange
-            var apiKey = "LLB_LiveLead";
-            var LLB_EQF = "LLB_EQF";
-            var LLB_TCC = "LLB_TCC";
-            var LLB_TCUS = "LLB_TCUS";
+            var apiKey = "LLC_DAT";
+            var LLB_EQF = "LLC_EQF";
+            var LLB_TCC = "LLC_TCC";
+            var LLB_TCUS = "LLC_TCUS";
 
             var searchRequest = new GetUSMemberSearchCommand
             {
                 CustCd = "TCORELL",
-                CompanyName = "te",
-                Phone = "",
-                ProvSt = "",
+                CompanyName = "bird",
+                //Phone = "",
+                //ProvSt = "",
                 ShowExcluded = SearchType.All
             };
 
