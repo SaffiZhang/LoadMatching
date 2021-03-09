@@ -22,6 +22,10 @@ namespace LoadLink.LoadMatching.Application.USMemberSearch.Services
         public async Task<IEnumerable<GetUSMemberSearchQuery>> GetListAsync(GetUSMemberSearchCommand searchRequest,
                                                                             USMemberSearchSubscriptionsStatus subscriptions)
         {
+            searchRequest.CompanyName = searchRequest.CompanyName == null ? "" : searchRequest.CompanyName;
+            searchRequest.ProvSt = searchRequest.ProvSt == null ? "" : searchRequest.ProvSt;
+            searchRequest.Phone = searchRequest.Phone == null ? "" : searchRequest.Phone;
+
             var result = await _USMemberSearchRepository.GetListAsync(searchRequest);
             if (!result.Any())
                 return null;

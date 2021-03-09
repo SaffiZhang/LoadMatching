@@ -56,7 +56,7 @@ namespace LoadLink.LoadMatching.Api.Test.TemplatePosting
         public async Task Get_Template_Posting()
         {
             // arrange
-            int templateId = 109999;
+            int templateId = 73840;
 
             //act
             var actionResult = await _templatePostingController.GetAsync(templateId);
@@ -125,19 +125,19 @@ namespace LoadLink.LoadMatching.Api.Test.TemplatePosting
             // arrange
             var templatePostingCommand = new UpdateTemplatePostingCommand
             {
-                TemplateID = 110031,
-                TemplateName = "Template-110031",
+                TemplateID = 73840,
+                TemplateName = "Template-73840",
                 PostType = "E",
                 DateAvail = DateTime.Now,
-                SrceCity = "Montreal",
-                SrceSt = "QC",
-                SrceRadius = 150,
-                DestCity = "Toronto",
+                SrceCity = "Tilbury",
+                SrceSt = "ON",
+                SrceRadius = 200,
+                DestCity = "London",
                 DestSt = "ON",
-                DestRadius = 100,
-                VehicleSize = " ", //15
-                VehicleType = "V", //1
-                Comment = "Montreal to Toronto",
+                DestRadius = 200,
+                VehicleSize = "U",
+                VehicleType = "VFS",
+                Comment = "Test Vev from unit test",
                 PostMode = "A",
                 ClientRefNum = "Client Ref Number",
                 PostingAttrib = "",
