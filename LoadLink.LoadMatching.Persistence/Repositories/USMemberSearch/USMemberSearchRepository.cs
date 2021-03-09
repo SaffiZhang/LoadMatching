@@ -23,6 +23,13 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.USMemberSearch
         {
             var proc = "usp_GetUSMembers";
 
+            var param = new DynamicParameters();
+            param.Add("@CompanyName", searchRequest.CompanyName);
+            param.Add("@ProvSt", searchRequest.ProvSt);
+            param.Add("@Phone", searchRequest.Phone);
+            param.Add("@ShowExcluded", (int)searchRequest.ShowExcluded);
+            param.Add("@CustCD", searchRequest.CustCd);
+            
             var result = await SqlMapper.QueryAsync<UspGetUSMembersResult>(
                 _dbConnection, sql: proc, commandType: CommandType.StoredProcedure);
 
