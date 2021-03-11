@@ -38,7 +38,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             // CHECK IF USER IS SUBSCRIBED FOR LiveLead FEATURE & DAT FEATURE
             if (!(getUserApiKeys.Contains(LLAPIkey) && getUserApiKeys.Contains(DATAPIkey)))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(ResponseCode.NotSubscribe);
 
             // features subscription 
             DatLoadLiveLeadSubscriptionsStatus subscriptions = new DatLoadLiveLeadSubscriptionsStatus();
@@ -74,7 +74,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             // CHECK IF USER IS SUBSCRIBED FOR LiveLead FEATURE & DAT FEATURE
             if (!(getUserApiKeys.Contains(LLAPIkey) && getUserApiKeys.Contains(DATAPIkey)))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(ResponseCode.NotSubscribe);
 
             // features subscription 
             DatLoadLiveLeadSubscriptionsStatus subscriptions = new DatLoadLiveLeadSubscriptionsStatus();

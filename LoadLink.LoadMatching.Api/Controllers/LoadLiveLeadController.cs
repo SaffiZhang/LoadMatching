@@ -38,7 +38,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             // check subscription
             if (!getUserApiKeys.Contains(LLAPIkey))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(ResponseCode.NotSubscribe);
 
             // features subscription
             LoadLiveLeadSubscriptionsStatus subscriptions = new LoadLiveLeadSubscriptionsStatus();
@@ -72,7 +72,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             // check subscription
             if (!getUserApiKeys.Contains(LLAPIkey))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(ResponseCode.NotSubscribe);
 
             // features subscription 
             LoadLiveLeadSubscriptionsStatus subscriptions = new LoadLiveLeadSubscriptionsStatus();
