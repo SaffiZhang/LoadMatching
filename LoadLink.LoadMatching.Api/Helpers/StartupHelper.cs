@@ -358,7 +358,8 @@ namespace LoadLink.LoadMatching.Api.Helpers
                           var error = new FluentValidation.Results.ValidationFailure("BusinessValidation", exception.Message);
 
                           // centralized logging  here
-                          Sentry.SentryId eventId = Sentry.SentrySdk.CaptureEvent(new Sentry.SentryEvent(exception));
+                          Sentry.SentryId eventId;
+                          eventId = Sentry.SentrySdk.CaptureEvent(new Sentry.SentryEvent(exception));
 
                           errorText = System.Text.Json.JsonSerializer.Serialize(new List<dynamic> { error, "EventId:" + eventId });
 

@@ -31,7 +31,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.USMemberSearch
             param.Add("@CustCD", searchRequest.CustCd);
             
             var result = await SqlMapper.QueryAsync<UspGetUSMembersResult>(
-                _dbConnection, sql: proc, commandType: CommandType.StoredProcedure);
+                _dbConnection, sql: proc, param: param, commandType: CommandType.StoredProcedure);
 
             return result;
         }

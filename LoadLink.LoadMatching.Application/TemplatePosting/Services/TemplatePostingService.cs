@@ -24,7 +24,6 @@ namespace LoadLink.LoadMatching.Application.TemplatePosting.Services
         {
             var tmpltPostingCmd = new CreateTemplatePostingSPCommand()
             {
-
                 UserId = templatePosting.UserId,
                 TemplateID = templatePosting.TemplateID,
                 TemplateName = string.IsNullOrEmpty(templatePosting.TemplateName) ? "" : templatePosting.TemplateName,
@@ -45,8 +44,8 @@ namespace LoadLink.LoadMatching.Application.TemplatePosting.Services
                 PostMode = templatePosting.PostMode,
                 ClientRefNum = string.IsNullOrEmpty(templatePosting.ClientRefNum) ? "" : templatePosting.ClientRefNum,
                 CustCd = templatePosting.CustCd,
-                Corridor = templatePosting.Corridor,
-                CustomerTracking = templatePosting.CustomerTracking,
+                Corridor = string.IsNullOrEmpty(templatePosting.Corridor) ? "" : templatePosting.Corridor,
+                CustomerTracking = templatePosting.CustomerTracking == null ? false : templatePosting.CustomerTracking,
                 NetworkId = templatePosting.NetworkId
             };
             templatePosting.TemplateID = await _TemplatePostingRepository.CreateAsync(tmpltPostingCmd);

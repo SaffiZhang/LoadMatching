@@ -35,7 +35,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             // check subscription
             if (!getUserApiKeys.Contains(DATAPIkey))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(ResponseCode.NotSubscribe);
 
             // features subscription 
             DatEquipmentSubscriptionsStatus subscriptions = new DatEquipmentSubscriptionsStatus();     
@@ -69,7 +69,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             // check subscription
             if (!getUserApiKeys.Contains(DATAPIkey))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(ResponseCode.NotSubscribe);
 
             // features subscription 
             DatEquipmentSubscriptionsStatus subscriptions = new DatEquipmentSubscriptionsStatus();      

@@ -3,13 +3,13 @@ namespace LoadLink.LoadMatching.Api.Infrastructure.Http
 {
     public class BusinessHttpCode
     {
-        public int Code { get; set; }
-        public string Message { get; set; }
+        public int ResponseCode { get; set; }
+        public string ResponseMessage { get; set; }
 
         public BusinessHttpCode(int code, string message)
         {
-            Code = code;
-            Message = message;
+            ResponseCode = code;
+            ResponseMessage = message;
         }
     }
 
@@ -19,5 +19,6 @@ namespace LoadLink.LoadMatching.Api.Infrastructure.Http
 
         // Add more business http code here
     }
+
 
 }

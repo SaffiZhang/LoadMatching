@@ -38,13 +38,13 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             // check subscription - load leads (Type 0)
             if (LLRequest.Type == 0 && !getUserApiKeys.Contains(LLRequest.Broker.B_LLAPIKey))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(ResponseCode.NotSubscribe);
             // check subscription - equipment leads (Type 1)
             else if (LLRequest.Type == 1 && !getUserApiKeys.Contains(LLRequest.Carrier.C_LLAPIKey))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(ResponseCode.NotSubscribe);
             // check subscription - Both Load & Equipment leads (Type 2)
             else if (LLRequest.Type == 2 && (!getUserApiKeys.Contains(LLRequest.Broker.B_LLAPIKey) || !getUserApiKeys.Contains(LLRequest.Carrier.C_LLAPIKey)))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(ResponseCode.NotSubscribe);
 
             //features subscription statuses
             LiveLeadSubscriptionsStatus subscriptions = new LiveLeadSubscriptionsStatus();
