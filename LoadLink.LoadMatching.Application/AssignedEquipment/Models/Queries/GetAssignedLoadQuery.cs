@@ -6,7 +6,7 @@ namespace LoadLink.LoadMatching.Application.AssignedEquipment.Models.Queries
     {
         public int ID { get; set; }
         public string CustCd { get; set; }
-        public int? UserId { get; set; }
+        public int? UserID { get; set; }
         public int Token { get; set; }
         public string PIN { get; set; }
         public string Instruction { get; set; }
