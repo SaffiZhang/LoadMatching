@@ -37,7 +37,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             // check feature access
             if (!getUserApiKeys.Contains(APIkey))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(ResponseCode.NotSubscribe);
 
             //Get the result
             var custCd = _userHelperService.GetCustCd();
@@ -59,7 +59,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             // check feature access
             if (!getUserApiKeys.Contains(APIkey))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(ResponseCode.NotSubscribe);
 
             //Get the result
             var custCd = _userHelperService.GetCustCd();
@@ -84,7 +84,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             // check feature access
             if (!getUserApiKeys.Contains(APIkey))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(ResponseCode.NotSubscribe);
 
             //Get the result
             var custCd = _userHelperService.GetCustCd();
@@ -116,7 +116,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             // check feature access
             if (!getUserApiKeys.Contains(APIkey))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(ResponseCode.NotSubscribe);
 
             posting.CustCD = _userHelperService.GetCustCd(); 
             posting.CreatedBy = _userHelperService.GetUserId();
@@ -138,7 +138,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             // check feature access
             if (!getUserApiKeys.Contains(APIkey))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(ResponseCode.NotSubscribe);
 
             await _loadPostingService.UpdateAsync(token, loadPosting.PStatus);
 
@@ -167,7 +167,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             // check feature access
             if (!getUserApiKeys.Contains(APIkey))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(ResponseCode.NotSubscribe);
 
             //Get the Posting the update needs to be applied on
             var custCd = _userHelperService.GetCustCd();
@@ -202,7 +202,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             // check feature access
             if (!getUserApiKeys.Contains(APIkey))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(ResponseCode.NotSubscribe);
 
             //Check if posting exsits before delete
             var custCd = _userHelperService.GetCustCd();

@@ -34,7 +34,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             // check DAT feature access
             if (!getUserApiKeys.Contains(APIkey))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(ResponseCode.NotSubscribe);
 
             var result = await _datAccountService.GetAsync(custcd);
 

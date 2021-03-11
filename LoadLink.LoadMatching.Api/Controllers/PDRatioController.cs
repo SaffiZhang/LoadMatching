@@ -29,7 +29,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             // check subscription
             if (!getUserApiKeys.Contains(APIkey))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(ResponseCode.NotSubscribe);
 
             var result = await _pdRatioService.GetAsync(requestLane);
             if (result == null)

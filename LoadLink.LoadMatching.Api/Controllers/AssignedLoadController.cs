@@ -86,7 +86,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
                 [FromBody] UpdateCustomerTrackingCommand updateCustomerTrackingCommand, string APIkey)
         {
             if (!(await _userHelperService.HasValidSubscription(APIkey)))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(ResponseCode.NotSubscribe);
 
             if (updateCustomerTrackingCommand == null)
                 return BadRequest();

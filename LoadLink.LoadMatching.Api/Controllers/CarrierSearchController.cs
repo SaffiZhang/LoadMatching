@@ -34,7 +34,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
                 
             // check carrier search feature access
             if (!getUserApiKeys.Contains(APIkey))
-                throw new UnauthorizedAccessException(ResponseCode.NotSubscribe.Message);
+                return Ok(ResponseCode.NotSubscribe);
 
             CarrierSearchSubscriptionsStatus subscriptions = new CarrierSearchSubscriptionsStatus();
             subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
