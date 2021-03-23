@@ -81,7 +81,7 @@ namespace LoadLink.LoadMatching.Api
                 options.RoutePrefix = "swagger/ui";
             });
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
