@@ -26,7 +26,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.EquipmentLiveLead
             var param = new DynamicParameters();
             param.Add("@CustCD", custCd);
             param.Add("@MileageProvider", mileageProvider);
-            param.Add("@EToken", postingId);
+            param.Add("@EToken", postingId == null ? 0 : postingId);
             param.Add("@LeadFrom", leadfrom);
 
             var result = await SqlMapper.QueryAsync<UspGetEquipmentLeadResult>(
