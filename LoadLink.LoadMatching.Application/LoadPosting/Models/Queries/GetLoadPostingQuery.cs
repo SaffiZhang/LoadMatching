@@ -67,9 +67,7 @@ namespace LoadLink.LoadMatching.Application.LoadPosting.Models.Queries
 
         public int DestMarketAreaID { get; set; }
 
-        public int NetworkId { get; set; }
-
-        public string Corridor { get; set; }
+        public int NetworkId { get; set; }       
 
         public bool? GlobalExcluded { get; set; }
 
