@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Sentry.AspNetCore;
 
 namespace LoadLink.LoadMatching.Api
 {
@@ -82,6 +83,8 @@ namespace LoadLink.LoadMatching.Api
             });
 
             //app.UseHttpsRedirection();
+
+            app.UseSentryTracing();
 
             app.UseRouting();
 
