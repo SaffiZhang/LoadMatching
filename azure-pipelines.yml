@@ -7,7 +7,7 @@ trigger:
 - usit
 
 pool:
-  name: 'BS-UDVLP'
+  name: 'USIT-AGENT'
 
 variables:
   solution: '**/*.sln'
