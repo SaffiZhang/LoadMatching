@@ -214,6 +214,12 @@ namespace LoadLink.LoadMatching.Api.Controllers
             if (posting == null)
                 return NoContent();
 
+            //Open = O, Expired = E
+            if (!(posting.PStatus.Equals("O") || posting.PStatus.Equals("E")))
+            {
+                return BadRequest("Invalid token status");
+            }
+
             await  _equipmentPostingService.DeleteAsync(token, custCd, userId);
 
             return NoContent();
