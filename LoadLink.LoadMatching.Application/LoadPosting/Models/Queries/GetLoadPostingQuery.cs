@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace LoadLink.LoadMatching.Application.LoadPosting.Models.Queries
 {
@@ -77,5 +74,6 @@ namespace LoadLink.LoadMatching.Application.LoadPosting.Models.Queries
 
         public int DisplayLeadsCount { get; set; }
 
+        public bool HasLiveLeads { get; set; } = false;
     }
 }

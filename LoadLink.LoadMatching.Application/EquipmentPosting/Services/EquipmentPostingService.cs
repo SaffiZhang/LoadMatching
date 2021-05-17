@@ -3,6 +3,7 @@ using LoadLink.LoadMatching.Application.Common;
 using LoadLink.LoadMatching.Application.EquipmentPosting.Models.Commands;
 using LoadLink.LoadMatching.Application.EquipmentPosting.Models.Queries;
 using LoadLink.LoadMatching.Application.EquipmentPosting.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -77,11 +78,28 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Services
 
         public async Task<IEnumerable<GetEquipmentPostingQuery>> GetListAsync(string custCd, string mileageProvider, int leadsCap, bool? getDAT = false)
         {
-            var result = await _equipmentPostingRepository.GetListAsync( custCd, mileageProvider, getDAT);
+            var result = await _equipmentPostingRepository.GetListAsync(custCd, mileageProvider, getDAT);
             if (!result.Any())
                 return null;
 
             var ret = _mapper.Map<IEnumerable<GetEquipmentPostingQuery>>(result);
+
+            var resultList = ret.ToList();
+            resultList.ForEach(
+                row => {
+                    row.DisplayLeadsCount = (leadsCap > 0 && row.LeadsCount >= leadsCap) ? leadsCap : row.LeadsCount;
+                });
+
+            return ret;
+        }
+
+        public async Task<IEnumerable<GetEquipmentPostingLLQuery>> GetListLLAsync(string custCd, string mileageProvider, int leadsCap, DateTime liveLeadTime, bool? getDAT = false)
+        {
+            var result = await _equipmentPostingRepository.GetListLLAsync(custCd, mileageProvider, liveLeadTime, getDAT);
+            if (!result.Any())
+                return null;
+
+            var ret = _mapper.Map<IEnumerable<GetEquipmentPostingLLQuery>>(result);
 
             var resultList = ret.ToList();
             resultList.ForEach(

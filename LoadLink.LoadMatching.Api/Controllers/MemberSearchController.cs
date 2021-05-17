@@ -34,9 +34,9 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             MemberSearchSubscriptionsStatus subscriptions = new MemberSearchSubscriptionsStatus();
-            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
-            subscriptions.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
-            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey.ToUpper());
+            subscriptions.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey.ToUpper());
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey.ToUpper());
 
             if (string.IsNullOrEmpty(searchRequest.CustCd))
                 searchRequest.CustCd = _userHelperService.GetCustCd();
@@ -58,9 +58,9 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             MemberSearchSubscriptionsStatus subscriptions = new MemberSearchSubscriptionsStatus();
-            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
-            subscriptions.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
-            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey.ToUpper());
+            subscriptions.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey.ToUpper());
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey.ToUpper());
 
             if (string.IsNullOrEmpty(searchRequest.CustCd))
                 searchRequest.CustCd = _userHelperService.GetCustCd();

@@ -28,7 +28,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check subscription
-            if (!getUserApiKeys.Contains(APIkey))
+            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
                 return Ok(ResponseCode.NotSubscribe);
 
             var result = await _riRateService.GetAsync(requestLane);

@@ -3,6 +3,7 @@ using LoadLink.LoadMatching.Application.LoadPosting.Models.Commands;
 using LoadLink.LoadMatching.Application.LoadPosting.Repository;
 using LoadLink.LoadMatching.Domain.Procedures;
 using LoadLink.LoadMatching.Persistence.Data;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -69,6 +70,21 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.LoadPosting
             param.Add("@GetDAT", getDAT);
 
             var result = await SqlMapper.QueryAsync<UspGetLoadPostingResult>(
+               _dbConnection, sql: proc, param, commandType: CommandType.StoredProcedure);
+
+            return result;
+        }
+
+        public async Task<IEnumerable<UspGetLoadPostingLLResult>> GetListLLAsync(string custCd, string mileageProvider, DateTime liveLeadTime, bool? getDAT = false)
+        {
+            var proc = "dbo.usp_GetLoadPosting_LL";
+            var param = new DynamicParameters();
+            param.Add("@CustCD", custCd);
+            param.Add("@MileageProvider", mileageProvider);
+            param.Add("@GetDAT", getDAT);
+            param.Add("@LiveLeadTime", liveLeadTime);
+
+            var result = await SqlMapper.QueryAsync<UspGetLoadPostingLLResult>(
                _dbConnection, sql: proc, param, commandType: CommandType.StoredProcedure);
 
             return result;

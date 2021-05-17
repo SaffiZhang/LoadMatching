@@ -34,15 +34,15 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check subscription
-            if (!getUserApiKeys.Contains(DATAPIkey))
+            if (!getUserApiKeys.Contains(DATAPIkey.ToUpper()))
                 return Ok(ResponseCode.NotSubscribe);
 
             // features subscription 
             DatEquipmentSubscriptionsStatus subscriptions = new DatEquipmentSubscriptionsStatus();     
-            subscriptions.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
-            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
-            subscriptions.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
-            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+            subscriptions.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey.ToUpper());
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey.ToUpper());
+            subscriptions.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey.ToUpper());
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey.ToUpper());
 
             //AppSettings
             var mileageProvider = _settings.AppSetting.MileageProvider;
@@ -68,15 +68,15 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check subscription
-            if (!getUserApiKeys.Contains(DATAPIkey))
+            if (!getUserApiKeys.Contains(DATAPIkey.ToUpper()))
                 return Ok(ResponseCode.NotSubscribe);
 
             // features subscription 
             DatEquipmentSubscriptionsStatus subscriptions = new DatEquipmentSubscriptionsStatus();      
-            subscriptions.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
-            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
-            subscriptions.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
-            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
+            subscriptions.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey.ToUpper());
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey.ToUpper());
+            subscriptions.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey.ToUpper());
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey.ToUpper());
 
             //AppSettings
             var mileageProvider = _settings.AppSetting.MileageProvider;

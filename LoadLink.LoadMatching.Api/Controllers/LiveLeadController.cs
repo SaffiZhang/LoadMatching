@@ -37,27 +37,27 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check subscription - load leads (Type 0)
-            if (LLRequest.Type == 0 && !getUserApiKeys.Contains(LLRequest.Broker.B_LLAPIKey))
+            if (LLRequest.Type == 0 && !getUserApiKeys.Contains(LLRequest.Broker.B_LLAPIKey.ToUpper()))
                 return Ok(ResponseCode.NotSubscribe);
             // check subscription - equipment leads (Type 1)
-            else if (LLRequest.Type == 1 && !getUserApiKeys.Contains(LLRequest.Carrier.C_LLAPIKey))
+            else if (LLRequest.Type == 1 && !getUserApiKeys.Contains(LLRequest.Carrier.C_LLAPIKey.ToUpper()))
                 return Ok(ResponseCode.NotSubscribe);
             // check subscription - Both Load & Equipment leads (Type 2)
-            else if (LLRequest.Type == 2 && (!getUserApiKeys.Contains(LLRequest.Broker.B_LLAPIKey) || !getUserApiKeys.Contains(LLRequest.Carrier.C_LLAPIKey)))
+            else if (LLRequest.Type == 2 && (!getUserApiKeys.Contains(LLRequest.Broker.B_LLAPIKey.ToUpper()) || !getUserApiKeys.Contains(LLRequest.Carrier.C_LLAPIKey.ToUpper())))
                 return Ok(ResponseCode.NotSubscribe);
 
             //features subscription statuses
             LiveLeadSubscriptionsStatus subscriptions = new LiveLeadSubscriptionsStatus();
-            subscriptions.B_DATAPIKey_Status = getUserApiKeys.Contains(LLRequest.Broker.B_DATAPIKey);
-            subscriptions.B_EQFAPIKey_Status = getUserApiKeys.Contains(LLRequest.Broker.B_EQFAPIKey);
-            subscriptions.B_QPAPIKey_Status = getUserApiKeys.Contains(LLRequest.Broker.B_QPAPIKey);
-            subscriptions.B_TCCAPIKey_Status = getUserApiKeys.Contains(LLRequest.Broker.B_TCCAPIKey);
-            subscriptions.B_TCUSAPIKey_Status = getUserApiKeys.Contains(LLRequest.Broker.B_TCUSAPIKey);
-            subscriptions.C_DATAPIKey_Status = getUserApiKeys.Contains(LLRequest.Carrier.C_DATAPIKey);
-            subscriptions.C_EQFAPIKey_Status = getUserApiKeys.Contains(LLRequest.Carrier.C_EQFAPIKey);
-            subscriptions.C_QPAPIKey_Status = getUserApiKeys.Contains(LLRequest.Carrier.C_QPAPIKey);
-            subscriptions.C_TCCAPIKey_Status = getUserApiKeys.Contains(LLRequest.Carrier.C_TCCAPIKey);
-            subscriptions.C_TCUSAPIKey_Status = getUserApiKeys.Contains(LLRequest.Carrier.C_TCUSAPIKey);
+            subscriptions.B_DATAPIKey_Status = getUserApiKeys.Contains(LLRequest.Broker.B_DATAPIKey.ToUpper());
+            subscriptions.B_EQFAPIKey_Status = getUserApiKeys.Contains(LLRequest.Broker.B_EQFAPIKey.ToUpper());
+            subscriptions.B_QPAPIKey_Status = getUserApiKeys.Contains(LLRequest.Broker.B_QPAPIKey.ToUpper());
+            subscriptions.B_TCCAPIKey_Status = getUserApiKeys.Contains(LLRequest.Broker.B_TCCAPIKey.ToUpper());
+            subscriptions.B_TCUSAPIKey_Status = getUserApiKeys.Contains(LLRequest.Broker.B_TCUSAPIKey.ToUpper());
+            subscriptions.C_DATAPIKey_Status = getUserApiKeys.Contains(LLRequest.Carrier.C_DATAPIKey.ToUpper());
+            subscriptions.C_EQFAPIKey_Status = getUserApiKeys.Contains(LLRequest.Carrier.C_EQFAPIKey.ToUpper());
+            subscriptions.C_QPAPIKey_Status = getUserApiKeys.Contains(LLRequest.Carrier.C_QPAPIKey.ToUpper());
+            subscriptions.C_TCCAPIKey_Status = getUserApiKeys.Contains(LLRequest.Carrier.C_TCCAPIKey.ToUpper());
+            subscriptions.C_TCUSAPIKey_Status = getUserApiKeys.Contains(LLRequest.Carrier.C_TCUSAPIKey.ToUpper());
 
             var custCd = _userHelperService.GetCustCd();
             var mileageProvider = _appSettings.AppSetting.MileageProvider;
