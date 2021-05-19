@@ -3,6 +3,7 @@ using LoadLink.LoadMatching.Application.Common;
 using LoadLink.LoadMatching.Application.LoadPosting.Models.Commands;
 using LoadLink.LoadMatching.Application.LoadPosting.Models.Queries;
 using LoadLink.LoadMatching.Application.LoadPosting.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -76,11 +77,28 @@ namespace LoadLink.LoadMatching.Application.LoadPosting.Services
 
         public async Task<IEnumerable<GetLoadPostingQuery>> GetListAsync(string custCd, string mileageProvider, int leadsCap, bool? getDAT = false)
         {
-            var result = await _loadPostingRepository.GetListAsync( custCd, mileageProvider, getDAT);
+            var result = await _loadPostingRepository.GetListAsync(custCd, mileageProvider, getDAT);
             if (!result.Any())
                 return null;
 
             var ret = _mapper.Map<IEnumerable<GetLoadPostingQuery>>(result);
+
+            var resultList = ret.ToList();
+            resultList.ForEach(
+                row => {
+                    row.DisplayLeadsCount = (leadsCap > 0 && row.LeadsCount >= leadsCap) ? leadsCap : row.LeadsCount;
+                });
+
+            return ret;
+        }
+
+        public async Task<IEnumerable<GetLoadPostingLLQuery>> GetListLLAsync(string custCd, string mileageProvider, int leadsCap, DateTime liveLeadTime, bool? getDAT = false)
+        {
+            var result = await _loadPostingRepository.GetListLLAsync(custCd, mileageProvider, liveLeadTime, getDAT);
+            if (!result.Any())
+                return null;
+
+            var ret = _mapper.Map<IEnumerable<GetLoadPostingLLQuery>>(result);
 
             var resultList = ret.ToList();
             resultList.ForEach(

@@ -33,7 +33,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check feature access
-            if (!getUserApiKeys.Contains(APIkey))
+            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
                 return Ok(ResponseCode.NotSubscribe);
 
             var result = await _loadPositionService.GetListAsync(token);
@@ -55,7 +55,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check feature access
-            if (!getUserApiKeys.Contains(APIkey))
+            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
                 return Ok(ResponseCode.NotSubscribe);
 
             await _loadPositionService.CreateAsync(token);

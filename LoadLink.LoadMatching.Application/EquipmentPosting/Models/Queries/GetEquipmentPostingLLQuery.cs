@@ -2,7 +2,7 @@
 
 namespace LoadLink.LoadMatching.Application.EquipmentPosting.Models.Queries
 {
-    public class GetEquipmentPostingQuery
+    public class GetEquipmentPostingLLQuery
     {
         public int Token { get; set; }
 
@@ -76,6 +76,7 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Models.Queries
 
         public int DisplayLeadsCount { get; set; }
 
-        public bool HasLiveLeads { get; set; } = false;
+        public bool HasLiveLeads { get; set; }
+
     }
 }

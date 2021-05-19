@@ -36,7 +36,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check feature access
-            if (!getUserApiKeys.Contains(APIkey))
+            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
                 return Ok(ResponseCode.NotSubscribe);
 
             //Get the result
@@ -58,7 +58,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check feature access
-            if (!getUserApiKeys.Contains(APIkey))
+            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
                 return Ok(ResponseCode.NotSubscribe);
 
             //Get the result
@@ -67,6 +67,28 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var leadsCap = _appSettings.AppSetting.LeadsCap;
 
             var postings = await _loadPostingService.GetListAsync(custCd, mileageProvider, leadsCap, GETDAT);
+
+            if (postings == null)
+                return NoContent();
+
+            return Ok(postings);
+        }
+
+        [HttpGet("{APIkey}/GETDAT/{GETDAT}/{LiveLeadTime}")]
+        public async Task<IActionResult> GetListLLAsync(string APIkey, bool GETDAT, DateTime LiveLeadTime)
+        {
+            var getUserApiKeys = await _userHelperService.GetUserApiKeys();
+
+            // check feature access
+            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
+                return Ok(ResponseCode.NotSubscribe);
+
+            //Get the result
+            var custCd = _userHelperService.GetCustCd();
+            var mileageProvider = _appSettings.AppSetting.MileageProvider;
+            var leadsCap = _appSettings.AppSetting.LeadsCap;
+
+            var postings = await _loadPostingService.GetListLLAsync(custCd, mileageProvider, leadsCap, LiveLeadTime, GETDAT);
 
             if (postings == null)
                 return NoContent();
@@ -83,7 +105,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check feature access
-            if (!getUserApiKeys.Contains(APIkey))
+            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
                 return Ok(ResponseCode.NotSubscribe);
 
             //Get the result
@@ -115,7 +137,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check feature access
-            if (!getUserApiKeys.Contains(APIkey))
+            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
                 return Ok(ResponseCode.NotSubscribe);
 
             posting.CustCD = _userHelperService.GetCustCd(); 
@@ -137,7 +159,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check feature access
-            if (!getUserApiKeys.Contains(APIkey))
+            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
                 return Ok(ResponseCode.NotSubscribe);
 
             await _loadPostingService.UpdateAsync(token, loadPosting.PStatus);
@@ -166,7 +188,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check feature access
-            if (!getUserApiKeys.Contains(APIkey))
+            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
                 return Ok(ResponseCode.NotSubscribe);
 
             //Get the Posting the update needs to be applied on
@@ -201,7 +223,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check feature access
-            if (!getUserApiKeys.Contains(APIkey))
+            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
                 return Ok(ResponseCode.NotSubscribe);
 
             //Check if posting exsits before delete
