@@ -36,7 +36,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check feature access
-            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
+            if (!getUserApiKeys.Contains(APIkey))
                 return Ok(ResponseCode.NotSubscribe);
 
             //Get the result
@@ -58,7 +58,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check feature access
-            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
+            if (!getUserApiKeys.Contains(APIkey))
                 return Ok(ResponseCode.NotSubscribe);
 
             //Get the result
@@ -80,7 +80,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check feature access
-            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
+            if (!getUserApiKeys.Contains(APIkey))
                 return Ok(ResponseCode.NotSubscribe);
 
             //Get the result
@@ -105,7 +105,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check feature access
-            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
+            if (!getUserApiKeys.Contains(APIkey))
                 return Ok(ResponseCode.NotSubscribe);
 
             //Get the result
@@ -137,7 +137,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check feature access
-            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
+            if (!getUserApiKeys.Contains(APIkey))
                 return Ok(ResponseCode.NotSubscribe);
 
             posting.CustCD = _userHelperService.GetCustCd(); 
@@ -159,7 +159,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check feature access
-            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
+            if (!getUserApiKeys.Contains(APIkey))
                 return Ok(ResponseCode.NotSubscribe);
 
             await _equipmentPostingService.UpdateAsync(token, equipmentPosting.PStatus);
@@ -188,7 +188,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check feature access
-            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
+            if (!getUserApiKeys.Contains(APIkey))
                 return Ok(ResponseCode.NotSubscribe);
 
             //Get the Posting the update needs to be applied on
@@ -222,7 +222,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check feature access
-            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
+            if (!getUserApiKeys.Contains(APIkey))
                 return Ok(ResponseCode.NotSubscribe);
 
             //Check if posting exsits before delete

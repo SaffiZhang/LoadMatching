@@ -30,7 +30,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // DAT features subscription status
-            getDAT = getUserApiKeys.Contains(DATAPIKey.ToUpper());
+            getDAT = getUserApiKeys.Contains(DATAPIKey);
 
             var userId = _userHelperService.GetUserId();
 

@@ -32,13 +32,13 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check carrier search feature access
-            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
+            if (!getUserApiKeys.Contains(APIkey))
                 return Ok(ResponseCode.NotSubscribe);
 
             USMemberSearchSubscriptionsStatus subscriptions = new USMemberSearchSubscriptionsStatus();
-            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey.ToUpper());
-            subscriptions.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey.ToUpper());
-            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey.ToUpper());
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
+            subscriptions.HasTCSubscription = getUserApiKeys.Contains(TCCAPIKey);
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
             if (string.IsNullOrEmpty(searchRequest.CustCd))
                 searchRequest.CustCd = _userHelperService.GetCustCd();
