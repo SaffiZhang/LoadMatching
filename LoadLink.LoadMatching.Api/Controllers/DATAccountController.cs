@@ -33,7 +33,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
             var getUserApiKeys = await _userHelperService.GetUserApiKeys();
 
             // check DAT feature access
-            if (!getUserApiKeys.Contains(APIkey.ToUpper()))
+            if (!getUserApiKeys.Contains(APIkey))
                 return Ok(ResponseCode.NotSubscribe);
 
             var result = await _datAccountService.GetAsync(custcd);

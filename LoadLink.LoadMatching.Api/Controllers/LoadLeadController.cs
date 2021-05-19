@@ -35,10 +35,10 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             // features subscription 
             LoadLeadSubscriptionsStatus subscriptions = new LoadLeadSubscriptionsStatus();
-            subscriptions.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey.ToUpper());
-            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey.ToUpper());
-            subscriptions.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey.ToUpper());
-            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey.ToUpper());
+            subscriptions.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
+            subscriptions.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
             //AppSettings
             var mileageProvider = _settings.AppSetting.MileageProvider;
@@ -63,10 +63,10 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             // features subscription 
             LoadLeadSubscriptionsStatus subscriptions = new LoadLeadSubscriptionsStatus();
-            subscriptions.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey.ToUpper());
-            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey.ToUpper());
-            subscriptions.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey.ToUpper());
-            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey.ToUpper());
+            subscriptions.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
+            subscriptions.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
             //AppSettings
             var mileageProvider = _settings.AppSetting.MileageProvider;
@@ -94,11 +94,11 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             // features subscription 
             LoadLeadSubscriptionsStatus subscriptions = new LoadLeadSubscriptionsStatus();
-            subscriptions.HasDATSubscription = getUserApiKeys.Contains(DATAPIkey.ToUpper());
-            subscriptions.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey.ToUpper());
-            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey.ToUpper());
-            subscriptions.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey.ToUpper());
-            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey.ToUpper());
+            subscriptions.HasDATSubscription = getUserApiKeys.Contains(DATAPIkey);
+            subscriptions.HasQPSubscription = getUserApiKeys.Contains(QPAPIKey);
+            subscriptions.HasEQSubscription = getUserApiKeys.Contains(EQFAPIKey);
+            subscriptions.HasTCCSubscription = getUserApiKeys.Contains(TCCAPIKey);
+            subscriptions.HasTCUSSubscription = getUserApiKeys.Contains(TCUSAPIKey);
 
             //AppSettings
             var mileageProvider = _settings.AppSetting.MileageProvider;
