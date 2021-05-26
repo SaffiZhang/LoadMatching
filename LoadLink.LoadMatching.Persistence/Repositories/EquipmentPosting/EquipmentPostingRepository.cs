@@ -3,6 +3,7 @@ using LoadLink.LoadMatching.Application.EquipmentPosting.Models.Commands;
 using LoadLink.LoadMatching.Application.EquipmentPosting.Repository;
 using LoadLink.LoadMatching.Domain.Procedures;
 using LoadLink.LoadMatching.Persistence.Data;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -68,6 +69,21 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.EquipmentPosting
             param.Add("@GetDAT", getDAT);
 
             var result = await SqlMapper.QueryAsync<UspGetEquipmentPostingResult>(
+               _dbConnection, sql: proc, param, commandType: CommandType.StoredProcedure);
+
+            return result;
+        }
+
+        public async Task<IEnumerable<UspGetEquipmentPostingLLResult>> GetListLLAsync(string custCd, string mileageProvider, DateTime liveLeadTime, bool? getDAT = false)
+        {
+            var proc = "dbo.usp_GetEquipmentPosting_LL";
+            var param = new DynamicParameters();
+            param.Add("@CustCD", custCd);
+            param.Add("@MileageProvider", mileageProvider);
+            param.Add("@GetDAT", getDAT);
+            param.Add("@LiveLeadTime", liveLeadTime);
+
+            var result = await SqlMapper.QueryAsync<UspGetEquipmentPostingLLResult>(
                _dbConnection, sql: proc, param, commandType: CommandType.StoredProcedure);
 
             return result;

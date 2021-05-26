@@ -8,6 +8,7 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Profiles
         public EquipmentPostingProfile()
         {
             CreateMap<UspGetEquipmentPostingResult, GetEquipmentPostingQuery>();
+            CreateMap<UspGetEquipmentPostingLLResult, GetEquipmentPostingLLQuery>();
         }
     }
 }

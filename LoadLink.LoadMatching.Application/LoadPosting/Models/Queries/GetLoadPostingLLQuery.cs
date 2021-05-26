@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace LoadLink.LoadMatching.Application.EquipmentPosting.Models.Queries
+namespace LoadLink.LoadMatching.Application.LoadPosting.Models.Queries
 {
-    public class GetEquipmentPostingQuery
+    public class GetLoadPostingLLQuery
     {
         public int Token { get; set; }
 
@@ -66,8 +66,6 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Models.Queries
 
         public int NetworkId { get; set; }
 
-        public string Corridor { get; set; }
-
         public bool? GlobalExcluded { get; set; }
 
         public bool CustomerTracking { get; set; }
@@ -76,6 +74,7 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Models.Queries
 
         public int DisplayLeadsCount { get; set; }
 
-        public bool HasLiveLeads { get; set; } = false;
+        public bool HasLiveLeads { get; set; }
+
     }
 }

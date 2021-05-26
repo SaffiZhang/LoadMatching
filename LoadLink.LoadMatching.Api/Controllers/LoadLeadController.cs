@@ -83,7 +83,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
         [HttpGet("{token}/{DATAPIkey}/{QPAPIKey}/{EQFAPIKey}/{TCUSAPIKey}/{TCCAPIKey}")]
         public async Task<IActionResult> GetCombinedAsync(int token, string DATAPIkey, string QPAPIKey,
-                                    string EQFAPIKey, string TCUSAPIKey, string TCCAPIKey)
+                                                            string EQFAPIKey, string TCUSAPIKey, string TCCAPIKey)
         {
             if (token <= 0)
             {

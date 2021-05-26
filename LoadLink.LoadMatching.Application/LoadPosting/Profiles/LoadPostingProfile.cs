@@ -8,6 +8,7 @@ namespace LoadLink.LoadMatching.Application.LoadPosting.Profiles
         public LoadPostingProfile()
         {
             CreateMap<UspGetLoadPostingResult, GetLoadPostingQuery>();
+            CreateMap<UspGetLoadPostingLLResult, GetLoadPostingLLQuery>();
         }
     }
 }
