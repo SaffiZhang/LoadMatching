@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using LoadLink.LoadMatching.Api.Services;
 using LoadLink.LoadMatching.Application.LeadCount.Services;
-
 using Microsoft.AspNetCore.Mvc;
 
 namespace LoadLink.LoadMatching.Api.Controllers

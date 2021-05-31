@@ -2,8 +2,6 @@
 using LoadLink.LoadMatching.Application.VehicleType.Services;
 using Microsoft.AspNetCore.Mvc;
 using LoadLink.LoadMatching.Api.Services;
-using LoadLink.LoadMatching.Api.Infrastructure.Http;
-using System;
 
 namespace LoadLink.LoadMatching.Api.Controllers
 {

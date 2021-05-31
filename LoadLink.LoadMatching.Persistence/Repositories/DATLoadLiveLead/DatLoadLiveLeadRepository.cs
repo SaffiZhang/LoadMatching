@@ -25,7 +25,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.DATLoadLead
             var param = new DynamicParameters();
             param.Add("@CustCD", custCd);
             param.Add("@MileageProvider", mileageProvider);
-            param.Add("@EToken", postingId);
+            param.Add("@LToken", postingId);
             param.Add("@LeadFrom", leadfrom);
 
             var result = await SqlMapper.QueryAsync<UspGetDatLoadLeadResult>(
