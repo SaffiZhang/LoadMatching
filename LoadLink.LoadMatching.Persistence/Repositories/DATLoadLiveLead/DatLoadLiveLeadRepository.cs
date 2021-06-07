@@ -17,23 +17,21 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.DATLoadLead
         public DatLoadLiveLeadRepository(IConnectionFactory connectionFactory)
         {
             _dbConnection = new SqlConnection(connectionFactory.ConnectionString);
-
         }
+
         public async Task<IEnumerable<UspGetDatLoadLeadResult>> GetLeads(string custCd, string mileageProvider, DateTime? leadfrom, int? postingId)
         {
             var proc = "usp_GetDATLoadLead";
             var param = new DynamicParameters();
             param.Add("@CustCD", custCd);
             param.Add("@MileageProvider", mileageProvider);
-            param.Add("@LToken", postingId);
+            param.Add("@EToken", postingId == null ? 0 : postingId);
             param.Add("@LeadFrom", leadfrom);
 
             var result = await SqlMapper.QueryAsync<UspGetDatLoadLeadResult>(
                _dbConnection, sql: proc, param, commandType: CommandType.StoredProcedure);
 
             return result;
-
         }
-
     }
 }
