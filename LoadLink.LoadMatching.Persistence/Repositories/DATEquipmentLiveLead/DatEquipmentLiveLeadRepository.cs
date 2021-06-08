@@ -17,23 +17,21 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.DATEquipmentLead
         public DatEquipmentLiveLeadRepository(IConnectionFactory connectionFactory)
         {
             _dbConnection = new SqlConnection(connectionFactory.ConnectionString);
-
         }
+
         public async Task<IEnumerable<UspGetDatEquipmentLeadResult>> GetLeads(string custCd, string mileageProvider, DateTime? leadfrom, int? postingId)
         {
             var proc = "usp_GetDATEquipmentLead";
             var param = new DynamicParameters();
             param.Add("@CustCD", custCd);
             param.Add("@MileageProvider", mileageProvider);
-            param.Add("@EToken", postingId);
+            param.Add("@EToken", postingId == null ? 0 : postingId);
             param.Add("@LeadFrom", leadfrom);
 
             var result = await SqlMapper.QueryAsync<UspGetDatEquipmentLeadResult>(
                _dbConnection, sql: proc, param, commandType: CommandType.StoredProcedure);
 
             return result;
-
         }
-
     }
 }
