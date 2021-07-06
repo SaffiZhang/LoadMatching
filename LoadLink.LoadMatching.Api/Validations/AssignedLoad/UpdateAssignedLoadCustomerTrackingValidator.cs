@@ -11,10 +11,10 @@ namespace LoadLink.LoadMatching.Api.Validations.AssignedLoad
                 .WithMessage("ID is Mandatory.");
             RuleFor(x => x.ID).GreaterThan((short)0)
                 .WithMessage("Invalid ID - must be greater than 0.");
-            RuleFor(x => x.CustTracking).NotNull()
-                .WithMessage("CustTracking is Mandatory.");
-            RuleFor(x => x.CustTracking).NotEmpty()
-                .WithMessage("CustTracking is Mandatory.");
+            //RuleFor(x => x.CustTracking).NotNull()
+            //    .WithMessage("CustTracking is Mandatory.");
+            //RuleFor(x => x.CustTracking).NotEmpty()
+            //    .WithMessage("CustTracking is Mandatory.");
         }
 
     }
