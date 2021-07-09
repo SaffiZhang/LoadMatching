@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using LoadLink.LoadMatching.Application.LoadPosting.Models.Commands;
+using LoadLink.LoadMatching.Application.LoadPosting.Models.Queries;
 using LoadLink.LoadMatching.Application.LoadPosting.Repository;
 using LoadLink.LoadMatching.Domain.Procedures;
 using LoadLink.LoadMatching.Persistence.Data;
@@ -21,7 +22,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.LoadPosting
             _dbConnection = new SqlConnection(connectionFactory.ConnectionString);
         }
 
-        public async Task<int> CreateAsync(UspCreateLoadPostingCommand createCommand)
+        public async Task<int> CreateAsync_old(UspCreateLoadPostingCommand createCommand)
         {
             var proc = "dbo.usp_CreateLoad";
 
@@ -35,6 +36,35 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.LoadPosting
 
             return param.Get<int>("@Token");
         }
+
+        public async Task<int> CreateAsync(UspCreateLoadPostingCommand createCommand)
+        {
+            var proc = "dbo.usp_CreateLoad_Separate";
+
+            createCommand.Comment = string.IsNullOrEmpty(createCommand.Comment) ?
+                                            createCommand.Comment : await CleanseComment(createCommand.Comment);
+            var param = new DynamicParameters(createCommand);
+
+            var result = await SqlMapper.QueryFirstOrDefaultAsync<CreateLoadPostingQuery>(
+               _dbConnection, sql: proc, param, commandType: CommandType.StoredProcedure);
+
+            if (result.Token > 0)
+                await CreateMatchesAsync(result);
+
+            return result.Token;
+        }
+
+        public async Task<int> CreateMatchesAsync(CreateLoadPostingQuery loadPosting)
+        {
+            var proc = "dbo.usp_MatchLoad_Separate";
+            var param = new DynamicParameters(loadPosting);
+
+            param.Add("@Result", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+            await SqlMapper.ExecuteAsync(_dbConnection, sql: proc, param: param, commandType: CommandType.StoredProcedure);
+
+            return param.Get<int>("@Result");
+        }
+
 
         public async Task DeleteAsync(int token, string custCd, int userId)
         {
