@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using LoadLink.LoadMatching.Application.EquipmentPosting.Models.Commands;
+using LoadLink.LoadMatching.Application.EquipmentPosting.Models.Queries;
 using LoadLink.LoadMatching.Application.EquipmentPosting.Repository;
 using LoadLink.LoadMatching.Domain.Procedures;
 using LoadLink.LoadMatching.Persistence.Data;
@@ -20,7 +21,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.EquipmentPosting
             _dbConnection = new SqlConnection(connectionFactory.ConnectionString);
         }
 
-        public async Task<int> CreateAsync(UspCreateEquipmentPostingCommand createCommand)
+        public async Task<int> CreateAsync_Old(UspCreateEquipmentPostingCommand createCommand)
         {
             var proc = "dbo.usp_CreateEquipment";
 
@@ -32,6 +33,34 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.EquipmentPosting
             await SqlMapper.ExecuteAsync(_dbConnection, sql: proc, param: param, commandType: CommandType.StoredProcedure);
 
             return param.Get<int>("@Token");
+        }
+
+        public async Task<int> CreateAsync(UspCreateEquipmentPostingCommand createCommand)
+        {
+            var proc = "dbo.usp_CreateEquipment_Separate";
+
+            createCommand.Comment = string.IsNullOrEmpty(createCommand.Comment) ?
+                                            createCommand.Comment : await CleanseComment(createCommand.Comment);
+            var param = new DynamicParameters(createCommand);
+
+            var result = await SqlMapper.QueryFirstOrDefaultAsync<CreateEquipmentPostingQuery>(
+               _dbConnection, sql: proc, param, commandType: CommandType.StoredProcedure);
+
+            if (result.Token > 0)
+                await CreateMatchesAsync(result);
+
+            return result.Token;
+        }
+
+        public async Task<int> CreateMatchesAsync(CreateEquipmentPostingQuery equipPosting)
+        {
+            var proc = "dbo.usp_MatchEquipment_Separate";
+            var param = new DynamicParameters(equipPosting);
+
+            param.Add("@Result", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+            await SqlMapper.ExecuteAsync(_dbConnection, sql: proc, param: param, commandType: CommandType.StoredProcedure);
+
+            return param.Get<int>("@Result");
         }
 
         public async Task DeleteAsync(int token, string custCd, int userId)
