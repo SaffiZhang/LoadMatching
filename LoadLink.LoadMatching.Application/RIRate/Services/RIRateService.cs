@@ -2,7 +2,7 @@
 using LoadLink.LoadMatching.Application.RIRate.Models.Commands;
 using LoadLink.LoadMatching.Application.RIRate.Models.Queries;
 using LoadLink.LoadMatching.Application.RIRate.Repository;
-using LoadLink.LoadMatching.Application.Common;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
 using System.Threading.Tasks;
 
 namespace LoadLink.LoadMatching.Application.RIRate.Services

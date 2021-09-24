@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using LoadLink.LoadMatching.Application.Common;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
 using LoadLink.LoadMatching.Application.LoadPosting.Models.Commands;
 using LoadLink.LoadMatching.Application.LoadPosting.Models.Queries;
 using LoadLink.LoadMatching.Application.LoadPosting.Repository;
@@ -12,10 +12,10 @@ namespace LoadLink.LoadMatching.Application.LoadPosting.Services
 {
     public class LoadPostingService : ILoadPostingService
     {
-        private readonly ILoadPostingRepository _loadPostingRepository;
+        private readonly Application.LoadPosting.Repository.ILoadPostingRepository _loadPostingRepository;
         private readonly IMapper _mapper;
 
-        public LoadPostingService(ILoadPostingRepository loadPostingRepository, IMapper mapper)
+        public LoadPostingService(Repository.ILoadPostingRepository loadPostingRepository, IMapper mapper)
         {
             _loadPostingRepository = loadPostingRepository;
             _mapper = mapper;

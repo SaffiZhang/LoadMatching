@@ -1,15 +1,17 @@
 ﻿using LoadLink.LoadMatching.Api.Configuration;
 using LoadLink.LoadMatching.Api.Infrastructure.Http;
 using LoadLink.LoadMatching.Api.Services;
-using LoadLink.LoadMatching.Application.EquipmentPosting.Models.Commands;
-using LoadLink.LoadMatching.Application.EquipmentPosting.Services;
+using LoadLink.LoadMatching.Application.EquipmentPosting.Commands;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using MediatR;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
+using System.Collections.Generic;
 
 namespace LoadLink.LoadMatching.Api.Controllers
 {
@@ -17,108 +19,15 @@ namespace LoadLink.LoadMatching.Api.Controllers
     [ApiController]
     public class EquipmentPostingController : ControllerBase
     {
-        private readonly IEquipmentPostingService _equipmentPostingService;
+    
         private readonly IUserHelperService _userHelperService;
-        private readonly AppSettings _appSettings;
+  
+        private readonly IMediator _mediator;
 
-        public EquipmentPostingController(IEquipmentPostingService equipmentPostingService, 
-                                            IUserHelperService userHelperService, 
-                                            IOptions<AppSettings> appSettings )
+        public EquipmentPostingController(IUserHelperService userHelperService, IMediator mediator)
         {
-            _equipmentPostingService = equipmentPostingService;
             _userHelperService = userHelperService;
-            _appSettings = appSettings.Value;
-        }
-
-        [HttpGet("{APIkey}")]
-        public async Task<IActionResult> GetList(string APIkey)
-        {
-            var getUserApiKeys = await _userHelperService.GetUserApiKeys();
-
-            // check feature access
-            if (!getUserApiKeys.Contains(APIkey))
-                return Ok(ResponseCode.NotSubscribe);
-
-            //Get the result
-            var custCd = _userHelperService.GetCustCd();
-            var mileageProvider = _appSettings.AppSetting.MileageProvider;
-            var leadsCap = _appSettings.AppSetting.LeadsCap;
-
-            var postings = await _equipmentPostingService.GetListAsync(custCd, mileageProvider, leadsCap, false);
-
-            if (postings == null)
-                return NoContent();
-
-            return Ok(postings);
-        }
-
-        [HttpGet("{APIkey}/GETDAT/{GETDAT?}")]
-        public async Task<IActionResult> GetList(string APIkey, bool GETDAT)
-        {
-            var getUserApiKeys = await _userHelperService.GetUserApiKeys();
-
-            // check feature access
-            if (!getUserApiKeys.Contains(APIkey))
-                return Ok(ResponseCode.NotSubscribe);
-
-            //Get the result
-            var custCd = _userHelperService.GetCustCd();
-            var mileageProvider = _appSettings.AppSetting.MileageProvider;
-            var leadsCap = _appSettings.AppSetting.LeadsCap;
-
-            var postings = await _equipmentPostingService.GetListAsync(custCd, mileageProvider, leadsCap, GETDAT);
-
-            if (postings == null)
-                return NoContent();
-
-            return Ok(postings);
-        }
-
-        [HttpGet("{APIkey}/GETDAT/{GETDAT}/{LiveLeadTime}")]
-        public async Task<IActionResult> GetListLLAsync(string APIkey, bool GETDAT, DateTime LiveLeadTime)
-        {
-            var getUserApiKeys = await _userHelperService.GetUserApiKeys();
-
-            // check feature access
-            if (!getUserApiKeys.Contains(APIkey))
-                return Ok(ResponseCode.NotSubscribe);
-
-            //Get the result
-            var custCd = _userHelperService.GetCustCd();
-            var mileageProvider = _appSettings.AppSetting.MileageProvider;
-            var leadsCap = _appSettings.AppSetting.LeadsCap;
-
-            var postings = await _equipmentPostingService.GetListLLAsync(custCd, mileageProvider, leadsCap, LiveLeadTime, GETDAT);
-
-            if (postings == null)
-                return NoContent();
-
-            return Ok(postings);
-        }
-
-        [HttpGet("{token}/{APIkey}")]
-        public async Task<IActionResult> Get(int token, string APIkey)
-        {
-            if (token <= 0)
-                return BadRequest("Invalid Equipment Token");
-
-            var getUserApiKeys = await _userHelperService.GetUserApiKeys();
-
-            // check feature access
-            if (!getUserApiKeys.Contains(APIkey))
-                return Ok(ResponseCode.NotSubscribe);
-
-            //Get the result
-            var custCd = _userHelperService.GetCustCd();
-            var mileageProvider = _appSettings.AppSetting.MileageProvider;
-            var leadsCap = _appSettings.AppSetting.LeadsCap;
-
-            var posting = await _equipmentPostingService.GetAsync(token, custCd, mileageProvider, leadsCap);
-
-            if (posting == null)
-                return NoContent();
-
-            return Ok(posting);
+            _mediator = mediator;
         }
 
         [HttpPost("{APIkey}")]
@@ -142,112 +51,17 @@ namespace LoadLink.LoadMatching.Api.Controllers
 
             posting.CustCD = _userHelperService.GetCustCd(); 
             posting.CreatedBy = _userHelperService.GetUserId();
-
-            return Ok(await _equipmentPostingService.CreateAsync(posting));
-        }
-
-        [HttpPut("{token}/{APIkey}")]
-        public async Task<IActionResult> Put(int token, [FromBody] UpdateEquipmentPostingCommand equipmentPosting, string APIkey)
-        {
-            if (equipmentPosting == null)
-                return BadRequest("No Posting Status Provided");
-            if (token <= 0)
-                return BadRequest("Invalid Equipment Token");
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var getUserApiKeys = await _userHelperService.GetUserApiKeys();
-
-            // check feature access
-            if (!getUserApiKeys.Contains(APIkey))
-                return Ok(ResponseCode.NotSubscribe);
-
-            await _equipmentPostingService.UpdateAsync(token, equipmentPosting.PStatus);
-
-            return NoContent();
-        }
-        
-        [HttpPut("{token}")]
-        public async Task<IActionResult> Put(int token, [FromBody] int InitialLeadsCount)
-        {          
-            if (token == 0)
-                return BadRequest("Invalid Equipment Token");
-
-            await _equipmentPostingService.UpdateLeadCount(token, InitialLeadsCount);
-
-            return NoContent();           
-        }
-
-        [HttpPatch("{token}/{APIkey}")]
-        public async Task<IActionResult> Patch(int token, [FromBody] JsonPatchDocument<UpdateEquipmentPostingCommand> patchDoc, string APIkey)
-        {         
-            //Ensure patch Doc is not null
-            if (patchDoc == null)
-                return BadRequest("No Posting Status Provided");
-
-            var getUserApiKeys = await _userHelperService.GetUserApiKeys();
-
-            // check feature access
-            if (!getUserApiKeys.Contains(APIkey))
-                return Ok(ResponseCode.NotSubscribe);
-
-            //Get the Posting the update needs to be applied on
-            var custCd = _userHelperService.GetCustCd();
-            var mileageProvider = _appSettings.AppSetting.MileageProvider;
-            var leadsCap = _appSettings.AppSetting.LeadsCap;
-
-            var equipmentPostingToUpdate = await _equipmentPostingService.GetAsync(token, custCd, mileageProvider, leadsCap);
-            //Ensure record to be updated exists
-            if (equipmentPostingToUpdate == null)
-                return NoContent();
-
-            //apply update model
-            var equipmentPostingToPatch = new UpdateEquipmentPostingCommand() { PStatus = equipmentPostingToUpdate.PStatus };
-            patchDoc.ApplyTo(equipmentPostingToPatch, ModelState);
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            await _equipmentPostingService.UpdateAsync(token, equipmentPostingToPatch.PStatus);
-
-            return NoContent();
-        }
-
-        [HttpDelete("{token}/{APIkey}")]
-        public async Task<IActionResult> Delete(int token, string APIkey)
-        {
-            if (token <= 0)
-                return BadRequest("Invalid Equipment Token");
-
-            var getUserApiKeys = await _userHelperService.GetUserApiKeys();
-
-            // check feature access
-            if (!getUserApiKeys.Contains(APIkey))
-                return Ok(ResponseCode.NotSubscribe);
-
-            //Check if posting exsits before delete
-            var custCd = _userHelperService.GetCustCd();
-            var mileageProvider = _appSettings.AppSetting.MileageProvider;
-            var leadsCap = _appSettings.AppSetting.LeadsCap;
-            var userId = _userHelperService.GetUserId();
-
-            var posting = await _equipmentPostingService.GetAsync(token, custCd, mileageProvider, leadsCap);
-
-            if (posting == null)
-                return NoContent();
-
-            //Open = O, Expired = E
-            if (!(posting.PStatus.Equals("O") || posting.PStatus.Equals("E")))
+            
+            var commandResult = await _mediator.Send(posting);
+              if (commandResult==null)
             {
-                return BadRequest("Invalid token status");
+                return BadRequest();
             }
 
-            await  _equipmentPostingService.DeleteAsync(token, custCd, userId);
-
-            return NoContent();
+            return Ok(commandResult);
         }
 
-        // VEHICLE TYPE & ATTRIBUTES VALIDATIONS
+      
         private bool ValidateVehicleType(string VehicleType)
         {
             bool res = false;

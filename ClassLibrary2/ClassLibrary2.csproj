@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LoadLink.LoadMatching.Domain\LoadLink.LoadMatching.Domain.csproj" />
+    <ProjectReference Include="..\LoadLink.LoadMatching.Persistence\LoadLink.LoadMatching.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>

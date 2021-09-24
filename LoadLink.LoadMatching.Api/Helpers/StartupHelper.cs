@@ -39,19 +39,13 @@ using LoadLink.LoadMatching.Application.CarrierSearch.Services;
 using LoadLink.LoadMatching.Application.CarrierSearch.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.CarrierSearch;
 using LoadLink.LoadMatching.Application.EquipmentLead.Services;
-using LoadLink.LoadMatching.Application.EquipmentLead.Repository;
-using LoadLink.LoadMatching.Persistence.Repositories.EquipmentLead;
-using LoadLink.LoadMatching.Application.DATLoadLead.Repository;
-using LoadLink.LoadMatching.Persistence.Repositories.DatLoadLead;
-using LoadLink.LoadMatching.Application.DATLoadLead.Services;
-using LoadLink.LoadMatching.Persistence.Repositories.EquipmentPosting;
-using LoadLink.LoadMatching.Application.EquipmentPosting.Repository;
-using LoadLink.LoadMatching.Application.EquipmentPosting.Services;
+
+
+
 using LoadLink.LoadMatching.Application.LeadCount.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.LeadCount;
 using LoadLink.LoadMatching.Application.LeadCount.Services;
-using LoadLink.LoadMatching.Application.DATEquipmentLead.Repository;
-using LoadLink.LoadMatching.Persistence.Repositories.DATEquipmentLead;
+
 using LoadLink.LoadMatching.Application.DATEquipmentLead.Services;
 using LoadLink.LoadMatching.Application.Contacted.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.Contacted;
@@ -60,13 +54,9 @@ using LoadLink.LoadMatching.Application.DATAccount.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.DATAccount;
 using LoadLink.LoadMatching.Application.DATAccount.Services;
 using LoadLink.LoadMatching.Application.DATEquipmentLiveLead.Services;
-using LoadLink.LoadMatching.Application.DATEquipmentLiveLead.Repository;
-using LoadLink.LoadMatching.Application.EquipmentLiveLead.Repository;
-using LoadLink.LoadMatching.Persistence.Repositories.EquipmentLiveLead;
+
 using LoadLink.LoadMatching.Application.EquipmentLiveLead.Services;
-using LoadLink.LoadMatching.Application.EquipmentLiveLeadLiveLead.Services;
-using LoadLink.LoadMatching.Application.DATLoadLiveLead.Repository;
-using LoadLink.LoadMatching.Persistence.Repositories.DATLoadLead;
+
 using LoadLink.LoadMatching.Application.DATLoadLiveLead.Services;
 using LoadLink.LoadMatching.Application.EquipmentPosition.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.EquipmentPosition;
@@ -77,8 +67,7 @@ using LoadLink.LoadMatching.Application.Flag.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.Flag;
 using LoadLink.LoadMatching.Application.Exclude.Services;
 using LoadLink.LoadMatching.Application.Flag.Services;
-using LoadLink.LoadMatching.Application.LoadLead.Repository;
-using LoadLink.LoadMatching.Persistence.Repositories.LoadLead;
+
 using LoadLink.LoadMatching.Application.LoadLead.Services;
 using LoadLink.LoadMatching.Application.LoadPosition.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.LoadPosition;
@@ -138,8 +127,27 @@ using LoadLink.LoadMatching.Persistence.Repositories.MemberSearch;
 using LoadLink.LoadMatching.Application.LiveLead.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.LiveLead;
 using LoadLink.LoadMatching.Application.LiveLead.Services;
-
-using Sentry;
+using LoadLink.LoadMatching.Application.LoadLead.Repository;
+using LoadLink.LoadMatching.Application.DATLoadLead.Services;
+using LoadLink.LoadMatching.Persistence.Repositories.LoadLead;
+using LoadLink.LoadMatching.Application.EquipmentLiveLeadLiveLead.Services;
+using LoadLink.LoadMatching.Application.DATEquipmentLead.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.DATEquipmentLead;
+using LoadLink.LoadMatching.Application.DATEquipmentLiveLead.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.DATLoadLead;
+using LoadLink.LoadMatching.Application.DATLoadLead.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.DatLoadLead;
+using LoadLink.LoadMatching.Application.DATLoadLiveLead.Repository;
+using LoadLink.LoadMatching.Application.EquipmentLead.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.EquipmentLead;
+using LoadLink.LoadMatching.Application.EquipmentLiveLead.Repository;
+using LoadLink.LoadMatching.Persistence.Repositories.EquipmentLiveLead;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
+using MediatR;
+using LoadLink.LoadMatching.Application.EquipmentPosting.Commands;
+using LoadLink.LoadMatching.Persistence.Repositories.PostingRepositories;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings.EquipmentMatchings;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 
 namespace LoadLink.LoadMatching.Api.Helpers
 {
@@ -149,6 +157,7 @@ namespace LoadLink.LoadMatching.Api.Helpers
         {
             // connections
             var connectionString = configuration.GetConnectionString("DefaultConnection");
+           
             services.AddScoped<IConnectionFactory>(x => new ConnectionFactory(connectionString));
 
             // mapping profiles            
@@ -168,7 +177,7 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<IEquipmentLeadRepository, EquipmentLeadRepository>();
             services.AddScoped<IEquipmentLiveLeadRepository, EquipmentLiveLeadRepository>();
             services.AddScoped<IEquipmentPositionRepository, EquipmentPositionRepository>();
-            services.AddScoped<IEquipmentPostingRepository, EquipmentPostingRepository>();
+           
             services.AddScoped<IExcludeRepository, ExcludeRepository>();
             services.AddScoped<IFlagRepository, FlagRepository>();
             services.AddScoped<ILeadsCountRepository, LeadsCountRepository>();
@@ -177,7 +186,7 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<ILoadLeadRepository, LoadLeadRepository>();
             services.AddScoped<ILoadLiveLeadRepository, LoadLiveLeadRepository>();
             services.AddScoped<ILoadPositionRepository, LoadPositionRepository>();
-            services.AddScoped<ILoadPostingRepository, LoadPostingRepository>();
+            services.AddScoped<LoadLink.LoadMatching.Application.LoadPosting.Repository.ILoadPostingRepository, LoadPostingRepository>();
             services.AddScoped<IMemberRepository, MemberRepository>();
             services.AddScoped<IMemberSearchRepository, MemberSearchRepository>();
             services.AddScoped<INetworkMembersRepository, NetworkMembersRepository>();
@@ -207,7 +216,7 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddScoped<IEquipmentLeadService, EquipmentLeadService>();
             services.AddScoped<IEquipmentLiveLeadService, EquipmentLiveLeadService>();
             services.AddScoped<IEquipmentPositionService, EquipmentPositionService>();
-            services.AddScoped<IEquipmentPostingService, EquipmentPostingService>();
+           
             services.AddScoped<IExcludeService, ExcludeService>();
             services.AddScoped<IFlagService, FlagService>();
             services.AddScoped<ILeadsCountService, LeadsCountService>();
@@ -234,6 +243,19 @@ namespace LoadLink.LoadMatching.Api.Helpers
 
             // local services
             services.AddScoped<IUserHelperService, UserHelperService>();
+            //Changes in 2021-9-21
+            
+            var matchingConfig = configuration.GetSection("MatchingConfig").Get<MatchingConfig>();
+            services.AddSingleton<IMatchingConfig>(matchingConfig);
+            services.AddScoped<IEquipmentPostingRepository, EquipmentPostingRepository>();
+
+            services.AddMediatR(typeof(PostingBase).Assembly, typeof(CreateEquipmentPostingCommandHandler).Assembly, typeof(Startup).Assembly);
+            services.AddTransient<IFillNotPlatformPosting, FillingNotPlatformPosting>();
+
+            services.AddTransient<IMatchingServiceFactory, MatchingServiceFactory>();
+
+            
+
         }
 
         public static void AddValidators(this IServiceCollection services)

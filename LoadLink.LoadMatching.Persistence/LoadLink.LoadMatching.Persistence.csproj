@@ -14,4 +14,8 @@
     <ProjectReference Include="..\LoadLink.LoadMatching.Application\LoadLink.LoadMatching.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositories\EquipmentPosting\" />
+  </ItemGroup>
+
 </Project>

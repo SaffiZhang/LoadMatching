@@ -2,7 +2,7 @@
 using LoadLink.LoadMatching.Application.TemplatePosting.Models.Commands;
 using LoadLink.LoadMatching.Application.TemplatePosting.Models.Queries;
 using LoadLink.LoadMatching.Application.TemplatePosting.Repository;
-using LoadLink.LoadMatching.Application.Common;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

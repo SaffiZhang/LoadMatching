@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
-using static LoadLink.LoadMatching.Application.Common.CommonLM;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
 
 namespace LoadLink.LoadMatching.Api.Test.USMemberSearch
 {

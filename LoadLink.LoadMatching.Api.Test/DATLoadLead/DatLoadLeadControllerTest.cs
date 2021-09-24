@@ -7,7 +7,6 @@ using LoadLink.LoadMatching.Application.DATLoadLead.Models.Queries;
 using LoadLink.LoadMatching.Application.DATLoadLead.Profiles;
 using LoadLink.LoadMatching.Application.DATLoadLead.Services;
 using LoadLink.LoadMatching.Application.UserSubscription.Services;
-using LoadLink.LoadMatching.Persistence.Repositories.DatLoadLead;
 using LoadLink.LoadMatching.Persistence.Repositories.UserSubscription;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +15,8 @@ using Moq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
+using LoadLink.LoadMatching.Persistence.Repositories.DatLoadLead;
+
 
 namespace LoadLink.LoadMatching.Api.Test.DATLoadLead
 {

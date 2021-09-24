@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace EquipmentLink.EquipmentMatching.Api.Test.LiveLead
+namespace EquipmentLink.EquipmentMatchings.Api.Test.LiveLead
 {
     public class LiveLeadControllerTest
     {

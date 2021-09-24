@@ -1,4 +1,4 @@
-﻿using static LoadLink.LoadMatching.Application.Common.CommonLM;
+﻿
 
 namespace LoadLink.LoadMatching.Application.MemberSearch.Models.Queries
 {

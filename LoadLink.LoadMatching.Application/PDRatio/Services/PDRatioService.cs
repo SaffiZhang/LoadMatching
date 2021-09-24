@@ -2,7 +2,7 @@
 using LoadLink.LoadMatching.Application.PDRatio.Models.Commands;
 using LoadLink.LoadMatching.Application.PDRatio.Models.Queries;
 using LoadLink.LoadMatching.Application.PDRatio.Repository;
-using LoadLink.LoadMatching.Application.Common;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
 using System.Threading.Tasks;
 
 namespace LoadLink.LoadMatching.Application.PDRatio.Services

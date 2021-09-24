@@ -40,5 +40,6 @@ namespace LoadLink.LoadMatching.Domain.Entities
         public long SrceRegCDN { get; set; }
         public long DestRegUS { get; set; }
         public long DestRegCDN { get; set; }
+       
     }
 }

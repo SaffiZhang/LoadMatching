@@ -16,6 +16,7 @@
   <ItemGroup>
     <Folder Include="City\Models\" />
     <Folder Include="City\Services\" />
+    <Folder Include="EquipmentPosting\Profiles\" />
     <Folder Include="RepostAll\Models\Queries\" />
     <Folder Include="RepostAll\Profiles\" />
   </ItemGroup>

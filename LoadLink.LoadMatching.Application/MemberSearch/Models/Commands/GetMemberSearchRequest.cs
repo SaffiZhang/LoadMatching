@@ -1,4 +1,4 @@
-﻿using static LoadLink.LoadMatching.Application.Common.CommonLM;
+﻿using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
 
 namespace LoadLink.LoadMatching.Application.MemberSearch.Models.Queries
 {

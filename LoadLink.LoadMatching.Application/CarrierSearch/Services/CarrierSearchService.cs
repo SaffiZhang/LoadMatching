@@ -2,7 +2,7 @@
 using LoadLink.LoadMatching.Application.CarrierSearch.Models.Commands;
 using LoadLink.LoadMatching.Application.CarrierSearch.Models.Queries;
 using LoadLink.LoadMatching.Application.CarrierSearch.Repository;
-using LoadLink.LoadMatching.Application.Common;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
 using System;
 using System.Collections.Generic;
 using System.Linq;

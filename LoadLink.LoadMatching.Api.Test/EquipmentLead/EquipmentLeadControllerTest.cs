@@ -8,7 +8,6 @@ using LoadLink.LoadMatching.Application.EquipmentLead.Models.Queries;
 using LoadLink.LoadMatching.Application.EquipmentLead.Profiles;
 using LoadLink.LoadMatching.Application.EquipmentLead.Services;
 using LoadLink.LoadMatching.Application.UserSubscription.Services;
-using LoadLink.LoadMatching.Persistence.Repositories.EquipmentLead;
 using LoadLink.LoadMatching.Persistence.Repositories.UserSubscription;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +16,7 @@ using Moq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
+using LoadLink.LoadMatching.Persistence.Repositories.EquipmentLead;
 
 namespace LoadLink.LoadMatching.Api.Test.EquipmentLead
 {

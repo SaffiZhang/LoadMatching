@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using LoadLink.LoadMatching.Application.Common;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
 using LoadLink.LoadMatching.Application.USCarrierSearch.Models.Commands;
 using LoadLink.LoadMatching.Application.USCarrierSearch.Repository;
 using LoadLink.LoadMatching.Domain.Procedures;

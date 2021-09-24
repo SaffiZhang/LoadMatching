@@ -17,13 +17,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadLink.LoadMatching.Domai
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadLink.LoadMatching.Application", "LoadLink.LoadMatching.Application\LoadLink.LoadMatching.Application.csproj", "{D0E185A7-CD77-4DD7-A371-8D5DE14E5B6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadLink.LoadMatching.Infrastructure", "LoadLink.LoadMatching.Infrastructure\LoadLink.LoadMatching.Infrastructure.csproj", "{1B481357-FB12-479C-848D-3DB5734751AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadLink.LoadMatching.Infrastructure", "LoadLink.LoadMatching.Infrastructure\LoadLink.LoadMatching.Infrastructure.csproj", "{1B481357-FB12-479C-848D-3DB5734751AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadLink.LoadMatching.Persistence", "LoadLink.LoadMatching.Persistence\LoadLink.LoadMatching.Persistence.csproj", "{14A3649A-E46F-46A7-B284-BBD693FFF63C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadLink.LoadMatching.Persistence", "LoadLink.LoadMatching.Persistence\LoadLink.LoadMatching.Persistence.csproj", "{14A3649A-E46F-46A7-B284-BBD693FFF63C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadLink.LoadMatching.Api", "LoadLink.LoadMatching.Api\LoadLink.LoadMatching.Api.csproj", "{0B70AAA2-9A8F-4291-A7D2-54488C59CEE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadLink.LoadMatching.Api", "LoadLink.LoadMatching.Api\LoadLink.LoadMatching.Api.csproj", "{0B70AAA2-9A8F-4291-A7D2-54488C59CEE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadLink.LoadMatching.Api.Test", "LoadLink.LoadMatching.Api.Test\LoadLink.LoadMatching.Api.Test.csproj", "{43133DA3-19D7-4A31-9AA7-BDD316F98704}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadLink.LoadMatching.Application.Test", "LoadLink.LoadMatching.Application.Test\LoadLink.LoadMatching.Application.Test.csproj", "{4F56A8A9-9D0D-4678-BE94-DCA680A4B934}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadLink.LoadMatching.Domain.Test", "LoadLink.LoadMatching.Domain.Test\LoadLink.LoadMatching.Domain.Test.csproj", "{8E7A6751-EA22-4DDD-A7DA-12EA1FA58630}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadLink.LoadMatching.Api.Test", "LoadLink.LoadMatching.Api.Test\LoadLink.LoadMatching.Api.Test.csproj", "{A88D92FC-3E52-440B-A9ED-572D6E739958}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,10 +55,18 @@ Global
 		{0B70AAA2-9A8F-4291-A7D2-54488C59CEE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B70AAA2-9A8F-4291-A7D2-54488C59CEE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B70AAA2-9A8F-4291-A7D2-54488C59CEE2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{43133DA3-19D7-4A31-9AA7-BDD316F98704}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{43133DA3-19D7-4A31-9AA7-BDD316F98704}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{43133DA3-19D7-4A31-9AA7-BDD316F98704}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{43133DA3-19D7-4A31-9AA7-BDD316F98704}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F56A8A9-9D0D-4678-BE94-DCA680A4B934}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F56A8A9-9D0D-4678-BE94-DCA680A4B934}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F56A8A9-9D0D-4678-BE94-DCA680A4B934}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F56A8A9-9D0D-4678-BE94-DCA680A4B934}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E7A6751-EA22-4DDD-A7DA-12EA1FA58630}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E7A6751-EA22-4DDD-A7DA-12EA1FA58630}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E7A6751-EA22-4DDD-A7DA-12EA1FA58630}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E7A6751-EA22-4DDD-A7DA-12EA1FA58630}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A88D92FC-3E52-440B-A9ED-572D6E739958}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A88D92FC-3E52-440B-A9ED-572D6E739958}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A88D92FC-3E52-440B-A9ED-572D6E739958}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A88D92FC-3E52-440B-A9ED-572D6E739958}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,7 +80,9 @@ Global
 		{1B481357-FB12-479C-848D-3DB5734751AF} = {0BBEBBD6-0BDF-43D0-BEEC-48FEE2F89CAB}
 		{14A3649A-E46F-46A7-B284-BBD693FFF63C} = {0BBEBBD6-0BDF-43D0-BEEC-48FEE2F89CAB}
 		{0B70AAA2-9A8F-4291-A7D2-54488C59CEE2} = {B2CD5021-67D9-4CC8-8559-22845E43D7AA}
-		{43133DA3-19D7-4A31-9AA7-BDD316F98704} = {E4A7A8E6-5310-461E-A700-3FEDDE820321}
+		{4F56A8A9-9D0D-4678-BE94-DCA680A4B934} = {E4A7A8E6-5310-461E-A700-3FEDDE820321}
+		{8E7A6751-EA22-4DDD-A7DA-12EA1FA58630} = {E4A7A8E6-5310-461E-A700-3FEDDE820321}
+		{A88D92FC-3E52-440B-A9ED-572D6E739958} = {E4A7A8E6-5310-461E-A700-3FEDDE820321}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {71E0DC13-1110-4EC6-8F06-8DF783435BDC}

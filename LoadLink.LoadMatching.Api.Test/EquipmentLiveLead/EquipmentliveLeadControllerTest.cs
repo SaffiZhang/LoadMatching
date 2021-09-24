@@ -9,7 +9,6 @@ using LoadLink.LoadMatching.Application.EquipmentLiveLead.Models;
 using LoadLink.LoadMatching.Application.EquipmentLiveLead.Services;
 using LoadLink.LoadMatching.Application.EquipmentLiveLeadLiveLead.Services;
 using LoadLink.LoadMatching.Application.UserSubscription.Services;
-using LoadLink.LoadMatching.Persistence.Repositories.EquipmentLiveLead;
 using LoadLink.LoadMatching.Persistence.Repositories.UserSubscription;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,8 +18,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
-
-namespace EquipmentLink.EquipmentMatching.Api.Test.EquipmentLiveLead
+using LoadLink.LoadMatching.Persistence.Repositories.EquipmentLiveLead;
+namespace EquipmentLink.EquipmentMatchings.Api.Test.EquipmentLiveLead
 {
     public class EquipmentLiveLeadControllerTest
     {

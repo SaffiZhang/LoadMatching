@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using EquipmentLink.EquipmentMatching.Application.DATEquipmentLiveLead.Profiles;
+using EquipmentLink.EquipmentMatchings.Application.DATEquipmentLiveLead.Profiles;
 using LoadLink.LoadMatching.Api.Configuration;
 using LoadLink.LoadMatching.Api.Controllers;
 using LoadLink.LoadMatching.Api.Services;
@@ -7,7 +7,6 @@ using LoadLink.LoadMatching.Api.Test.Setup;
 using LoadLink.LoadMatching.Application.DATEquipmentLiveLead.Models;
 using LoadLink.LoadMatching.Application.DATEquipmentLiveLead.Services;
 using LoadLink.LoadMatching.Application.UserSubscription.Services;
-using LoadLink.LoadMatching.Persistence.Repositories.DATEquipmentLead;
 using LoadLink.LoadMatching.Persistence.Repositories.UserSubscription;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,8 +16,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
+using LoadLink.LoadMatching.Persistence.Repositories.DATEquipmentLead;
 
-namespace EquipmentLink.EquipmentMatching.Api.Test.DATEquipmentLiveLead
+namespace EquipmentLink.EquipmentMatchings.Api.Test.DATEquipmentLiveLead
 {
     public class DATEquipmentLiveLeadControllerTest
     {

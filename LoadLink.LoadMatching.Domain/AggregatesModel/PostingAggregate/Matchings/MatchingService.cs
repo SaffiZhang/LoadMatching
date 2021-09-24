@@ -1,0 +1,107 @@
+﻿using System;
+using System.Collections.Generic;
+using MediatR;
+
+using System.Threading.Tasks;
+using System.Linq;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Geometries;
+
+namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings
+{
+    public abstract class MatchingService:IMatch
+    {
+        private IMatchingConfig _matchingConfig;
+        private IMediator _mediator;
+    
+        private IFillNotPlatformPosting _fillNotPlatformPosting;
+        
+        protected MatchingService(IMatchingConfig matchingConfig, IMediator mediator, IFillNotPlatformPosting fillNotPlatformPosting)
+        {
+            _matchingConfig = matchingConfig;
+            _mediator = mediator;
+            _fillNotPlatformPosting = fillNotPlatformPosting;
+        }
+        protected abstract LeadBase CreateLead(PostingBase posting, PostingBase matchedPosting, string dirO, bool? isGlobalExcluded);
+        public async Task<IEnumerable<LeadBase>> Match(PostingBase posting, 
+                                                        IEnumerable<PostingBase> preMatchedPostings,
+                                                        bool isMatchToPlatformPosting,
+                                                        bool? isGlobalExcluded=false)
+        {
+        
+            var tasks = new List<Task>();
+            var lists = GetSmallBatch(preMatchedPostings);
+            foreach (var list in lists)
+                tasks.Add(Task.Run(() => BatchMatch(posting, list,isMatchToPlatformPosting, isGlobalExcluded)));
+
+            await Task.WhenAll(tasks);
+            var liveLeads = new List<LeadBase>();
+
+            foreach (var task in tasks)
+         
+                liveLeads.AddRange(((Task<IEnumerable<LeadBase>>)task).Result);
+
+           
+            return liveLeads;
+            //return await BatchMatch(posting, preMatchedPostings, true);
+
+        }
+        
+        private List<List<PostingBase>> GetSmallBatch(IEnumerable<PostingBase> preMatchedPostings)
+        {
+            var size = _matchingConfig.MatchingBatchSize;
+            var list = preMatchedPostings.ToList();
+            var result = new List<List<PostingBase>>();
+            int listCount = 0;
+            for (int i = 0; i < list.Count(); i += size)
+            {
+                var smallList = list.GetRange(i, ((list.Count() - listCount) >= size)?size: (list.Count() - listCount) );
+                result.Add(smallList);
+                listCount = listCount + size;
+            }
+                
+            return result;
+        }
+        private async Task<IEnumerable<LeadBase>> BatchMatch(PostingBase posting, 
+                                                            IEnumerable<PostingBase> preMatchedPostings,
+                                                            bool isMatchToPlatformPosting,
+                                                            bool? isGlobalExcluded=false)
+        {
+            var pRoute = posting.GetRoute();
+            var pSrcePoint = posting.GetSourcePoint();
+            var isToMatchCorridor = posting.Corridor == "C" ? true : false;
+            var leads = new List<LeadBase>();
+            var corridor = new Corridor(pRoute);
+            foreach (var mp in preMatchedPostings)
+            {
+                var mRoute = mp.GetRoute();
+                if (IsMatched(pRoute, mRoute, corridor, isToMatchCorridor))
+                {
+                    var m = mp;
+                    if (!isMatchToPlatformPosting)
+                        m = await _fillNotPlatformPosting.Fill(m);
+
+                    var dirO = Geometry.DestDirection(posting.GetSourcePoint(), m.GetSourcePoint());
+                    var lead = CreateLead(posting, m,dirO, isGlobalExcluded);
+
+                    //for response to request
+                    leads.Add(lead);
+                    
+                    //save to DB and not wait for result
+                    foreach ( var e in lead.DomainEvents)
+                        Task.Run(()=>_mediator.Publish(e));
+                    
+
+                }
+            }
+            return leads;
+
+        }
+        private bool IsMatched(Route pRoute, Route mRoute, Corridor corridor, bool isToMatchCorridor)
+        {
+            return Geometry.IsMatchedRadius(pRoute, mRoute) ? true
+                                                                  : isToMatchCorridor ? corridor.IsMatchedCorridor(mRoute)
+                                                                                      : false;
+        }
+       
+    }
+}

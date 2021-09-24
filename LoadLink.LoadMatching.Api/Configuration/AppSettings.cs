@@ -11,7 +11,7 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 namespace LoadLink.LoadMatching.Api.Configuration
 {
     public class AppSettings
@@ -22,6 +22,7 @@ namespace LoadLink.LoadMatching.Api.Configuration
         public string[] AllowedCorsOrigin { get; set; }
         public AppSetting AppSetting { get; set; }
         public RedisConfiguration RedisConfiguration { get; set; }
+        public MatchingConfig MatchingConfig { get; set; }
     }
 
 

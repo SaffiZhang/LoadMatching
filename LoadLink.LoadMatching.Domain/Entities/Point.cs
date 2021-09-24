@@ -5,6 +5,25 @@ namespace LoadLink.LoadMatching.Domain.Entities
 {
     public class Point
     {
+        public Point(double @long, double lat, int? radius=null, 
+            int? id=null, string city=null, string stateCode=null, short? country=null,   int? marketAreaID=null)
+        {
+            Long = @long;
+            Lat = lat;
+
+            if (id != null)
+                ID = id.Value;
+            if (radius != null)
+                this.Radius = radius.Value;
+            City = city;
+            StateCode = stateCode;
+           
+            if (country != null)
+                Country = country.Value;
+            MarketAreaID = marketAreaID;
+
+        }
+
         public int ID { get; set; }
         public string City { get; set; }
         public string StateCode { get; set; }
