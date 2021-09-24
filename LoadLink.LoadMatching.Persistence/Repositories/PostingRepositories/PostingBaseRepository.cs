@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Dapper;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
-using LoadLink.LoadMatching.Application.EquipmentPosting.Commands;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 using LoadLink.LoadMatching.Persistence.Data;
 using AutoMapper;
 using LoadLink.LoadMatching.Application.EquipmentPosting.Models;
@@ -141,7 +141,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.PostingRepositories
             var connection = new SqlConnection(_dbConnectionStr);
             await SqlMapper.ExecuteAsync(connection,
                                                         sql: this.Usp_UpdatePostingForMatchingCompleted,
-                                                        param: DynamicParametersForLeadCompleted(token, initialLeadsCount, "Platform"),
+                                                        param: DynamicParametersForLeadCompleted(token, initialLeadsCount, MatchingType.Platform.ToString()),
                                                         commandType: CommandType.StoredProcedure);
         }
         public async Task UpdatePostingForDatLeadCompleted(int token, int initialLeadsCount)
@@ -149,7 +149,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.PostingRepositories
             var connection = new SqlConnection(_dbConnectionStr);
             await SqlMapper.ExecuteAsync(connection,
                                                         sql: this.Usp_UpdatePostingForMatchingCompleted,
-                                                        param: DynamicParametersForLeadCompleted(token, initialLeadsCount, "Dat"),
+                                                        param: DynamicParametersForLeadCompleted(token, initialLeadsCount, MatchingType.Dat.ToString()),
                                                         commandType: CommandType.StoredProcedure);
         }
 
@@ -158,7 +158,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.PostingRepositories
             var connection = new SqlConnection(_dbConnectionStr);
             await SqlMapper.ExecuteAsync(connection,
                                                         sql: this.Usp_UpdatePostingForMatchingCompleted,
-                                                        param: DynamicParametersForLeadCompleted(token, initialLeadsCount, "Legagcy"),
+                                                        param: DynamicParametersForLeadCompleted(token, initialLeadsCount, MatchingType.Legacy.ToString()),
                                                         commandType: CommandType.StoredProcedure);
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Geometries;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
 
 
 namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate

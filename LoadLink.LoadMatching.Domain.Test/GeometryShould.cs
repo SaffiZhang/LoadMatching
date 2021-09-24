@@ -59,9 +59,9 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
 
             Assert.True(corridor.IsMatchedCorridor(new Route(peterborough, mississauga)));
 
-            Assert.False(corridor.IsMatchedCorridor(new Route(mississauga, peterborough)));
+            Assert.False(corridor.IsMatchedCorridor(new Route(mississauga, peterborough)));// wrong direction
             
-            Assert.False(corridor.IsMatchedCorridor(new Route(ottawa, sudbury)));
+            Assert.False(corridor.IsMatchedCorridor(new Route(ottawa, sudbury)));// outside corridor
             Assert.True(corridor.IsMatchedCorridor(new Route(ottawa, peterborough)));
 
         }

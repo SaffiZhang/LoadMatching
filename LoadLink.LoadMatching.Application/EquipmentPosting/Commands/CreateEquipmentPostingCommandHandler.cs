@@ -81,12 +81,12 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Commands
              await Task.WhenAll(tasks);
            
             
-            var liveLeads = new List<LeadBase>();
+            var leads = new List<LeadBase>();
             foreach (var task in tasks)
-                liveLeads.AddRange(task.Result);
+                leads.AddRange(task.Result);
 
 
-            return liveLeads;
+            return leads;
             
         }
         private async Task<IEnumerable<LeadBase>> CreatePlatformLead(PostingBase posting, bool? isGlobleExclude)
@@ -103,7 +103,9 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Commands
             if (loadList.Count() == 0)
                 return new List<LeadBase>();
 
-            return await _equipmentPlatformLeadMatchingService.Match(posting, loadList,true, isGlobleExclude);
+            var leads= await _equipmentPlatformLeadMatchingService.Match(posting, loadList,true, isGlobleExclude);
+            await _equipmentPostingRespository.UpdatePostingForPlatformLeadCompleted(posting.Token, leads.Count());
+            return leads;
            
         
         }
@@ -119,7 +121,9 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Commands
             if (datLoadList.Count() == 0)
                 return new List<LeadBase>();
 
-            return await _equipmentDatLeadMatchingService.Match(posting, datLoadList,false);
+            var leads= await _equipmentDatLeadMatchingService.Match(posting, datLoadList,false);
+            await _equipmentPostingRespository.UpdatePostingForDatLeadCompleted(posting.Token, leads.Count());
+            return leads;
            
         }
         private async Task<IEnumerable<LeadBase>> CreateLegacyLead(PostingBase posting)
@@ -134,7 +138,9 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Commands
                                                                            posting.NetworkId);
             if (legacyLoadList.Count() == 0)
                 return new List<LeadBase>();
-            return await _equipmentLegacyLeadMatchingService.Match(posting, legacyLoadList,false);
+            var leads= await _equipmentLegacyLeadMatchingService.Match(posting, legacyLoadList,false);
+            await _equipmentPostingRespository.UpdatePostingForLegacyLeadCompleted(posting.Token, leads.Count());
+            return leads;
             
         }
     }
