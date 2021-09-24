@@ -10,8 +10,6 @@ namespace LoadLink.LoadMatching.Application.Test
         {
             public static PostingBase PlatformPosting()
             {
-
-
                 var posting = NotPlatformPosting();
                 posting.UpdateDistanceAndPointId(PostingDistanceAndPointId());
                 return posting;
@@ -21,7 +19,7 @@ namespace LoadLink.LoadMatching.Application.Test
             {
             var posting = new PostingBase("a", DateTime.Now,
                                        "a", "a", 20,
-                                       "a", "a", 20,
+                                       "a", "b", 20,
                                        1, 1, "a", "a",
                                        1, "a",
                                        "a", "a", "a", "a",
