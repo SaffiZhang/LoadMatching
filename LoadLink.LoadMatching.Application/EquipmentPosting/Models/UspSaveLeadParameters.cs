@@ -10,16 +10,15 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Models
 		public int EToken { get; set; }
 		public int LToken { get; set; }
 		public int CreatedBy { get; set; }
-
-		public int SrceId { get; }
-		public int DestId { get; }
+		public int SrceId { get; set; }
+		public int DestId { get; set; }
 
 		public string MCustCD { get; set; }
 		public DateTime MDateAvail { get; set; }
 
 		public int MSrceID { get; set; }
 		public string MSrceCity { get; set; }
-		public string MScreSt { get; set; }
+		public string MSrceSt { get; set; }
 		public int MSrceCountry { get; set; }
 		public double MSrceLong { get; set; }
 		public double MSrceLat { get; set; }

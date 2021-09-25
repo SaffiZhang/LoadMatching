@@ -85,10 +85,10 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
 
                     //for response to request
                     leads.Add(lead);
-                    
-                    //save to DB and not wait for result
-                    foreach ( var e in lead.DomainEvents)
-                        Task.Run(()=>_mediator.Publish(e));
+
+                    //save to DB 
+                    foreach (var e in lead.DomainEvents)
+                        await _mediator.Publish(e);
                     
 
                 }

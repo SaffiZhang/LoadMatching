@@ -75,7 +75,7 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Commands
 
             var tasks = new List<Task<IEnumerable<LeadBase>>>();
             tasks.Add(Task.Run(() => CreateDatLead(posting)));
-            tasks.Add(Task.Run(() => CreatePlatformLead(posting, request.GlobalExcluded??false)));
+            tasks.Add(Task.Run(() => CreatePlatformLead(posting, request.GlobalExcluded ?? false)));
             tasks.Add(Task.Run(() => CreateLegacyLead(posting)));
 
              await Task.WhenAll(tasks);

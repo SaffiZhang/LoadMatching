@@ -29,8 +29,7 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
 
 			this.CustCD = posting.CustCD;
 			
-			EToken =PType=="L"? posting.Token:matchedPosting.Token;
-			LToken = PType == "L" ? matchedPosting.Token : posting.Token;
+			
 
 			this.DestId = posting.DestID;
 			this.SrceId = posting.SrceID;
@@ -42,7 +41,7 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
 
             MSrceID = m.SrceID;
             MSrceCity = m.SrceCity;
-            MScreSt = m.SrceSt;
+            MSrceSt = m.SrceSt;
             MSrceCountry = m.SrceCountry;
             MSrceLong = m.SrceLong;
             MSrceLat = m.SrceLat;
@@ -70,22 +69,22 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
             CustomerTracking = m.CustomerTracking?? false;
 			
         }
-		public int GetSrceId() { return this.SrceId; }
-		public int GetDestId() { return this.DestId; }
+        public int GetSrceId() { return this.SrceId; }
+        public int GetDestId() { return this.DestId; }
 
         public string CustCD { get; set; }
 		public int EToken { get; set; }
 		public int LToken { get; set; }
 
-		private int SrceId { get; }
-		private  int DestId { get; }
+		private int SrceId { get; set; }
+		private int DestId { get; set; }
 
 		public string MCustCD { get; set; }
 		public DateTime MDateAvail { get; set; }
 		
 		public int MSrceID { get; set; }
 		public string MSrceCity { get; set; }
-		public string MScreSt { get; set; }
+		public string MSrceSt { get; set; }
 		public int MSrceCountry { get; set; }
 		public double MSrceLong { get; set; }
 		public double MSrceLat { get; set; }

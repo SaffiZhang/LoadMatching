@@ -14,6 +14,8 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
         {
             LeadType = "P";
             this.PType = "L";
+            this.EToken = posting.Token;
+            this.LToken = matchedPosting.Token;
             AddDomainEvent(new DatEquipmentLeadCreatedDomainEvent(this));
             
         }

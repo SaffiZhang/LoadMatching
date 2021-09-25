@@ -8,6 +8,7 @@ namespace LoadLink.LoadMatching.Domain.Events
     {
         public LegacyEquipmentLeadCreatedDomainEvent(LeadBase leadBase) 
         {
+            LeadBase = leadBase;
         }
         public LeadBase LeadBase { get; }
     }

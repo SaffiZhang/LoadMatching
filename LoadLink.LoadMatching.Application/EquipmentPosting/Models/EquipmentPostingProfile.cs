@@ -12,8 +12,9 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Models
             CreateMap<PostingBase, UspSavePostingParameters>();
 
             CreateMap<LeadBase, UspSaveLeadParameters>()
-                .ForMember(d => d.SrceId, opt => opt.MapFrom(s => s.GetSrceId()))
-                .ForMember(d => d.DestId, opt => opt.MapFrom(s => s.GetDestId()));
+                .ForMember(d => d.DestId, opt => opt.MapFrom(s => s.GetDestId()))
+                .ForMember(d => d.SrceId, opt => opt.MapFrom(s => s.GetSrceId()));
+             
                 
                
         }

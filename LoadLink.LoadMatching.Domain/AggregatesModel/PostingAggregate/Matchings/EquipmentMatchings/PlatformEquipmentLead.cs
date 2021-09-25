@@ -9,8 +9,10 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
     {
         public PlatformEquipmentLead(PostingBase posting, PostingBase matchedPosting,string dirO,  bool? isGlobalExcluded ) : base(posting, matchedPosting,  dirO,  isGlobalExcluded)
         {
+            LeadType = "P";
             this.PType = "L";
-            this.LeadType = "P";
+            this.EToken = posting.Token;
+            this.LToken = matchedPosting.Token;
             AddDomainEvent(new PlatformEquipmentLeadCreatedDomainEvent(this, posting, matchedPosting, isGlobalExcluded??false ));
         }
     }

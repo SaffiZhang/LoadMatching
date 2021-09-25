@@ -10,8 +10,10 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
 
         public LegacyEquipmentLead(PostingBase posting, PostingBase matchedPosting,  string dirO  ) : base(posting, matchedPosting,  dirO)
         {
+            LeadType = "P";
             this.PType = "L";
-            this.LeadType = "P";
+            this.EToken = posting.Token;
+            this.LToken = matchedPosting.Token;
             AddDomainEvent(new LegacyEquipmentLeadCreatedDomainEvent(this));
         }
 

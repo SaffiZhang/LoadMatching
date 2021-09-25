@@ -204,8 +204,50 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.PostingRepositories
         }
         private DynamicParameters SaveLeadParameter(LeadBase lead)
         {
+            //var para = new UspSaveLeadParameters()
+            //{
+            //    CreatedBy = lead.CreatedBy,
+            //    CustCD = lead.CustCD,
+            //    CustomerTracking = lead.CustomerTracking,
+            //    DirO = lead.DirO,
+            //    Distance = lead.Distance == null ? 0 : lead.Distance.Value,
+            //    EToken = lead.EToken,
+            //    GoogleMileage = lead.GoogleMileage == null ? 0 : lead.GoogleMileage.Value,
+            //    LeadType = lead.LeadType,
+            //    LToken = lead.LToken,
+            //    DestId=lead.DestId,
+            //    SrceId=lead.SrceId,
+            //    MClientRefNum = lead.MClientRefNum,
+            //    MComment = lead.MComment,
+            //    MCreatedBy = lead.MCreatedBy,
+            //    MCreatedOn = lead.MCreatedOn,
+            //    MCustCD = lead.MCustCD,
+            //    MDateAvail = lead.MDateAvail,
+            //    MDestCity = lead.MDestCity,
+            //    MDestCountry = lead.MDestCountry,
+            //    MDestID = lead.MDestID,
+            //    MDestLat = lead.MDestLat,
+            //    MDestLong = lead.MDestLong,
+            //    MDestSt = lead.MDestSt,
+            //    MPostingAttrib = lead.MPostingAttrib,
+            //    MPostMode = lead.MPostMode,
+            //    MProductName = lead.MProductName,
+            //    MSrceSt = lead.MScreSt,
+            //    MSrceCity = lead.MSrceCity,
+            //    MSrceCountry = lead.MSrceCountry,
+            //    MSrceID = lead.MSrceID,
+            //    MSrceLat = lead.MSrceLat,
+            //    MSrceLong = lead.MSrceLong,
+            //    PType = lead.PType,
+            //    TCUS = lead.TCUS,
+            //    VehicleSize = lead.VehicleSize,
+            //    VehicleType = lead.VehicleType
+
+            //};
+            var para = _mapper.Map<UspSaveLeadParameters>(lead);
+            
+           return   new DynamicParameters(para);
            
-            return  new DynamicParameters(_mapper.Map<UspSaveLeadParameters>(lead));
         }
     }
 }

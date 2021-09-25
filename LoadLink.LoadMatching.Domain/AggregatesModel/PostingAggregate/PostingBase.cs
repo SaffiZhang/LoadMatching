@@ -1,9 +1,7 @@
-﻿using System;
-
+﻿using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Geometries;
 using LoadLink.LoadMatching.Domain.Entities;
-
 using LoadLink.LoadMatching.Domain.Seedwork;
-using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Geometries;
+using System;
 namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
 {
     public class PostingBase:Entity<int>,IAggregateRoot
@@ -71,17 +69,20 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
 
         public void UpdateDistanceAndPointId(PostingDistanceAndPointId distanceAndPointId)
         {
-            //Token = distanceAndPointId.Token;
-            SrceID = distanceAndPointId.SrceID;
-            SrceCountry = distanceAndPointId.SrceCountry;
-            SrceLong = distanceAndPointId.SrceLong;
-            SrceLat = distanceAndPointId.SrceLat;
+            
+            Token =Token==0? distanceAndPointId.Token:Token;
+           
+            SrceID =SrceID==0? distanceAndPointId.SrceID:SrceID;
+
+            SrceCountry =SrceCountry==0? distanceAndPointId.SrceCountry:SrceCountry;
+            SrceLong =SrceLong==0? distanceAndPointId.SrceLong:SrceLong;
+            SrceLat =SrceLat==0? distanceAndPointId.SrceLat:SrceLat;
             SrceMarketAreaID = distanceAndPointId.SrceMarketAreaID;
 
-            DestID = distanceAndPointId.DestID;
-            DestCountry = distanceAndPointId.DestCountry;
-            DestLong = distanceAndPointId.DestLong;
-            DestLat = distanceAndPointId.DestLat;
+            DestID = DestID == 0 ? distanceAndPointId.DestID : DestID;
+            DestCountry = DestCountry==0? distanceAndPointId.DestCountry:DestCountry;
+            DestLong =DestLong==0 ?distanceAndPointId.DestLong:DestLong;
+            DestLat =DestLat==0? distanceAndPointId.DestLat:DestLat;
             DestMarketAreaID = distanceAndPointId.DestMarketAreaID;
 
             Distance = distanceAndPointId.Distance;
