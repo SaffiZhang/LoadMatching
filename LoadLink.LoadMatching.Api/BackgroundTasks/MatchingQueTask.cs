@@ -15,22 +15,23 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace LoadLink.LoadMatching.Api.BackgroundTasks
 {
-    public class LoadMatchingService:BackgroundService
+    public class MatchingQueTask
     {
-        private  IEquipmentPostingRepository _equipmentPostingRespository;
+        private IEquipmentPostingRepository _equipmentPostingRespository;
         private IMatch _equipmentLegacyLeadMatchingService;
-        private  IMatch _equipmentDatLeadMatchingService;
-        private  IMatch _equipmentPlatformLeadMatchingService;
+        private IMatch _equipmentDatLeadMatchingService;
+        private IMatch _equipmentPlatformLeadMatchingService;
         private readonly string queueName = "matchingQue";
         private readonly IServiceProvider _service;
 
-        private IConnection _connection;
+       
         private IModel _channel;
 
 
-        public LoadMatchingService(IServiceProvider service)
+       
+
+        public   async Task ExecuteAsync()
         {
-            _service = service;
             using (var scope = _service.CreateScope())
             {
                 _equipmentPostingRespository = scope.ServiceProvider.GetRequiredService<IEquipmentPostingRepository>();
@@ -38,10 +39,10 @@ namespace LoadLink.LoadMatching.Api.BackgroundTasks
                 _equipmentDatLeadMatchingService = matchingFactory.GetService(PostingType.EquipmentPosting, MatchingType.Dat);
                 _equipmentLegacyLeadMatchingService = matchingFactory.GetService(PostingType.EquipmentPosting, MatchingType.Legacy);
                 _equipmentPlatformLeadMatchingService = matchingFactory.GetService(PostingType.EquipmentPosting, MatchingType.Platform);
-            };
+                HandlePosting();
+            }
         }
-            
-        public override Task StartAsync(CancellationToken cancellationToken)
+        private void Init()
         {
 
             var factory = new ConnectionFactory()
@@ -49,8 +50,8 @@ namespace LoadLink.LoadMatching.Api.BackgroundTasks
                 HostName = "localhost",
                 DispatchConsumersAsync = true
             };
-            _connection = factory.CreateConnection();
-            _channel = _connection.CreateModel();
+            var connection = factory.CreateConnection();
+            _channel = connection.CreateModel();
             _channel.QueueDeclare(queue: queueName,
                                      durable: true,
                                      exclusive: false,
@@ -58,40 +59,34 @@ namespace LoadLink.LoadMatching.Api.BackgroundTasks
                                      arguments: null);
             _channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
-            return base.StartAsync(cancellationToken);
+
         }
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+
+        private void HandlePosting()
         {
-            stoppingToken.ThrowIfCancellationRequested();
-            HandlePosting();
-            await Task.CompletedTask;
+
+
+
+            var consumer = new AsyncEventingBasicConsumer(_channel);
+            _channel.BasicConsume(queue: queueName,
+                                autoAck: true,
+                                consumer: consumer);
+            consumer.Received +=
+                async (model, ea) =>
+                {
+                    var body = ea.Body.ToArray();
+                    var message = Encoding.UTF8.GetString(body);
+                    var para = JsonSerializer.Deserialize<MatchingPara>(message);
+
+                    await CreateLeads(para.Posting, para.IsGlobalExcluded);
+
+                    _channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+
+                };
+
         }
-       
-        private  void HandlePosting()
-        {
-            
-  
 
-                    var consumer = new AsyncEventingBasicConsumer(_channel);
-                    
-                    consumer.Received +=
-                        async (model, ea) =>
-                        {
-                            var body = ea.Body.ToArray();
-                            var message = Encoding.UTF8.GetString(body);
-                            var para = JsonSerializer.Deserialize<MatchingPara>(message);
-                          
-                            await CreateLeads(para.Posting, para.IsGlobalExcluded);
 
-                            _channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-
-                        };
-                    _channel.BasicConsume(queue: queueName,
-                                         autoAck: false,
-                                         consumer: consumer);
-        }
-            
-        
         private async Task CreateLeads(PostingBase posting, bool? isGlobleExclude)
         {
             var tasks = new List<Task<IEnumerable<LeadBase>>>();
@@ -163,12 +158,6 @@ namespace LoadLink.LoadMatching.Api.BackgroundTasks
             //await _equipmentPostingRespository.UpdatePostingForLegacyLeadCompleted(posting.Token, leads.Count());
             return leads;
 
-        }
-        public override async Task StopAsync(CancellationToken cancellationToken)
-        {
-            await base.StopAsync(cancellationToken);
-            _connection.Close();
-            
         }
     }
 }

@@ -88,7 +88,7 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Commands
         }
         private void SendToBackGround(MatchingPara para)
         {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
+            var factory = new ConnectionFactory() { HostName = "localhost" ,DispatchConsumersAsync=true };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
@@ -106,7 +106,7 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Commands
                 
                 channel.BasicPublish(exchange: "",
                                      routingKey: queueName,
-                                     basicProperties: null,
+                                     basicProperties:properties,
                                      body: body);
                 
             }

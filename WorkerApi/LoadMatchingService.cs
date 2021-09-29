@@ -13,7 +13,7 @@ using System.Linq;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LoadLink.LoadMatching.Api.BackgroundTasks
+namespace WorkerApi
 {
     public class LoadMatchingService:BackgroundService
     {
@@ -26,11 +26,15 @@ namespace LoadLink.LoadMatching.Api.BackgroundTasks
 
         private IConnection _connection;
         private IModel _channel;
-
+      
 
         public LoadMatchingService(IServiceProvider service)
         {
             _service = service;
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
             using (var scope = _service.CreateScope())
             {
                 _equipmentPostingRespository = scope.ServiceProvider.GetRequiredService<IEquipmentPostingRepository>();
@@ -38,17 +42,14 @@ namespace LoadLink.LoadMatching.Api.BackgroundTasks
                 _equipmentDatLeadMatchingService = matchingFactory.GetService(PostingType.EquipmentPosting, MatchingType.Dat);
                 _equipmentLegacyLeadMatchingService = matchingFactory.GetService(PostingType.EquipmentPosting, MatchingType.Legacy);
                 _equipmentPlatformLeadMatchingService = matchingFactory.GetService(PostingType.EquipmentPosting, MatchingType.Platform);
-            };
+                 HandlePosting();
+            }
         }
-            
-        public override Task StartAsync(CancellationToken cancellationToken)
+        public override  Task StartAsync(CancellationToken cancellationToken)
         {
-
-            var factory = new ConnectionFactory()
-            {
-                HostName = "localhost",
-                DispatchConsumersAsync = true
-            };
+           
+            var factory = new ConnectionFactory() { HostName = "localhost",
+                DispatchConsumersAsync = true};
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
             _channel.QueueDeclare(queue: queueName,
@@ -57,38 +58,32 @@ namespace LoadLink.LoadMatching.Api.BackgroundTasks
                                      autoDelete: false,
                                      arguments: null);
             _channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
+            
 
             return base.StartAsync(cancellationToken);
         }
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            stoppingToken.ThrowIfCancellationRequested();
-            HandlePosting();
-            await Task.CompletedTask;
-        }
-       
         private  void HandlePosting()
         {
             
   
 
                     var consumer = new AsyncEventingBasicConsumer(_channel);
-                    
+                    _channel.BasicConsume(queue: queueName,
+                                        autoAck: true,
+                                        consumer: consumer);
                     consumer.Received +=
                         async (model, ea) =>
                         {
                             var body = ea.Body.ToArray();
                             var message = Encoding.UTF8.GetString(body);
                             var para = JsonSerializer.Deserialize<MatchingPara>(message);
-                          
+                            
                             await CreateLeads(para.Posting, para.IsGlobalExcluded);
 
                             _channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
 
                         };
-                    _channel.BasicConsume(queue: queueName,
-                                         autoAck: false,
-                                         consumer: consumer);
+           
         }
             
         
@@ -163,12 +158,6 @@ namespace LoadLink.LoadMatching.Api.BackgroundTasks
             //await _equipmentPostingRespository.UpdatePostingForLegacyLeadCompleted(posting.Token, leads.Count());
             return leads;
 
-        }
-        public override async Task StopAsync(CancellationToken cancellationToken)
-        {
-            await base.StopAsync(cancellationToken);
-            _connection.Close();
-            
         }
     }
 }

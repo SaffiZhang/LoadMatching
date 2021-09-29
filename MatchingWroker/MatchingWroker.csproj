@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>dotnet-MatchingWroker-7B81E3C7-7E0E-4494-B7AC-A2E02C4E5287</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.19" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LoadLink.LoadMatching.Application\LoadLink.LoadMatching.Application.csproj" />
+    <ProjectReference Include="..\LoadLink.LoadMatching.Domain\LoadLink.LoadMatching.Domain.csproj" />
+    <ProjectReference Include="..\LoadLink.LoadMatching.Persistence\LoadLink.LoadMatching.Persistence.csproj" />
+  </ItemGroup>
+</Project>
