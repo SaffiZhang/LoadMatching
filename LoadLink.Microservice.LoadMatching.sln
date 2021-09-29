@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadLink.LoadMatching.Domai
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadLink.LoadMatching.Api.Test", "LoadLink.LoadMatching.Api.Test\LoadLink.LoadMatching.Api.Test.csproj", "{A88D92FC-3E52-440B-A9ED-572D6E739958}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadLink.LoadMatching.Persistence.Test", "Loadlink.LoadMatching.Persistence.Test\LoadLink.LoadMatching.Persistence.Test.csproj", "{EE67F1DE-301B-4DC5-B55C-BE0D3E49DE67}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{A88D92FC-3E52-440B-A9ED-572D6E739958}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A88D92FC-3E52-440B-A9ED-572D6E739958}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A88D92FC-3E52-440B-A9ED-572D6E739958}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE67F1DE-301B-4DC5-B55C-BE0D3E49DE67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE67F1DE-301B-4DC5-B55C-BE0D3E49DE67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE67F1DE-301B-4DC5-B55C-BE0D3E49DE67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE67F1DE-301B-4DC5-B55C-BE0D3E49DE67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +89,7 @@ Global
 		{4F56A8A9-9D0D-4678-BE94-DCA680A4B934} = {E4A7A8E6-5310-461E-A700-3FEDDE820321}
 		{8E7A6751-EA22-4DDD-A7DA-12EA1FA58630} = {E4A7A8E6-5310-461E-A700-3FEDDE820321}
 		{A88D92FC-3E52-440B-A9ED-572D6E739958} = {E4A7A8E6-5310-461E-A700-3FEDDE820321}
+		{EE67F1DE-301B-4DC5-B55C-BE0D3E49DE67} = {E4A7A8E6-5310-461E-A700-3FEDDE820321}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {71E0DC13-1110-4EC6-8F06-8DF783435BDC}

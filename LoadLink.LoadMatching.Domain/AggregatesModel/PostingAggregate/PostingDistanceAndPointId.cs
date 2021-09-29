@@ -10,8 +10,8 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
         {
         }
 
-        public PostingDistanceAndPointId( int token,int srceID, int srceCountry, 
-            double srceLong, double srceLat, 
+        public PostingDistanceAndPointId( int token,int srceID, 
+            int srceCountry, double srceLong, double srceLat, 
             int srceMarketAreaID, int destID, int destCountry, 
             double destLong, double destLat, 
             int destMarketAreaID, int distance, int googleMileage)

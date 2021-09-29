@@ -21,7 +21,7 @@ namespace LoadLink.LoadMatching.Application.Test
             mockEquipmentPostingRepository.Setup(m => m.SaveLegacyLead(It.IsAny<LeadBase>())).Verifiable();
             var handler = new LegacyEquipmentLeadCreatedDomainEventHandler(mockEquipmentPostingRepository.Object);
             await handler.Handle(new LegacyEquipmentLeadCreatedDomainEvent(FakePosting.LeadBase()), new CancellationToken());
-            mockEquipmentPostingRepository.Verify(m => m.SaveLegacyLead(It.IsAny<LeadBase>()), Times.Once);
+            mockEquipmentPostingRepository.Verify(m => m.SaveLegacyLead(It.IsAny<LeadBase>()), Times.Never);
         }
     }
 }

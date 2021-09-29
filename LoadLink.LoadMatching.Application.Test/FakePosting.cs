@@ -20,7 +20,7 @@ namespace LoadLink.LoadMatching.Application.Test
             var posting = new PostingBase("a", DateTime.Now,
                                        "a", "a", 20,
                                        "a", "b", 20,
-                                       1, 1, "a", "a",
+                                       15, 1, "a", "a",
                                        1, "a",
                                        "a", "a", "a", "a",
                                        1, "", false,
@@ -34,7 +34,7 @@ namespace LoadLink.LoadMatching.Application.Test
             var posting = new PostingBase("a", DateTime.Now, 
                     "a", "a", 20,
                     "a", "a", 20,
-                    1, 1, "a", "a",
+                    15, 1, "a", "a",
                     1, "a", 
                     "a", "a", "a", "a",
                     1, corridor, false,
@@ -44,11 +44,11 @@ namespace LoadLink.LoadMatching.Application.Test
         }
         public static PostingDistanceAndPointId PostingDistanceAndPointId()
             {
-                return new PostingDistanceAndPointId(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+                return new PostingDistanceAndPointId(1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
             }
             public static PostingDistanceAndPointId PostingDistanceAndPointId(Point srce, Point dest)
             {
-                return new PostingDistanceAndPointId(1, 1,
+                return new PostingDistanceAndPointId(1,1, 1,
                     srce.Long, srce.Lat,
                     1, 1, 1,
                     dest.Long, dest.Lat,

@@ -58,7 +58,7 @@ namespace LoadLink.LoadMatching.Api.Controllers
                 return BadRequest();
             }
 
-            return Ok(commandResult.Count());
+            return Ok(commandResult);
         }
 
       

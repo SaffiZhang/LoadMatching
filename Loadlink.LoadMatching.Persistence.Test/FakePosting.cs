@@ -4,8 +4,8 @@ using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings.Eq
 using LoadLink.LoadMatching.Domain.Entities;
 
 
-namespace LoadLink.LoadMatching.Domain.Test
-    {
+namespace LoadLink.LoadMatching.Persistence.Test
+{
         public static class FakePosting
         {
             public static PostingBase PlatformPosting()
@@ -47,11 +47,11 @@ namespace LoadLink.LoadMatching.Domain.Test
         }
         public static PostingDistanceAndPointId PostingDistanceAndPointId()
             {
-                return new PostingDistanceAndPointId(1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+                return new PostingDistanceAndPointId(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1);
             }
             public static PostingDistanceAndPointId PostingDistanceAndPointId(Point srce, Point dest)
             {
-                return new PostingDistanceAndPointId(1,1, 1, 
+                return new PostingDistanceAndPointId(0, 1,1, 
                     srce.Long, srce.Lat,
                     1, 1, 1,
                     dest.Long, dest.Lat,

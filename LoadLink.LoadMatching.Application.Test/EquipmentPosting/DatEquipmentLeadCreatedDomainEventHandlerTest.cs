@@ -22,7 +22,7 @@ namespace LoadLink.LoadMatching.Application.Test
             mockEquipmentPostingRepository.Setup(m => m.SaveDatLead(It.IsAny<LeadBase>())).Verifiable();
             var handler = new DatEquipmentLeadCreatedDomainEventHandler(mockEquipmentPostingRepository.Object);
             await handler.Handle(new DatEquipmentLeadCreatedDomainEvent(FakePosting.LeadBase()), new CancellationToken());
-            mockEquipmentPostingRepository.Verify(m => m.SaveDatLead(It.IsAny<LeadBase>()), Times.Once);
+            mockEquipmentPostingRepository.Verify(m => m.SaveDatLead(It.IsAny<LeadBase>()), Times.Never);
         }
                
     }

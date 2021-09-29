@@ -36,7 +36,7 @@ namespace LoadLink.LoadMatching.Application.Test
             
             await handler.Handle(notification, new CancellationToken());
             
-            mockEquipmentPostingRepository.Verify(m => m.SavePlatformLead(It.IsAny<LeadBase>()), Times.Once);
+            mockEquipmentPostingRepository.Verify(m => m.SavePlatformLead(It.IsAny<LeadBase>()), Times.Never);
             mockMediator.Verify(m=>m.Publish(It.IsAny<INotification>(), It.IsAny<CancellationToken>()), Times.Never);
             
             // 2. platform match platform , IsGlobleExclude = false ,  2nd lead
@@ -47,7 +47,7 @@ namespace LoadLink.LoadMatching.Application.Test
             
             await handler.Handle(notification, new CancellationToken());
             
-            mockEquipmentPostingRepository.Verify(m => m.SavePlatformLead(It.IsAny<LeadBase>()), Times.Once);
+            mockEquipmentPostingRepository.Verify(m => m.SavePlatformLead(It.IsAny<LeadBase>()), Times.Never);
             mockMediator.Verify(m => m.Publish(It.IsAny<INotification>(), It.IsAny<CancellationToken>()), Times.Once);
 
 

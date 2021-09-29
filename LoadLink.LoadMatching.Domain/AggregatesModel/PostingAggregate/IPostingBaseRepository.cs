@@ -49,7 +49,7 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
         //Task FlagLead(string custId, int createdBy, int eToken, int lToken);
         //Task RemoveFlag(string custId, int createdBy, int eToken, int lToken);
         //Task DeletePost(int token, int userId);
-
+        Task BulkInsertLead(List<LeadBase> leads);
 
     }
 }

@@ -9,6 +9,9 @@ using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 using LoadLink.LoadMatching.Persistence.Data;
 using AutoMapper;
 using LoadLink.LoadMatching.Application.EquipmentPosting.Models;
+using LoadLink.LoadMatching.Persistence.Utilities;
+
+
 namespace LoadLink.LoadMatching.Persistence.Repositories.PostingRepositories
 {
     public abstract class PostingBaseRepository : IPostingBaseRepository
@@ -248,6 +251,26 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.PostingRepositories
             
            return   new DynamicParameters(para);
            
+        }
+
+        public async Task BulkInsertLead(List<LeadBase> leads)
+        {
+            var con = new SqlConnection(_dbConnectionStr);
+            SqlBulkCopy bulk = new SqlBulkCopy(con);
+            bulk.DestinationTableName = "EquipmentLead";
+            bulk.ColumnMappings.Add("ID", "ID");
+            bulk.ColumnMappings.Add("CustCD", "CustCD");
+            bulk.ColumnMappings.Add("EToken", "EToken");
+            bulk.ColumnMappings.Add("LToken", "LToken");
+            bulk.ColumnMappings.Add("CreatedOn", "CreatedOn");
+            bulk.ColumnMappings.Add("CreatedBy", "CreatedBy");
+            bulk.ColumnMappings.Add("LeadType", "LeadType");
+            bulk.ColumnMappings.Add("MCustCD", "MCustCD");
+            bulk.ColumnMappings.Add("MDateAvail", "MDateAvail");
+            con.Open();
+            await bulk.WriteToServerAsync(ListToDataTableConverter.ToDataTable<LeadBase>(leads));
+            con.Close();
+
         }
     }
 }
