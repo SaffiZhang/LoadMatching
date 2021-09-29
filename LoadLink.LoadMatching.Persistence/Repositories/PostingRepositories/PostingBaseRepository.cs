@@ -255,6 +255,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.PostingRepositories
 
         public async Task BulkInsertLead(List<LeadBase> leads)
         {
+            
             var con = new SqlConnection(_dbConnectionStr);
             SqlBulkCopy bulk = new SqlBulkCopy(con);
             bulk.DestinationTableName = "EquipmentLead";

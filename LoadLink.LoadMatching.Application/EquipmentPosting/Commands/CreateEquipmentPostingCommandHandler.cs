@@ -7,6 +7,10 @@ using MediatR;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 using System.Linq;
+using System.ComponentModel;
+using RabbitMQ.Client;
+using System.Text.Json;
+using LoadLink.LoadMatching.Application.EquipmentPosting.Models;
 
 
 namespace LoadLink.LoadMatching.Application.EquipmentPosting.Commands
@@ -14,16 +18,13 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Commands
     public class CreateEquipmentPostingCommandHandler : IRequestHandler<CreateEquipmentPostingCommand, int?>
     {
         private readonly IEquipmentPostingRepository _equipmentPostingRespository;
-        private readonly IMatch _equipmentLegacyLeadMatchingService;
-        private readonly IMatch _equipmentDatLeadMatchingService;
-        private readonly IMatch _equipmentPlatformLeadMatchingService;
+       
 
-        public CreateEquipmentPostingCommandHandler(IEquipmentPostingRepository equipmentPostingRespository, IMatchingServiceFactory matchingServiceFactory)
+        private readonly string queueName="matchingQue";
+
+        public CreateEquipmentPostingCommandHandler(IEquipmentPostingRepository equipmentPostingRespository)
         {
             _equipmentPostingRespository = equipmentPostingRespository;
-            _equipmentPlatformLeadMatchingService = matchingServiceFactory.GetService(PostingType.EquipmentPosting,MatchingType.Platform);
-            _equipmentLegacyLeadMatchingService = matchingServiceFactory.GetService(PostingType.EquipmentPosting, MatchingType.Legacy);
-            _equipmentDatLeadMatchingService = matchingServiceFactory.GetService(PostingType.EquipmentPosting, MatchingType.Dat);
         }
 
         public async Task<int?> Handle(CreateEquipmentPostingCommand request, CancellationToken cancellationToken)
@@ -43,8 +44,8 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Commands
             }
             else 
                 pAttrib = 0;
-          
-            var isGlobalExcluded = request.GlobalExcluded == null ? false : request.GlobalExcluded.Value;
+
+            var isGlobalExcluded = request.GlobalExcluded ?? false;
 
             var posting = new PostingBase(
                                           request.CustCD,
@@ -80,81 +81,39 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Commands
             var resultFromDB = await _equipmentPostingRespository.SavePosting(posting);
             posting.UpdateDistanceAndPointId(resultFromDB);
 
-            Task.Run(() => CreateLeads(posting, request.GlobalExcluded ?? false));
+            SendToBackGround(new MatchingPara(posting, request.GlobalExcluded));
+            
             return resultFromDB.Token;
             
         }
-        private async Task CreateLeads(PostingBase posting, bool? isGlobleExclude)
+        private void SendToBackGround(MatchingPara para)
         {
-            var tasks = new List<Task<IEnumerable<LeadBase>>>();
-            tasks.Add(Task.Run(() => CreateDatLead(posting)));
-            tasks.Add(Task.Run(() => CreatePlatformLead(posting, isGlobleExclude ?? false)));
-            tasks.Add(Task.Run(() => CreateLegacyLead(posting)));
+            var factory = new ConnectionFactory() { HostName = "localhost" };
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                channel.QueueDeclare(queue: queueName,
+                                     durable: true,
+                                     exclusive: false,
+                                     autoDelete: false,
+                                     arguments: null);
+                
+                string message = JsonSerializer.Serialize(para);
+                var body = Encoding.UTF8.GetBytes(message);
 
-            await Task.WhenAll(tasks);
+                var properties = channel.CreateBasicProperties();
+                properties.Persistent = true;
+                
+                channel.BasicPublish(exchange: "",
+                                     routingKey: queueName,
+                                     basicProperties: null,
+                                     body: body);
+                
+            }
 
 
-            var leads = new List<LeadBase>();
-            foreach (var task in tasks)
-                leads.AddRange(task.Result);
-
-            await _equipmentPostingRespository.BulkInsertLead(leads);
-           
         }
-        private async Task<IEnumerable<LeadBase>> CreatePlatformLead(PostingBase posting, bool? isGlobleExclude)
-        {
-            var loadList = await _equipmentPostingRespository.GetPlatformPostingForMatching (
-                                                                           posting.CustCD,
-                                                                           posting.DateAvail,
-                                                                           posting.VSize,
-                                                                           posting.VType,
-                                                                           posting.SrceCountry,
-                                                                           posting.DestCountry,
-                                                                           posting.PostMode,
-                                                                           posting.NetworkId);
-            if (loadList.Count() == 0)
-                return new List<LeadBase>();
-
-            var leads= await _equipmentPlatformLeadMatchingService.Match(posting, loadList,true, isGlobleExclude);
-            //await _equipmentPostingRespository.UpdatePostingForPlatformLeadCompleted(posting.Token, leads.Count());
-            return leads;
-           
         
-        }
-        private async Task<IEnumerable<LeadBase>> CreateDatLead(PostingBase posting)
-        {
-            var datLoadList = await _equipmentPostingRespository.GetDatPostingForMatching(posting.DateAvail,
-                                                                           posting.VSize,
-                                                                           posting.VType,
-                                                                           posting.SrceCountry,
-                                                                           posting.DestCountry,
-                                                                           posting.PostMode,
-                                                                           posting.NetworkId);
-            if (datLoadList.Count() == 0)
-                return new List<LeadBase>();
-
-            var leads= await _equipmentDatLeadMatchingService.Match(posting, datLoadList,false);
-            //await _equipmentPostingRespository.UpdatePostingForDatLeadCompleted(posting.Token, leads.Count());
-            return leads;
-           
-        }
-        private async Task<IEnumerable<LeadBase>> CreateLegacyLead(PostingBase posting)
-        {
-            var legacyLoadList = await _equipmentPostingRespository.GetLegacyPostingForMatching(posting.CustCD,
-                                                                           posting.DateAvail,
-                                                                           posting.VSize,
-                                                                           posting.VType,
-                                                                           posting.SrceCountry,
-                                                                           posting.DestCountry,
-                                                                           posting.PostMode,
-                                                                           posting.NetworkId);
-            if (legacyLoadList.Count() == 0)
-                return new List<LeadBase>();
-            var leads= await _equipmentLegacyLeadMatchingService.Match(posting, legacyLoadList,false);
-            //await _equipmentPostingRespository.UpdatePostingForLegacyLeadCompleted(posting.Token, leads.Count());
-            return leads;
-            
-        }
         
     }
 }

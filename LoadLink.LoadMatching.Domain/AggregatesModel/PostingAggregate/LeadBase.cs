@@ -67,6 +67,7 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
             MDeletedBy = m.DeletedBy;
             MDeletedOn = m.DeletedOn;
             CustomerTracking = m.CustomerTracking?? false;
+			CreatedOn = DateTime.Now;
 			
         }
         public int GetSrceId() { return this.SrceId; }

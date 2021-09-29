@@ -83,7 +83,7 @@ namespace LoadLink.LoadMatching.Application.Test
 
 
             mockMatchingServiceFactory.Setup(m => m.GetService(PostingType.EquipmentPosting, MatchingType.Platform))
-                                      .Returns(new PlatformEquipmentMatching(matchingConfig, mockMediator.Object, mockFillNotPlatformPosting.Object, mockEquipmentPostingRepository.Object));
+                                      .Returns(new PlatformEquipmentMatching(matchingConfig, mockMediator.Object, mockFillNotPlatformPosting.Object));
             mockMatchingServiceFactory.Setup(m => m.GetService(PostingType.EquipmentPosting, MatchingType.Legacy))
                                       .Returns(new LegacyEquipmentMatching(matchingConfig, mockMediator.Object, mockFillNotPlatformPosting.Object));
             mockMatchingServiceFactory.Setup(m => m.GetService(PostingType.EquipmentPosting, MatchingType.Dat))

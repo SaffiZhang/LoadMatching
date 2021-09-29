@@ -48,7 +48,7 @@ namespace LoadLink.LoadMatching.Domain.Test
             posting = FakePosting.NotPlatformPostingOfCorridor("");
             SetupPlatFormPosting();
 
-            var matchingService = new PlatformEquipmentMatching(matchingConfig, mockMediator.Object,mockFillNotPlatformPosting.Object);
+            var matchingService = new PlatformEquipmentMatching(matchingConfig, mockMediator.Object,mockFillNotPlatformPosting.Object,mockEquipmentPostingRepository.Object);
             var leads = await matchingService.Match(posting, preMatchedPostings, true);
             Assert.Equal(2, leads.Count());
 
@@ -57,7 +57,7 @@ namespace LoadLink.LoadMatching.Domain.Test
             InitMock();
             posting = FakePosting.NotPlatformPostingOfCorridor("C");
             SetupPlatFormPosting();
-            matchingService = new PlatformEquipmentMatching(matchingConfig, mockMediator.Object, mockFillNotPlatformPosting.Object);
+            matchingService = new PlatformEquipmentMatching(matchingConfig, mockMediator.Object, mockFillNotPlatformPosting.Object,mockEquipmentPostingRepository.Object);
             leads = await matchingService.Match(posting, preMatchedPostings, true);
             Assert.Equal(3, leads.Count());
 

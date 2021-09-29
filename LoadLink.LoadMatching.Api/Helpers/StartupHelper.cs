@@ -148,6 +148,8 @@ using LoadLink.LoadMatching.Application.EquipmentPosting.Commands;
 using LoadLink.LoadMatching.Persistence.Repositories.PostingRepositories;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings.EquipmentMatchings;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
+using LoadLink.LoadMatching.Api.BackgroundTasks;
+
 
 namespace LoadLink.LoadMatching.Api.Helpers
 {
@@ -159,7 +161,7 @@ namespace LoadLink.LoadMatching.Api.Helpers
             var connectionString = configuration.GetConnectionString("DefaultConnection");
            
             services.AddScoped<IConnectionFactory>(x => new ConnectionFactory(connectionString));
-
+            
             // mapping profiles            
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -253,8 +255,10 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddTransient<IFillNotPlatformPosting, FillingNotPlatformPosting>();
 
             services.AddTransient<IMatchingServiceFactory, MatchingServiceFactory>();
-
+            services.AddHostedService<LoadMatchingService>();
             
+
+
 
         }
 

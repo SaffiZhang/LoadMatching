@@ -10,12 +10,14 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
         private IMatchingConfig _matchingConfig;
         private IMediator _mediator;
         private IFillNotPlatformPosting _fillNotPlatformPosting;
+        private IEquipmentPostingRepository _equipmentPostingRepository;
 
-        public MatchingServiceFactory(IMatchingConfig matchingConfig, IMediator mediator, IFillNotPlatformPosting fillNotPlatformPosting)
+        public MatchingServiceFactory(IMatchingConfig matchingConfig, IMediator mediator, IFillNotPlatformPosting fillNotPlatformPosting, IEquipmentPostingRepository equipmentPostingRepository)
         {
             _matchingConfig = matchingConfig;
             _mediator = mediator;
             _fillNotPlatformPosting = fillNotPlatformPosting;
+            _equipmentPostingRepository = equipmentPostingRepository;
         }
 
         public IMatch GetService(PostingType postingType, MatchingType matchingType)
@@ -23,7 +25,7 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
             switch (postingType,matchingType)
             {
                 case (PostingType.EquipmentPosting, MatchingType.Platform):
-                    return new PlatformEquipmentMatching(_matchingConfig,_mediator,_fillNotPlatformPosting);
+                    return new PlatformEquipmentMatching(_matchingConfig,_mediator,_fillNotPlatformPosting,_equipmentPostingRepository);
                 case (PostingType.EquipmentPosting, MatchingType.Legacy):
                     return new LegacyEquipmentMatching(_matchingConfig, _mediator, _fillNotPlatformPosting);
                 case (PostingType.EquipmentPosting, MatchingType.Dat):

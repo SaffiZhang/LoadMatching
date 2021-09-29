@@ -13,9 +13,10 @@ using LoadLink.LoadMatching.Domain.Entities;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 
 
+
 namespace LoadLink.LoadMatching.Application.Test
 {
-    public class CreateEquipmentPostingCommandHandlerTest
+    public class LoadMatchingServiceTest
     {
         private Point ottawa = new Point(-75.68861, 45.41972, 50);
         private Point cambridge = new Point(-80.29972, 43.36583, 50);
@@ -44,17 +45,13 @@ namespace LoadLink.LoadMatching.Application.Test
             Setup();
 
 
-            var handler = new CreateEquipmentPostingCommandHandler(mockEquipmentPostingRepository.Object);
-                                                                
-            var result = await handler.Handle(request, new CancellationToken());
+            var handler = new LoadMatchingService(mockEquipmentPostingRepository.Object, mockMatchingServiceFactory.Object);
+
+             await handler.ExecuteAsync(CancellationToken.None);
+            //await handler.StopAsync(CancellationToken.None);
 
             //save one posting to DB
-            mockEquipmentPostingRepository.Verify(m => m.SavePosting(It.IsAny<PostingBase>()), Times.Once);
-
-
-            // Aggregate all the result from 3 matchings
-
-            Assert.NotNull(result);
+           
 
 
         }

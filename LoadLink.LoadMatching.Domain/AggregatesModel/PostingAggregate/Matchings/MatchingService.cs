@@ -14,6 +14,7 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
         private IMediator _mediator;
     
         private IFillNotPlatformPosting _fillNotPlatformPosting;
+       
         
         protected MatchingService(IMatchingConfig matchingConfig, IMediator mediator, IFillNotPlatformPosting fillNotPlatformPosting)
         {
@@ -21,7 +22,7 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
             _mediator = mediator;
             _fillNotPlatformPosting = fillNotPlatformPosting;
         }
-        protected abstract LeadBase CreateLead(PostingBase posting, PostingBase matchedPosting, string dirO, bool? isGlobalExcluded);
+        protected abstract Task<LeadBase> CreateLead(PostingBase posting, PostingBase matchedPosting, string dirO, bool? isGlobalExcluded);
         public async Task<IEnumerable<LeadBase>> Match(PostingBase posting, 
                                                         IEnumerable<PostingBase> preMatchedPostings,
                                                         bool isMatchToPlatformPosting,
@@ -67,7 +68,7 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
                                                             bool? isGlobalExcluded=false)
         {
             var pRoute = posting.GetRoute();
-            var pSrcePoint = posting.GetSourcePoint();
+          
             var isToMatchCorridor = posting.Corridor == "C" ? true : false;
             var leads = new List<LeadBase>();
             var corridor = new Corridor(pRoute);
@@ -81,14 +82,14 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
                         m = await _fillNotPlatformPosting.Fill(m);
 
                     var dirO = Geometry.DestDirection(posting.GetSourcePoint(), m.GetSourcePoint());
-                    var lead = CreateLead(posting, m,dirO, isGlobalExcluded);
+                    var lead =await CreateLead(posting, m,dirO, isGlobalExcluded);
 
                     //for response to request
                     leads.Add(lead);
 
                     //save to DB 
-                    foreach (var e in lead.DomainEvents)
-                        await _mediator.Publish(e);
+                    //foreach (var e in lead.DomainEvents)
+                    //    await _mediator.Publish(e);
                     
 
                 }
