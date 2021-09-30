@@ -88,9 +88,9 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
                     leads.Add(lead);
 
                     //save to DB 
-                    //foreach (var e in lead.DomainEvents)
-                    //    await _mediator.Publish(e);
-                    
+                    foreach (var e in lead.DomainEvents)
+                        await _mediator.Publish(e);
+
 
                 }
             }

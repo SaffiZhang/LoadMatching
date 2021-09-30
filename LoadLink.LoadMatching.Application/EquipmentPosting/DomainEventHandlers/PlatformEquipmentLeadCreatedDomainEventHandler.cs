@@ -23,8 +23,8 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.DomainEventHandlers
         public async Task Handle(PlatformEquipmentLeadCreatedDomainEvent notification, CancellationToken cancellationToken)
         {
             var lead = notification.LeadBase;
-            //await _equipmentPostingRespository.SavePlatformLead(lead);
-           
+            await _equipmentPostingRespository.SavePlatformLead(lead);
+
             if (notification.IsGlobalExcluded)
                 return;
 

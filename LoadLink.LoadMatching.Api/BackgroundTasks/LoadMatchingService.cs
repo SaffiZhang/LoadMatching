@@ -12,6 +12,7 @@ using LoadLink.LoadMatching.Application.EquipmentPosting.Models;
 using System.Linq;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 using Microsoft.Extensions.DependencyInjection;
+using LoadLink.LoadMatching.Application.EquipmentPosting.Models;
 
 namespace LoadLink.LoadMatching.Api.BackgroundTasks
 {
@@ -21,18 +22,19 @@ namespace LoadLink.LoadMatching.Api.BackgroundTasks
         private IMatch _equipmentLegacyLeadMatchingService;
         private  IMatch _equipmentDatLeadMatchingService;
         private  IMatch _equipmentPlatformLeadMatchingService;
-        private readonly string queueName = "matchingQue";
+        
         private readonly IServiceProvider _service;
 
         private IConnection _connection;
         private IModel _channel;
-
-
-        public LoadMatchingService(IServiceProvider service)
+    
+        private string _queueName;
+        public LoadMatchingService(IServiceProvider service, MqConfig mqConfig)
         {
             _service = service;
             using (var scope = _service.CreateScope())
             {
+                _queueName = mqConfig.MqNo.ToString();
                 _equipmentPostingRespository = scope.ServiceProvider.GetRequiredService<IEquipmentPostingRepository>();
                 var matchingFactory = scope.ServiceProvider.GetRequiredService<IMatchingServiceFactory>();
                 _equipmentDatLeadMatchingService = matchingFactory.GetService(PostingType.EquipmentPosting, MatchingType.Dat);
@@ -51,7 +53,7 @@ namespace LoadLink.LoadMatching.Api.BackgroundTasks
             };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
-            _channel.QueueDeclare(queue: queueName,
+            _channel.QueueDeclare(queue: _queueName,
                                      durable: true,
                                      exclusive: false,
                                      autoDelete: false,
@@ -77,6 +79,7 @@ namespace LoadLink.LoadMatching.Api.BackgroundTasks
                     consumer.Received +=
                         async (model, ea) =>
                         {
+                           
                             var body = ea.Body.ToArray();
                             var message = Encoding.UTF8.GetString(body);
                             var para = JsonSerializer.Deserialize<MatchingPara>(message);
@@ -86,7 +89,7 @@ namespace LoadLink.LoadMatching.Api.BackgroundTasks
                             _channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
 
                         };
-                    _channel.BasicConsume(queue: queueName,
+                    _channel.BasicConsume(queue: _queueName,
                                          autoAck: false,
                                          consumer: consumer);
         }
@@ -106,7 +109,7 @@ namespace LoadLink.LoadMatching.Api.BackgroundTasks
             foreach (var task in tasks)
                 leads.AddRange(task.Result);
 
-            await _equipmentPostingRespository.BulkInsertLead(leads);
+            //await _equipmentPostingRespository.BulkInsertLead(leads);
 
 
         }

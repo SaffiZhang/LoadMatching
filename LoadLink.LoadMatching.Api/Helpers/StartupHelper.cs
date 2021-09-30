@@ -149,6 +149,7 @@ using LoadLink.LoadMatching.Persistence.Repositories.PostingRepositories;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings.EquipmentMatchings;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 using LoadLink.LoadMatching.Api.BackgroundTasks;
+using LoadLink.LoadMatching.Application.EquipmentPosting.Models;
 
 
 namespace LoadLink.LoadMatching.Api.Helpers
@@ -249,6 +250,10 @@ namespace LoadLink.LoadMatching.Api.Helpers
             
             var matchingConfig = configuration.GetSection("MatchingConfig").Get<MatchingConfig>();
             services.AddSingleton<IMatchingConfig>(matchingConfig);
+
+            var MqConfig = configuration.GetSection("MqConfig").Get<MqConfig>();
+            services.AddSingleton(MqConfig);
+
             services.AddScoped<IEquipmentPostingRepository, EquipmentPostingRepository>();
 
             services.AddMediatR(typeof(PostingBase).Assembly, typeof(CreateEquipmentPostingCommandHandler).Assembly, typeof(Startup).Assembly);

@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
+using LoadLink.LoadMatching.Application.EquipmentPosting.Models;
 namespace LoadLink.LoadMatching.Api.Configuration
 {
     public class AppSettings
@@ -23,6 +24,7 @@ namespace LoadLink.LoadMatching.Api.Configuration
         public AppSetting AppSetting { get; set; }
         public RedisConfiguration RedisConfiguration { get; set; }
         public MatchingConfig MatchingConfig { get; set; }
+        public MqConfig MqConfig { get; set; }
     }
 
 

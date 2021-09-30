@@ -20,11 +20,13 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Commands
         private readonly IEquipmentPostingRepository _equipmentPostingRespository;
        
 
-        private readonly string queueName="matchingQue";
+        
+        private readonly MqConfig _mqConfig;
 
-        public CreateEquipmentPostingCommandHandler(IEquipmentPostingRepository equipmentPostingRespository)
+        public CreateEquipmentPostingCommandHandler(IEquipmentPostingRepository equipmentPostingRespository,MqConfig mqConfig)
         {
             _equipmentPostingRespository = equipmentPostingRespository;
+            _mqConfig = mqConfig;
         }
 
         public async Task<int?> Handle(CreateEquipmentPostingCommand request, CancellationToken cancellationToken)
@@ -88,6 +90,8 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Commands
         }
         private void SendToBackGround(MatchingPara para)
         {
+            var rand = new Random();
+            var queueName = rand.Next(_mqConfig.MqCount).ToString();
             var factory = new ConnectionFactory() { HostName = "localhost" ,DispatchConsumersAsync=true };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
