@@ -47,7 +47,6 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Commands
             else 
                 pAttrib = 0;
 
-            var isGlobalExcluded = request.GlobalExcluded ?? false;
 
             var posting = new PostingBase(
                                           request.CustCD,
