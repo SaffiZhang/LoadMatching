@@ -83,12 +83,12 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Commands
             var resultFromDB = await _equipmentPostingRespository.SavePosting(posting);
             posting.UpdateDistanceAndPointId(resultFromDB);
 
-            SendToBackGround(new MatchingPara(posting, request.GlobalExcluded));
+            SendToBackground(new MatchingPara(posting, request.GlobalExcluded));
             
             return resultFromDB.Token;
             
         }
-        private void SendToBackGround(MatchingPara para)
+        private void SendToBackground(MatchingPara para)
         {
             var rand = new Random();
             var queueName = rand.Next(_mqConfig.MqCount).ToString();

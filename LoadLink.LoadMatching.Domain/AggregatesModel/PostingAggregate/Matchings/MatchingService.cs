@@ -89,7 +89,17 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
 
                     //save to DB 
                     foreach (var e in lead.DomainEvents)
-                        await _mediator.Publish(e);
+                    {
+                        try
+                        {
+                            await _mediator.Publish(e);
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                    }
+                       
 
 
                 }

@@ -109,7 +109,7 @@ namespace LoadLink.LoadMatching.Api.BackgroundTasks
             foreach (var task in tasks)
                 leads.AddRange(task.Result);
 
-            //await _equipmentPostingRespository.BulkInsertLead(leads);
+            await _equipmentPostingRespository.BulkInsertLead(leads);
 
 
         }
