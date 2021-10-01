@@ -150,6 +150,7 @@ using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings.Eq
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 using LoadLink.LoadMatching.Api.BackgroundTasks;
 using LoadLink.LoadMatching.Application.EquipmentPosting.Models;
+using Microsoft.Extensions.Hosting;
 
 
 namespace LoadLink.LoadMatching.Api.Helpers
@@ -260,8 +261,7 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddTransient<IFillNotPlatformPosting, FillingNotPlatformPosting>();
 
             services.AddTransient<IMatchingServiceFactory, MatchingServiceFactory>();
-            services.AddHostedService<LoadMatchingService>();
-            
+            services.AddHostedService<ServiceWorkerFactory>();
 
 
 

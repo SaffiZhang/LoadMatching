@@ -29,12 +29,12 @@ namespace LoadLink.LoadMatching.Api.BackgroundTasks
         private IModel _channel;
     
         private string _queueName;
-        public LoadMatchingService(IServiceProvider service, MqConfig mqConfig)
+        public LoadMatchingService(IServiceProvider service, int mqNo)
         {
             _service = service;
             using (var scope = _service.CreateScope())
             {
-                _queueName = mqConfig.MqNo.ToString();
+                _queueName = mqNo.ToString();
                 _equipmentPostingRespository = scope.ServiceProvider.GetRequiredService<IEquipmentPostingRepository>();
                 var matchingFactory = scope.ServiceProvider.GetRequiredService<IMatchingServiceFactory>();
                 _equipmentDatLeadMatchingService = matchingFactory.GetService(PostingType.EquipmentPosting, MatchingType.Dat);

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using MediatR;
 using LoadLink.LoadMatching.Domain.Entities;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
+using LoadLink.LoadMatching.Application.EquipmentPosting.Models;
 
 
 namespace LoadLink.LoadMatching.Application.Test
@@ -43,8 +44,8 @@ namespace LoadLink.LoadMatching.Application.Test
 
             Setup();
 
-
-            var handler = new CreateEquipmentPostingCommandHandler(mockEquipmentPostingRepository.Object);
+            var mqConfig = new MqConfig() { MqCount = 1, MqNo = 0 };
+            var handler = new CreateEquipmentPostingCommandHandler(mockEquipmentPostingRepository.Object,mqConfig );
                                                                 
             var result = await handler.Handle(request, new CancellationToken());
 
@@ -83,7 +84,7 @@ namespace LoadLink.LoadMatching.Application.Test
 
 
             mockMatchingServiceFactory.Setup(m => m.GetService(PostingType.EquipmentPosting, MatchingType.Platform))
-                                      .Returns(new PlatformEquipmentMatching(matchingConfig, mockMediator.Object, mockFillNotPlatformPosting.Object));
+                                      .Returns(new PlatformEquipmentMatching(matchingConfig, mockMediator.Object, mockFillNotPlatformPosting.Object, mockEquipmentPostingRepository.Object));
             mockMatchingServiceFactory.Setup(m => m.GetService(PostingType.EquipmentPosting, MatchingType.Legacy))
                                       .Returns(new LegacyEquipmentMatching(matchingConfig, mockMediator.Object, mockFillNotPlatformPosting.Object));
             mockMatchingServiceFactory.Setup(m => m.GetService(PostingType.EquipmentPosting, MatchingType.Dat))

@@ -7,6 +7,5 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Models
     public class MqConfig
     {
         public int MqCount { get; set; }
-        public int MqNo { get; set; }
     }
 }
