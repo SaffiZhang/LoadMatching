@@ -25,7 +25,7 @@ namespace LoadLink.LoadMatching.Api.BackgroundTasks
         public override Task StopAsync(CancellationToken cancellationToken)
         {
             foreach (var s in _LoadMatchingServices)
-                  s.StopAsync(cancellationToken);
+                  s.StopAsync(cancellationToken).Wait();
                 
             return base.StopAsync(cancellationToken);
         }
