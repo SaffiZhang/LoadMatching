@@ -7,6 +7,10 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
     public enum PostingType
     {
         EquipmentPosting,
-        LoadPosting
+        DatEquipmentPosting,
+        LegacyEquipmentPosting,
+        LoadPosting,
+        DatLoadPosting,
+        LegacyLoadPosting
     }
 }

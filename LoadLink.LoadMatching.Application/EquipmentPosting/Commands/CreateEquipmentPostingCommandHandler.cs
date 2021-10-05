@@ -7,10 +7,12 @@ using MediatR;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 using System.Linq;
-using System.ComponentModel;
+using LoadLink.LoadMatching.IntegrationEventManager;
+using LoadLink.LoadMatching.RabbitMQIntegrationEventManager;
 using RabbitMQ.Client;
 using System.Text.Json;
 using LoadLink.LoadMatching.Application.EquipmentPosting.Models;
+using LoadLink.LoadMatching.Application.EquipmentPosting.IntetrationEvents;
 
 
 namespace LoadLink.LoadMatching.Application.EquipmentPosting.Commands
@@ -18,15 +20,18 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Commands
     public class CreateEquipmentPostingCommandHandler : IRequestHandler<CreateEquipmentPostingCommand, int?>
     {
         private readonly IEquipmentPostingRepository _equipmentPostingRespository;
-       
 
+       
         
         private readonly MqConfig _mqConfig;
+        private readonly IPublishIntegrationEvent _publishIntegrationEvent;
+        
 
-        public CreateEquipmentPostingCommandHandler(IEquipmentPostingRepository equipmentPostingRespository,MqConfig mqConfig)
+        public CreateEquipmentPostingCommandHandler(IEquipmentPostingRepository equipmentPostingRespository, MqConfig mqConfig, IPublishIntegrationEvent publishIntegrationEvent)
         {
             _equipmentPostingRespository = equipmentPostingRespository;
             _mqConfig = mqConfig;
+            _publishIntegrationEvent = publishIntegrationEvent;
         }
 
         public async Task<int?> Handle(CreateEquipmentPostingCommand request, CancellationToken cancellationToken)
@@ -81,42 +86,19 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Commands
 
             var resultFromDB = await _equipmentPostingRespository.SavePosting(posting);
             posting.UpdateDistanceAndPointId(resultFromDB);
+            
+            _publishIntegrationEvent.Publish(new PostingCreatedEvent(posting, request.GlobalExcluded), LoadMatchingQue.PostingCreated.ToString());
 
-            SendToBackground(new MatchingPara(posting, request.GlobalExcluded));
+            
             
             return resultFromDB.Token;
             
         }
-        private void SendToBackground(MatchingPara para)
-        {
-            var rand = new Random();
-            var queueName = rand.Next(_mqConfig.MqCount).ToString();
-            var factory = new ConnectionFactory() { HostName = "localhost" ,DispatchConsumersAsync=true };
-            using (var connection = factory.CreateConnection())
-            using (var channel = connection.CreateModel())
-            {
-                channel.QueueDeclare(queue: queueName,
-                                     durable: true,
-                                     exclusive: false,
-                                     autoDelete: false,
-                                     arguments: null);
-                
-                string message = JsonSerializer.Serialize(para);
-                var body = Encoding.UTF8.GetBytes(message);
-
-                var properties = channel.CreateBasicProperties();
-                properties.Persistent = true;
-                
-                channel.BasicPublish(exchange: "",
-                                     routingKey: queueName,
-                                     basicProperties:properties,
-                                     body: body);
-                
-            }
+        
 
 
         }
         
         
     }
-}
+

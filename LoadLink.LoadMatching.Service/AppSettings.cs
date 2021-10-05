@@ -13,7 +13,7 @@
 // ***********************************************************************
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 using LoadLink.LoadMatching.IntegrationEventManager;
-namespace LoadLink.LoadMatching.Api.Configuration
+namespace LoadLink.LoadMatching.Service
 {
     public class AppSettings
     {

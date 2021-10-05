@@ -71,23 +71,23 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
         {
             
             Token =Token==0? distanceAndPointId.Token:Token;
-           
-            SrceID =SrceID==0? distanceAndPointId.SrceID:SrceID;
 
-            SrceCountry =SrceCountry==0? distanceAndPointId.SrceCountry:SrceCountry;
-            SrceLong =SrceLong==0? distanceAndPointId.SrceLong:SrceLong;
-            SrceLat =SrceLat==0? distanceAndPointId.SrceLat:SrceLat;
+            SrceID = SrceID == 0 ? distanceAndPointId.SrceID : SrceID;
+
+            SrceCountry = SrceCountry == 0 ? distanceAndPointId.SrceCountry : SrceCountry;
+            SrceLong = SrceLong == 0 ? distanceAndPointId.SrceLong : SrceLong;
+            SrceLat = SrceLat == 0 ? distanceAndPointId.SrceLat : SrceLat;
             SrceMarketAreaID = distanceAndPointId.SrceMarketAreaID;
 
             DestID = DestID == 0 ? distanceAndPointId.DestID : DestID;
-            DestCountry = DestCountry==0? distanceAndPointId.DestCountry:DestCountry;
-            DestLong =DestLong==0 ?distanceAndPointId.DestLong:DestLong;
-            DestLat =DestLat==0? distanceAndPointId.DestLat:DestLat;
+            DestCountry = DestCountry == 0 ? distanceAndPointId.DestCountry : DestCountry;
+            DestLong = DestLong == 0 ? distanceAndPointId.DestLong : DestLong;
+            DestLat = DestLat == 0 ? distanceAndPointId.DestLat : DestLat;
             DestMarketAreaID = distanceAndPointId.DestMarketAreaID;
 
-            Distance = distanceAndPointId.Distance;
-            GoogleMileage = distanceAndPointId.GoogleMileage;
-            
+            //Distance = distanceAndPointId.Distance;
+            //GoogleMileage = distanceAndPointId.GoogleMileage;
+
             //switch (postingType)
             //{
             //    case "E":
@@ -97,7 +97,7 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
             //        AddDomainEvent(new LoadPostingSavedDomainEvent(this));
             //        break;
             //}
-           
+
         }
         
      

@@ -13,7 +13,7 @@
 // ***********************************************************************
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 using LoadLink.LoadMatching.IntegrationEventManager;
-namespace LoadLink.LoadMatching.Api.Configuration
+namespace ConsoleService
 {
     public class AppSettings
     {
@@ -30,7 +30,7 @@ namespace LoadLink.LoadMatching.Api.Configuration
 
     public class ConnectionStrings
     {
-        public string DefaultConnection { get; set; }
+        public string LoadMatching { get; set; }
     }
 
     public class ServiceCacheSettings

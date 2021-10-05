@@ -14,7 +14,8 @@ using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 using Microsoft.Extensions.DependencyInjection;
 using LoadLink.LoadMatching.IntegrationEventManager;
 
-namespace LoadLink.LoadMatching.Api.BackgroundTasks
+
+namespace LoadLink.LoadMatching.Service
 {
     public class LoadMatchingService:BackgroundService
     {

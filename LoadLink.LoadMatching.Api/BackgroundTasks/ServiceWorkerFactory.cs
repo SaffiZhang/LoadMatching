@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using LoadLink.LoadMatching.Application.EquipmentPosting.Models;
+
+using LoadLink.LoadMatching.IntegrationEventManager;
 using Microsoft.Extensions.Hosting;
 using System.Threading;
 
@@ -36,7 +36,8 @@ namespace LoadLink.LoadMatching.Api.BackgroundTasks
                 {
                     for (int i = 0; i < _mqConfig.MqCount; i++)
                     {
-                        var service = new LoadMatchingService(_services, i);
+                        //var service = new LoadMatchingService(_services, i);
+                        var service = new LoadMatchingService(_services, _mqConfig);
                         _LoadMatchingServices.Add(service);
                         Task.Run(() => service.StartAsync(stoppingToken));
                        
