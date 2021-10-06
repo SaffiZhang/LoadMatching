@@ -151,8 +151,9 @@ using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 using LoadLink.LoadMatching.Api.BackgroundTasks;
 using LoadLink.LoadMatching.Application.EquipmentPosting.Models;
 using Microsoft.Extensions.Hosting;
-using LoadLink.LoadMatching.RabbitMQIntegrationEventManager;
+using LoadLink.LoadMatching.Application.EquipmentPosting.IntetrationEvents;
 using LoadLink.LoadMatching.IntegrationEventManager;
+using LoadLink.LoadMatching.RabbitMQIntegrationEventManager;
 
 
 namespace LoadLink.LoadMatching.Api.Helpers
@@ -263,7 +264,7 @@ namespace LoadLink.LoadMatching.Api.Helpers
             services.AddTransient<IFillNotPlatformPosting, FillingNotPlatformPosting>();
 
             services.AddTransient<IMatchingServiceFactory, MatchingServiceFactory>();
-            services.AddScoped<IPublishIntegrationEvent, IntegrationEventPublisher>();
+            services.AddScoped(typeof(IPublishIntegrationEvent<>), typeof(IntegrationEventPublisher<>));
             
 
 

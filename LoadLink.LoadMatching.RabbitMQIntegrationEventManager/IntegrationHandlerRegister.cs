@@ -44,6 +44,7 @@ namespace LoadLink.LoadMatching.RabbitMQIntegrationEventManager
                                          exclusive: false,
                                          autoDelete: false,
                                          arguments: null);
+                
                 channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
                 var consumer = new AsyncEventingBasicConsumer(channel);
 
@@ -51,9 +52,10 @@ namespace LoadLink.LoadMatching.RabbitMQIntegrationEventManager
                     async (model, ea) =>
                     {
                         var body = ea.Body.ToArray();
+                       
                         var message = Encoding.UTF8.GetString(body);
-                        var @event = JsonSerializer.Deserialize<T>(message);
-                        await handler.Handle(@event);
+                     
+                        await handler.Handle(JsonSerializer.Deserialize<T>(message));
 
                         channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
 
@@ -77,7 +79,7 @@ namespace LoadLink.LoadMatching.RabbitMQIntegrationEventManager
 
             }
         }
-
+       
         
 
         private MqConfig GetConfig(string queueName)

@@ -39,18 +39,10 @@ namespace ConsoleService
             };
         }
 
-        public async Task Handle(IIntegrationEvent integrationEvent)
+        public async Task Handle(PostingCreatedEvent integrationEvent)
         {
-            PostingCreatedEvent @event;
-            try
-            {
-                @event = (PostingCreatedEvent)integrationEvent;
-            }
-            catch(Exception ex)
-            {
-                throw new ArgumentException("Arguement:PostingCreatedEvent type error:" + ex.Message);
-            }
-            await CreateLeads(@event.Posting, @event.IsGlobalExclued);
+            Console.WriteLine(integrationEvent.Posting.Token);
+            await CreateLeads(integrationEvent.Posting, integrationEvent.IsGlobalExclued);
 
         }
      

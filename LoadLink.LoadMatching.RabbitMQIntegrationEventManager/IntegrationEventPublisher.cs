@@ -8,7 +8,7 @@ using LoadLink.LoadMatching.IntegrationEventManager;
 
 namespace LoadLink.LoadMatching.RabbitMQIntegrationEventManager
 {
-    public class IntegrationEventPublisher : IPublishIntegrationEvent
+    public class IntegrationEventPublisher<T> : IPublishIntegrationEvent<T> where T:IIntegrationEvent
     {
      
         IEnumerable<MqConfig> _mqConfigs;
@@ -18,7 +18,7 @@ namespace LoadLink.LoadMatching.RabbitMQIntegrationEventManager
             _mqConfigs = mqConfigs;
         }
 
-        public void Publish(IIntegrationEvent integrationEvent, string queueName)
+        public void Publish(T integrationEvent, string queueName)
         {
             var mqConfig = GetConfig(queueName);
             if (mqConfig == null)
@@ -37,8 +37,8 @@ namespace LoadLink.LoadMatching.RabbitMQIntegrationEventManager
                                      autoDelete: false,
                                      arguments: null);
 
-              
-                var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(integrationEvent));
+          
+                var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize<T>(integrationEvent));
 
                 var properties = channel.CreateBasicProperties();
                 properties.Persistent = true;
@@ -53,7 +53,7 @@ namespace LoadLink.LoadMatching.RabbitMQIntegrationEventManager
             }
         }
 
-        
+       
 
         private MqConfig GetConfig(string queueName)
         {

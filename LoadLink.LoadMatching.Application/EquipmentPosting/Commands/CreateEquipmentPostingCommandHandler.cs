@@ -24,10 +24,10 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.Commands
        
         
         private readonly MqConfig _mqConfig;
-        private readonly IPublishIntegrationEvent _publishIntegrationEvent;
+        private readonly IPublishIntegrationEvent<PostingCreatedEvent> _publishIntegrationEvent;
         
 
-        public CreateEquipmentPostingCommandHandler(IEquipmentPostingRepository equipmentPostingRespository, MqConfig mqConfig, IPublishIntegrationEvent publishIntegrationEvent)
+        public CreateEquipmentPostingCommandHandler(IEquipmentPostingRepository equipmentPostingRespository, MqConfig mqConfig, IPublishIntegrationEvent<PostingCreatedEvent> publishIntegrationEvent)
         {
             _equipmentPostingRespository = equipmentPostingRespository;
             _mqConfig = mqConfig;

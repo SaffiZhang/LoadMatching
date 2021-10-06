@@ -6,6 +6,6 @@ namespace LoadLink.LoadMatching.IntegrationEventManager
 {
     public interface IIntegrationEventHandler<T> where T: IIntegrationEvent
     {
-        Task Handle(IIntegrationEvent integrationEvent);
+        Task Handle(T integrationEvent);
     }
 }

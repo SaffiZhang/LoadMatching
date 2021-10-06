@@ -4,8 +4,8 @@ using System.Text;
 
 namespace LoadLink.LoadMatching.IntegrationEventManager
 {
-    public interface IPublishIntegrationEvent
+    public interface IPublishIntegrationEvent<T> where T: IIntegrationEvent
     {
-        void Publish(IIntegrationEvent integrationEvent, string queueName);
+        void Publish(T integrationEvent, string queueName);
     }
 }
