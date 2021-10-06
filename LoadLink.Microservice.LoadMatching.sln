@@ -31,8 +31,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadLink.LoadMatching.Api.T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadLink.LoadMatching.Persistence.Test", "Loadlink.LoadMatching.Persistence.Test\LoadLink.LoadMatching.Persistence.Test.csproj", "{EE67F1DE-301B-4DC5-B55C-BE0D3E49DE67}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchingService", "MatchingService\MatchingService.csproj", "{AA3428D0-A2F8-4406-9166-07003CC4705B}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{C2B4368A-7469-48F7-B8E5-D1C745223804}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadLink.LoadMatching.MatchingService", "LoadLink.LoadMatching.Service\LoadLink.LoadMatching.MatchingService.csproj", "{68FE12D0-BF29-4549-BF80-AE41544BC56F}"
@@ -43,7 +41,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadLink.LoadMatching.Integ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadLink.LoadMatching.RabbitMQIntegrationEventManager", "LoadLink.LoadMatching.RabbitMQIntegrationEventManager\LoadLink.LoadMatching.RabbitMQIntegrationEventManager.csproj", "{40E53327-AF6D-4FF3-9D95-D5AC7A7D42B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadLink.LoadMatching.IntegrationService", "LoadLink.LoadMatching.IntegrationService\LoadLink.LoadMatching.IntegrationService.csproj", "{E47CDB65-44B9-4D5E-B620-A710CF94E372}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadLink.LoadMatching.IntegrationService", "LoadLink.LoadMatching.IntegrationService\LoadLink.LoadMatching.IntegrationService.csproj", "{E47CDB65-44B9-4D5E-B620-A710CF94E372}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,10 +85,6 @@ Global
 		{EE67F1DE-301B-4DC5-B55C-BE0D3E49DE67}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE67F1DE-301B-4DC5-B55C-BE0D3E49DE67}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE67F1DE-301B-4DC5-B55C-BE0D3E49DE67}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AA3428D0-A2F8-4406-9166-07003CC4705B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AA3428D0-A2F8-4406-9166-07003CC4705B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AA3428D0-A2F8-4406-9166-07003CC4705B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AA3428D0-A2F8-4406-9166-07003CC4705B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{68FE12D0-BF29-4549-BF80-AE41544BC56F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{68FE12D0-BF29-4549-BF80-AE41544BC56F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68FE12D0-BF29-4549-BF80-AE41544BC56F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -128,7 +122,6 @@ Global
 		{8E7A6751-EA22-4DDD-A7DA-12EA1FA58630} = {E4A7A8E6-5310-461E-A700-3FEDDE820321}
 		{A88D92FC-3E52-440B-A9ED-572D6E739958} = {E4A7A8E6-5310-461E-A700-3FEDDE820321}
 		{EE67F1DE-301B-4DC5-B55C-BE0D3E49DE67} = {E4A7A8E6-5310-461E-A700-3FEDDE820321}
-		{AA3428D0-A2F8-4406-9166-07003CC4705B} = {B2CD5021-67D9-4CC8-8559-22845E43D7AA}
 		{C2B4368A-7469-48F7-B8E5-D1C745223804} = {1DB97BA9-455E-40AB-B27A-51A71FEEE778}
 		{68FE12D0-BF29-4549-BF80-AE41544BC56F} = {C2B4368A-7469-48F7-B8E5-D1C745223804}
 		{776FC5F7-1694-4FEA-80B0-47AECE9DF94A} = {C2B4368A-7469-48F7-B8E5-D1C745223804}

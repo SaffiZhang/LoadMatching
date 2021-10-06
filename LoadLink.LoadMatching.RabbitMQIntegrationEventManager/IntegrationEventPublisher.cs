@@ -37,22 +37,17 @@ namespace LoadLink.LoadMatching.RabbitMQIntegrationEventManager
                                      autoDelete: false,
                                      arguments: null);
 
-                string message = JsonSerializer.Serialize(integrationEvent);
-                var body = Encoding.UTF8.GetBytes(message);
+              
+                var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(integrationEvent));
 
                 var properties = channel.CreateBasicProperties();
                 properties.Persistent = true;
-                try
-                {
-                    channel.BasicPublish(exchange: "",
-                                     routingKey: queueName,
+                
+                channel.BasicPublish(exchange: "",
+                                     routingKey: queueNo,
                                      basicProperties: properties,
                                      body: body);
-                }
-                catch(Exception ex)
-                {
-                    var a = "";
-                }
+               
                 
 
             }
