@@ -42,11 +42,18 @@ namespace LoadLink.LoadMatching.RabbitMQIntegrationEventManager
 
                 var properties = channel.CreateBasicProperties();
                 properties.Persistent = true;
-
-                channel.BasicPublish(exchange: "",
+                try
+                {
+                    channel.BasicPublish(exchange: "",
                                      routingKey: queueName,
                                      basicProperties: properties,
                                      body: body);
+                }
+                catch(Exception ex)
+                {
+                    var a = "";
+                }
+                
 
             }
         }
