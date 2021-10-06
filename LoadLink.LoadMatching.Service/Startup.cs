@@ -67,7 +67,7 @@ namespace LoadLink.LoadMatching.Service
 
             services.AddTransient<IMatchingServiceFactory, MatchingServiceFactory>();
 
-            services.AddHostedService<LoadMatchingService>();
+            //services.AddHostedService<LoadMatchingService>();
 
 
 
