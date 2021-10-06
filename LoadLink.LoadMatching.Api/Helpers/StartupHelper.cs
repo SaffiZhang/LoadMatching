@@ -148,7 +148,7 @@ using LoadLink.LoadMatching.Application.EquipmentPosting.Commands;
 using LoadLink.LoadMatching.Persistence.Repositories.PostingRepositories;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings.EquipmentMatchings;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
-using LoadLink.LoadMatching.Api.BackgroundTasks;
+
 using LoadLink.LoadMatching.Application.EquipmentPosting.Models;
 using Microsoft.Extensions.Hosting;
 using LoadLink.LoadMatching.Application.EquipmentPosting.IntetrationEvents;

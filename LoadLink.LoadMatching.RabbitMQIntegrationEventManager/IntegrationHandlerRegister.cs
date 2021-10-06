@@ -11,30 +11,32 @@ namespace LoadLink.LoadMatching.RabbitMQIntegrationEventManager
     public class IntegrationHandlerRegister<T,TH> : IIntegationEventHandlerRegister<T> 
         where T:IIntegrationEvent where TH:IIntegrationEventHandler<T>
     {
-        private IEnumerable<MqConfig> _mqConfigs;
+        private MqConfig _mqConfig;
         private IConnection _connection;
 
-        public IntegrationHandlerRegister(IEnumerable<MqConfig> mqConfigs)
+        public IntegrationHandlerRegister(MqConfig mqConfig)
         {
-            _mqConfigs = mqConfigs;
+            _mqConfig = mqConfig;
         }
 
         public void Register(IIntegrationEventHandler<T> handler, string queueName, bool? isConsoleWaiting = null)
         {
-            var mqConfig = GetConfig(queueName);
-            if (mqConfig == null)
-                throw new ArgumentNullException("Configuration error, MqConfig miss " + queueName);
+            var queueConfig = GetConfig(queueName);
+            if (queueConfig == null)
+                throw new ArgumentNullException("Configuration error, MqConfig miss queue:" + queueName);
 
-            ListenToQueue(handler, mqConfig, isConsoleWaiting);
+            ListenToQueue(handler, queueConfig,  isConsoleWaiting);
         }
-        private void ListenToQueue(IIntegrationEventHandler<T> handler, MqConfig mqConfig, bool? isConsoleWaiting = null)
+        private void ListenToQueue(IIntegrationEventHandler<T> handler,  QueueConfig queueConfig, bool? isConsoleWaiting = null)
         {
             var factory = new ConnectionFactory()
             {
-                HostName = mqConfig.HostName,
-                DispatchConsumersAsync = true
+                HostName = _mqConfig.HostName??"LocalHost",
+                DispatchConsumersAsync = true,
+                UserName=_mqConfig.UserName??"guest",
+                Password=_mqConfig.Password??"guest"
             };
-            var queueName = mqConfig.QueueName + mqConfig.MqNo;
+            var queueName = queueConfig.QueueName + queueConfig.MqNo;
             _connection = factory.CreateConnection();
             using (_connection)
             using (var channel = _connection.CreateModel())
@@ -82,9 +84,9 @@ namespace LoadLink.LoadMatching.RabbitMQIntegrationEventManager
        
         
 
-        private MqConfig GetConfig(string queueName)
+        private QueueConfig GetConfig(string queueName)
         {
-            return _mqConfigs.Where(m => m.QueueName == queueName).FirstOrDefault();
+            return _mqConfig.Queues.Where(q => q.QueueName == queueName).FirstOrDefault();
         }
 
         public void CloseConnection()

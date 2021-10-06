@@ -11,23 +11,27 @@ namespace LoadLink.LoadMatching.RabbitMQIntegrationEventManager
     public class IntegrationEventPublisher<T> : IPublishIntegrationEvent<T> where T:IIntegrationEvent
     {
      
-        IEnumerable<MqConfig> _mqConfigs;
+       private MqConfig _mqConfig;
 
-        public IntegrationEventPublisher(IEnumerable<MqConfig> mqConfigs)
+        public IntegrationEventPublisher(MqConfig mqConfig)
         {
-            _mqConfigs = mqConfigs;
+            _mqConfig = mqConfig;
         }
 
         public void Publish(T integrationEvent, string queueName)
         {
-            var mqConfig = GetConfig(queueName);
-            if (mqConfig == null)
-                throw new ArgumentNullException("Configuration error, MqConfig miss " + queueName);
+            var queueConfig = GetConfig(queueName);
+            if (queueConfig == null)
+                throw new ArgumentNullException("Configuration error, MqConfig miss queue " + queueName);
 
 
             var rand = new Random();
-            var queueNo = queueName+ rand.Next(mqConfig.MqCount).ToString();
-            var factory = new ConnectionFactory() { HostName = mqConfig.HostName, DispatchConsumersAsync = true };
+            var queueNo = queueName+ rand.Next(queueConfig.MqCount).ToString();
+            var factory = new ConnectionFactory() { 
+                HostName = _mqConfig.HostName??"LocalHost",
+                UserName=_mqConfig.UserName??"guest",
+                Password=_mqConfig.Password??"guest",
+                DispatchConsumersAsync = true };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
@@ -55,9 +59,9 @@ namespace LoadLink.LoadMatching.RabbitMQIntegrationEventManager
 
        
 
-        private MqConfig GetConfig(string queueName)
+        private QueueConfig GetConfig(string queueName)
         {
-            return _mqConfigs.Where(m => m.QueueName == queueName).FirstOrDefault();
+            return _mqConfig.Queues.Where(q => q.QueueName == queueName).FirstOrDefault();
         }
     }
 }

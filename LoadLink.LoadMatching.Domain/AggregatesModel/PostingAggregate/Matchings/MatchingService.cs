@@ -92,20 +92,13 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
                         using (var scope = service.CreateScope())
                         {
                             _mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-                            //publish event
-                            foreach (var e in lead.DomainEvents)
-                            {
-                                
-                                    await _mediator.Publish(e);
-                               
-                            }
+                            if (lead.DomainEvents !=null)
+                                foreach (var e in lead.DomainEvents)
+                                {
+                                        await _mediator.Publish(e);
+                                }
                             return leads;
                         }
-                   
-
-
-
-
                 }
             }
             return leads;

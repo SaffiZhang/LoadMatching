@@ -33,7 +33,7 @@ namespace ConsoleService
 
         public void Start(CancellationToken token)
         {
-            Console.WriteLine("Start:" + _mqConfig.QueueName + _mqConfig.MqNo);
+            Console.WriteLine("Start:" + _mqConfig.Queues.FirstOrDefault().QueueName + _mqConfig.Queues.FirstOrDefault().MqNo);
            _integationEventHandlerRegister.Register(_postingCreatedEventHandler, LoadMatchingQue.PostingCreated.ToString(),true);
         }
        

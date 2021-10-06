@@ -34,10 +34,11 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.DomainEventHandlers
 
             var secondaryLead = new SecondaryLoadLead(posting, matchedPosting, lead.DirO);
             //2nd load lead event will be published
-            //foreach (var e in secondaryLead.DomainEvents)
-            //        await _mediator.Publish(e);
+            if (secondaryLead.DomainEvents!=null)
+                foreach (var e in secondaryLead.DomainEvents)
+                        await _mediator.Publish(e);
 
-        }
+    }
     }
 
 }

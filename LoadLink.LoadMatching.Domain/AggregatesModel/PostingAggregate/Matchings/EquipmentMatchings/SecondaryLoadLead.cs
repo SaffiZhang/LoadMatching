@@ -14,7 +14,7 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
             this.LeadType = "S";
             this.EToken = matchedPosting.Token; 
             this.LToken = posting.Token;
-            //AddDomainEvent(new SecondaryLoadLeadCreatedDomainEvent(this));
+            AddDomainEvent(new SecondaryLoadLeadCreatedDomainEvent(this));
         }
     }
 }

@@ -12,6 +12,7 @@ using MediatR;
 using LoadLink.LoadMatching.Domain.Entities;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 using LoadLink.LoadMatching.IntegrationEventManager;
+using LoadLink.LoadMatching.Application.EquipmentPosting.IntetrationEvents;
 
 
 namespace LoadLink.LoadMatching.Application.Test
@@ -29,7 +30,7 @@ namespace LoadLink.LoadMatching.Application.Test
         private MatchingConfig matchingConfig = new MatchingConfig();
         private Mock<IMediator> mockMediator = new Mock<IMediator>();
         private Mock<IFillNotPlatformPosting> mockFillNotPlatformPosting = new Mock<IFillNotPlatformPosting>();
-        private Mock<IPublishIntegrationEvent> mockPublishIntegrationEvent = new Mock<IPublishIntegrationEvent>();
+        private Mock<IPublishIntegrationEvent<PostingCreatedEvent>> mockPublishIntegrationEvent = new Mock<IPublishIntegrationEvent<PostingCreatedEvent>>();
 
         private Mock<IMatchingServiceFactory> mockMatchingServiceFactory = new Mock<IMatchingServiceFactory>();
 
@@ -45,7 +46,7 @@ namespace LoadLink.LoadMatching.Application.Test
 
             Setup();
 
-            var mqConfig = new MqConfig() {QueueName="PostingCreated", HostName="LocalHost", MqCount=1 };
+            var mqConfig = new MqConfig() { HostName = "localhost", Queues = new List<QueueConfig>() { new QueueConfig() { QueueName = "PostingCreated", MqNo = 0, MqCount = 1 } } };
             var handler = new CreateEquipmentPostingCommandHandler(mockEquipmentPostingRepository.Object,mqConfig,mockPublishIntegrationEvent.Object );
                                                                 
             var result = await handler.Handle(request, new CancellationToken());
@@ -80,7 +81,7 @@ namespace LoadLink.LoadMatching.Application.Test
             mockFillNotPlatformPosting.Setup(m => m.Fill(It.IsAny<PostingBase>())).ReturnsAsync(posting);
             mockMediator.Setup(m => m.Publish(It.IsAny<INotification>(), It.IsAny<CancellationToken>())).Verifiable();
             matchingConfig.MatchingBatchSize = 5;
-            mockPublishIntegrationEvent.Setup(m => m.Publish(It.IsAny<IIntegrationEvent>(), It.IsAny<string>())).Verifiable();
+            mockPublishIntegrationEvent.Setup(m => m.Publish(It.IsAny<PostingCreatedEvent>(), It.IsAny<string>())).Verifiable();
 
       
 
