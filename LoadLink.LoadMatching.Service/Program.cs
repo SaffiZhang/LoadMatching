@@ -5,7 +5,7 @@ using Serilog;
 using Sentry;
 using Serilog.Events;
 
-namespace LoadLink.LoadMatching.Service
+namespace LoadLink.LoadMatching.MatchingService
 {
  public static class Program
     {

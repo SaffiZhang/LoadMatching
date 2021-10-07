@@ -11,14 +11,15 @@ using Sentry.AspNetCore;
 using AutoMapper;
 using System;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
-using LoadLink.LoadMatching.Application.EquipmentPosting.Models;
+using LoadLink.LoadMatching.IntegrationEventManager;
+using LoadLink.LoadMatching.RabbitMQIntegrationEventManager;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
 using LoadLink.LoadMatching.Persistence.Repositories.PostingRepositories;
 using LoadLink.LoadMatching.Persistence.Data;
 using MediatR;
-using LoadLink.LoadMatching.IntegrationEventManager;
+using LoadLink.LoadMatching.Application.EquipmentPosting.IntetrationEvents;
 using LoadLink.LoadMatching.Application.EquipmentPosting.Commands;
-namespace LoadLink.LoadMatching.Service
+namespace LoadLink.LoadMatching.MatchingService
 {
     public class Startup
     {
@@ -48,12 +49,11 @@ namespace LoadLink.LoadMatching.Service
 
             services.AddSingleton(Configuration);
 
+
             // mapping profiles            
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-
             //Changes in 2021-9-21
-
             var matchingConfig = Configuration.GetSection("MatchingConfig").Get<MatchingConfig>();
             services.AddSingleton<IMatchingConfig>(matchingConfig);
 
@@ -62,16 +62,13 @@ namespace LoadLink.LoadMatching.Service
 
             services.AddScoped<IEquipmentPostingRepository, EquipmentPostingRepository>();
 
-            services.AddMediatR(typeof(PostingBase).Assembly, typeof(CreateEquipmentPostingCommandHandler).Assembly, typeof(Startup).Assembly);
+            services.AddMediatR(typeof(PostingBase).Assembly, typeof(CreateEquipmentPostingCommandHandler).Assembly, typeof(ConsoleService.LoadMatchingService).Assembly);
             services.AddTransient<IFillNotPlatformPosting, FillingNotPlatformPosting>();
 
             services.AddTransient<IMatchingServiceFactory, MatchingServiceFactory>();
-
-            //services.AddHostedService<LoadMatchingService>();
-
-
-
-
+            services.AddSingleton<LoadMatchingService>();
+            services.AddSingleton<IIntegrationEventHandler<PostingCreatedEvent>, PostingCreatedEventHandler>();
+            services.AddSingleton<IIntegationEventHandlerRegister<PostingCreatedEvent>, IntegrationHandlerRegister<PostingCreatedEvent, PostingCreatedEventHandler>>();
 
         }
 
@@ -89,14 +86,7 @@ namespace LoadLink.LoadMatching.Service
          
             app.UseSentryTracing();
 
-            app.UseRouting();
-
-    
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            
         }
     }
 }

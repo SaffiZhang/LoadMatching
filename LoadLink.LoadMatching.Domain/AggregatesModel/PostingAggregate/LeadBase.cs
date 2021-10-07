@@ -117,7 +117,7 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
 		
 		public DateTime CreatedOn { get; set; }
 		public int CreatedBy { get; set; }
-		public string LeadType { get; set; }
+		public string LeadType { get; set; }//"S"--2nd lead, "P"--Primary lead
 
 		public int TCUS { get; set; }
 		public string DirO { get; set; }
@@ -125,7 +125,7 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
 		public decimal DFD { get; set; }
 		public decimal DFO_Google { get; set; }
 		public decimal DFD_Google { get; set; }
-		public string PType { get; set; }
+		public string PType { get; set; } //"E--equipment, L-- Load"
 		public bool CustomerTracking { get; set; }
 		public string Contacted { get; set; }
 		public string Flag { get; set; }

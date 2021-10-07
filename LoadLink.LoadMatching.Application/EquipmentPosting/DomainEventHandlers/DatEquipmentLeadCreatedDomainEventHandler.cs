@@ -18,7 +18,7 @@ namespace LoadLink.LoadMatching.Application.EquipmentPosting.DomainEventHandlers
 
         public async Task Handle(DatEquipmentLeadCreatedDomainEvent notification, CancellationToken cancellationToken)
         {
-            await _equipmentPostingRespository.SaveDatLead(notification.LeadBase);
+            //await _equipmentPostingRespository.SaveDatLead(notification.LeadBase);
         }
     }
 }

@@ -13,16 +13,13 @@
 // ***********************************************************************
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 using LoadLink.LoadMatching.IntegrationEventManager;
-namespace LoadLink.LoadMatching.Service
+namespace LoadLink.LoadMatching.MatchingService
 {
     public class AppSettings
     {
         public ConnectionStrings ConnectionStrings { get; set; }
-        public ServiceCacheSettings ServiceCacheSettings { get; set; }
-        public IdentityServer IdentityServer { get; set; }
-        public string[] AllowedCorsOrigin { get; set; }
-        public AppSetting AppSetting { get; set; }
-        public RedisConfiguration RedisConfiguration { get; set; }
+       
+        
         public MatchingConfig MatchingConfig { get; set; }
         public MqConfig MqConfig { get; set; }
     }
@@ -33,35 +30,6 @@ namespace LoadLink.LoadMatching.Service
         public string DefaultConnection { get; set; }
     }
 
-    public class ServiceCacheSettings
-    {
-        public CacheSetting DefaultCacheSetting { get; set; }
-        public CacheSetting UserApiKeySetting { get; set; }
-        public CacheSetting ApiDataSetting { get;set;}
-    }
+   
 
-    public class CacheSetting
-    {
-        public int AbsoluteExpiration { get; set; }
-        public int SlidingExpiration { get; set; }
-    }
-
-    public class IdentityServer
-    {
-        public string AuthorityUrl { get; set; }
-    }
-
-    public class AppSetting
-    {
-        public int LeadsCap { get; set; }
-        public string MileageProvider { get; set; }
-    }
-
-    public class RedisConfiguration
-    {
-        public string Server { get; set; }
-        public string Password { get; set; }
-        public int ConnectTimeout { get; set; } = 5000; // milliseconds
-        public int SyncTimeout { get; set; } = 5000; // milliseconds
-    }
 }
