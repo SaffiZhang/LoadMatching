@@ -25,7 +25,7 @@ namespace LoadLink.LoadMatching.Persistence.Caching
                 var key = GetTokenKey(leadType,token) + l.Id.ToString();
                 values.Add(new Tuple<string, LeadBase>(key, l));
             }
-            await _redisCacheClient.Db0.AddAllAsync(values, DateTimeOffset.Now.AddMinutes(30));
+            await _redisCacheClient.Db0.AddAllAsync(values, DateTimeOffset.Now.AddDays(1));
         }
 
         public Task CleanLeadsCaching(LeadType leadType, int token, bool isDeleted)
