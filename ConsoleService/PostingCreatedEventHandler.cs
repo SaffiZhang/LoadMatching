@@ -14,6 +14,8 @@ using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 using Microsoft.Extensions.DependencyInjection;
 using LoadLink.LoadMatching.IntegrationEventManager;
 using LoadLink.LoadMatching.Application.EquipmentPosting.IntetrationEvents;
+using StackExchange.Redis.Extensions.Core.Abstractions;
+using LoadLink.LoadMatching.Persistence.Caching;
 
 namespace ConsoleService
 {
@@ -23,14 +25,16 @@ namespace ConsoleService
         private IMatch _equipmentLegacyLeadMatchingService;
         private IMatch _equipmentDatLeadMatchingService;
         private IMatch _equipmentPlatformLeadMatchingService;
-
+        private ILeadCaching _leadCaching;
         private readonly IServiceProvider _service;
 
         public PostingCreatedEventHandler(IServiceProvider service)
         {
             _service = service;
+            
             using (var scope = _service.CreateScope())
             {
+                _leadCaching = scope.ServiceProvider.GetRequiredService<ILeadCaching>();
                 _equipmentPostingRespository = scope.ServiceProvider.GetRequiredService<IEquipmentPostingRepository>();
                 var matchingFactory = scope.ServiceProvider.GetRequiredService<IMatchingServiceFactory>();
                 _equipmentDatLeadMatchingService = matchingFactory.GetService(PostingType.EquipmentPosting, MatchingType.Dat);
@@ -72,6 +76,7 @@ namespace ConsoleService
             var leads = await _equipmentPlatformLeadMatchingService.Match(posting, loadList, true, isGlobleExclude, _service);
             //await _equipmentPostingRespository.UpdatePostingForPlatformLeadCompleted(posting.Token, leads.Count());
             await _equipmentPostingRespository.BulkInsertLead(leads.ToList());
+            await _leadCaching.BulkInsertLeads(LeadType.EquipmentLead, posting.Token, leads);
 
 
         }
@@ -90,6 +95,7 @@ namespace ConsoleService
             var leads = await _equipmentDatLeadMatchingService.Match(posting, datLoadList, false, false, _service);
             //await _equipmentPostingRespository.UpdatePostingForDatLeadCompleted(posting.Token, leads.Count());
             await _equipmentPostingRespository.BulkInsertLead(leads.ToList());
+            await _leadCaching.BulkInsertLeads(LeadType.EquipmentLead, posting.Token, leads);
 
         }
         private async Task CreateLegacyLead(PostingBase posting)
@@ -107,6 +113,7 @@ namespace ConsoleService
             var leads = await _equipmentLegacyLeadMatchingService.Match(posting, legacyLoadList, false, false, _service);
             //await _equipmentPostingRespository.UpdatePostingForLegacyLeadCompleted(posting.Token, leads.Count());
             await _equipmentPostingRespository.BulkInsertLead(leads.ToList());
+            await _leadCaching.BulkInsertLeads(LeadType.EquipmentLead, posting.Token, leads);
 
         }
 

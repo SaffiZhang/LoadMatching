@@ -13,6 +13,10 @@
 // ***********************************************************************
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 using LoadLink.LoadMatching.IntegrationEventManager;
+
+
+
+
 namespace LoadLink.LoadMatching.Api.Configuration
 {
     public class AppSettings
@@ -39,7 +43,13 @@ namespace LoadLink.LoadMatching.Api.Configuration
         public CacheSetting UserApiKeySetting { get; set; }
         public CacheSetting ApiDataSetting { get;set;}
     }
-
+    public class RedisConfiguration
+    {
+        public string Server { get; set; }
+        public string Password { get; set; }
+        public int ConnectTimeout { get; set; } = 5000; // milliseconds
+        public int SyncTimeout { get; set; } = 5000; // milliseconds
+    }
     public class CacheSetting
     {
         public int AbsoluteExpiration { get; set; }
@@ -57,11 +67,5 @@ namespace LoadLink.LoadMatching.Api.Configuration
         public string MileageProvider { get; set; }
     }
 
-    public class RedisConfiguration
-    {
-        public string Server { get; set; }
-        public string Password { get; set; }
-        public int ConnectTimeout { get; set; } = 5000; // milliseconds
-        public int SyncTimeout { get; set; } = 5000; // milliseconds
-    }
+    
 }

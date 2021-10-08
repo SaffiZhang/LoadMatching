@@ -33,6 +33,8 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    <PackageReference Include="StackExchange.Redis.Extensions.AspNetCore" Version="7.1.1" />
+    <PackageReference Include="StackExchange.Redis.Extensions.Newtonsoft" Version="7.1.1" />
   </ItemGroup>
 
   <ItemGroup>

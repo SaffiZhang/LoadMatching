@@ -13,6 +13,9 @@
 // ***********************************************************************
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 using LoadLink.LoadMatching.IntegrationEventManager;
+using StackExchange.Redis.Extensions.Core.Configuration;
+
+
 namespace ConsoleService
 {
     public class AppSettings
@@ -57,11 +60,5 @@ namespace ConsoleService
         public string MileageProvider { get; set; }
     }
 
-    public class RedisConfiguration
-    {
-        public string Server { get; set; }
-        public string Password { get; set; }
-        public int ConnectTimeout { get; set; } = 5000; // milliseconds
-        public int SyncTimeout { get; set; } = 5000; // milliseconds
-    }
+   
 }

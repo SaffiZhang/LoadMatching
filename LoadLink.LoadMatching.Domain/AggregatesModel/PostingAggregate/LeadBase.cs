@@ -7,12 +7,12 @@ using LoadLink.LoadMatching.Domain.Events;
 
 namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
 {
-    public abstract class LeadBase: Entity<int>, IAggregateRoot
+    public  class LeadBase: Entity<int>, IAggregateRoot
     {
         public LeadBase()
         {
         }
-
+		
         public LeadBase(PostingBase posting,
 			PostingBase matchedPosting, string dirO,
 			bool? isGlobalExcluded=false)
@@ -129,6 +129,11 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
 		public bool CustomerTracking { get; set; }
 		public string Contacted { get; set; }
 		public string Flag { get; set; }
+        public override int Id { get => base.Id; set => base.Id = value; }
+		public void SetId(int id)
+        {
+			this.Id = id;
+        }
 
-	}
+    }
 }

@@ -15,6 +15,9 @@ using LoadLink.LoadMatching.Application.EquipmentPosting.IntetrationEvents;
 using System.Threading;
 using LoadLink.LoadMatching.IntegrationEventManager;
 using LoadLink.LoadMatching.RabbitMQIntegrationEventManager;
+using StackExchange.Redis.Extensions.Core.Configuration;
+using StackExchange.Redis.Extensions.Newtonsoft;
+
 namespace ConsoleService
 {
     class Program
@@ -63,7 +66,9 @@ namespace ConsoleService
             services.AddSingleton<LoadMatchingService>();
             services.AddSingleton<IIntegrationEventHandler<PostingCreatedEvent>, PostingCreatedEventHandler>();
             services.AddSingleton<IIntegationEventHandlerRegister<PostingCreatedEvent>, IntegrationHandlerRegister<PostingCreatedEvent, PostingCreatedEventHandler>>();
-          
+
+            var redisConfiguration = Configuration.GetSection("Redis").Get<RedisConfiguration>();
+            services.AddStackExchangeRedisExtensions<NewtonsoftSerializer>(redisConfiguration);
             return services.BuildServiceProvider();
            
 
