@@ -32,7 +32,8 @@ namespace LoadLink.LoadMatching.Infrastructure.Caching
             var custCD = leads.FirstOrDefault().CustCD;
             foreach (var l in leads)
             {//leadtype + deleded + token + leadId
-                var key = GetLeadKey(leadType, custCD, token, l.ID);
+                var mToken = l.EToken == token ? l.LToken : l.EToken;
+                var key = GetLeadKey(leadType, custCD, token, l.ID,mToken);
                
                 var dates = new List<DateTime>(){ l.DateAvail, l.MDateAvail };
                 await _redisCacheClient.Db0.AddAsync(key,l,dates.Min() );
@@ -58,7 +59,8 @@ namespace LoadLink.LoadMatching.Infrastructure.Caching
         // matching service create a 2nd lead, save to DB and save to redis
         public async Task InsertSingleLead(LeadPostingType leadType, int token, LeadBase lead)
         {
-            var key = GetLeadKey(leadType, lead.CustCD, token, lead.ID);
+            var mToken = lead.EToken == token ? lead.LToken : lead.EToken;
+            var key = GetLeadKey(leadType, lead.CustCD, token, lead.ID, mToken);
            
             var dates = new List<DateTime>() { lead.DateAvail, lead.MDateAvail };
             await _redisCacheClient.Db0.AddAsync(key, lead, dates.Min());
@@ -66,12 +68,12 @@ namespace LoadLink.LoadMatching.Infrastructure.Caching
         }
   
         //Interface showing leadcount for all postings for one customer
-        public async Task<IEnumerable<PostingLeadCount>> GetPostingLeadCountByCustCD(PostingLeadCount custCD)
+        public async Task<IEnumerable<PostingLeadCount>> GetPostingLeadCountByCustCD(LeadPostingType leadType, PostingLeadCount custCD)
         {
             IEnumerable<string> keys;
             IDictionary<string, PostingLeadCount> list;
 
-            keys = await _redisCacheClient.Db0.SearchKeysAsync(custCD + "*");
+            keys = await _redisCacheClient.Db0.SearchKeysAsync("LeadCount-"+leadType.ToString() + "-" + custCD + "*");
             list = await _redisCacheClient.Db0.GetAllAsync<PostingLeadCount>(keys);
 
 
@@ -102,29 +104,42 @@ namespace LoadLink.LoadMatching.Infrastructure.Caching
         {
             return leadType.ToString() + "-" + custCD + "-" + "0" + "-" + token.ToString() + "-";
         }
-        private string GetLeadKey(LeadPostingType leadType, string custCD, int token, int leadId)
+        private string GetLeadKey(LeadPostingType leadType, string custCD, int token, int leadId, int mToken)
         {
-            return GetTokenKey(leadType, custCD, token) + leadId.ToString();
+            return GetTokenKey(leadType, custCD, token) + leadId.ToString() +"-"+mToken  ;
         }
         private string GetLeadCountKey(LeadPostingType leadType, string custCD, int token)
         {
-            return leadType.ToString() + "-" + custCD + token.ToString() ;
+            return "LeadCount-" +leadType.ToString() + "-" + custCD + token.ToString() ;
         }
         public Task CleanLeadsCaching(LeadPostingType leadType, int token, bool isDeleted)
         {
             throw new NotImplementedException();
         }
-
-        public Task DeleteLead(LeadPostingType leadType, int token, int leadId)
+        //when a posting is deleted, all the 2nd lead of it are deleted
+        public async Task DeleteLead(LeadPostingType leadType, int token)
         {
-            throw new NotImplementedException();
+            IEnumerable<string> keys;
+            keys = await _redisCacheClient.Db0.SearchKeysAsync(leadType.ToString() + "*-" + token.ToString());
+            foreach (var key in keys)
+            {
+                var lead = await _redisCacheClient.Db0.GetAsync<LeadBase>(key);
+                await _redisCacheClient.Db0.RemoveAsync(key);
+                var secondaryLeadType = leadType == LeadPostingType.EquipmentLead ? LeadPostingType.LoadLead : LeadPostingType.EquipmentLead;
+                var deletedToken= leadType == LeadPostingType.EquipmentLead ? lead.LToken : lead.EToken;
+                await UpdateLeadCount(secondaryLeadType, lead.CustCD, deletedToken, -1);
+            }
+               
         }
-
+       
         public Task<IEnumerable<int>> GetDeleteLeadsByToken(LeadPostingType leadType, int token, int maxLeadId)
         {
             throw new NotImplementedException();
         }
 
-       
+        public Task DeleteLead(LeadPostingType leadType, string custCD, int token, int leadId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

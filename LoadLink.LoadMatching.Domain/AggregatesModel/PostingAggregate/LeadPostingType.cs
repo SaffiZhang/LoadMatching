@@ -6,7 +6,7 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
 {
     public enum LeadPostingType
     {
-            EquipmentLead,
-            LoadLead   
+            EquipmentLead=0,
+            LoadLead=1   
     }
 }
