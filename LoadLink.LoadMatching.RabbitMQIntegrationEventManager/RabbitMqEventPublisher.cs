@@ -2,24 +2,46 @@
 using System.Collections.Generic;
 using System.Linq;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using RabbitMQ.Client.Exceptions;
 using System.Text.Json;
 using System.Text;
 using LoadLink.LoadMatching.IntegrationEventManager;
+using Polly;
+using Polly.Retry;
+using System.Net.Sockets;
+using Microsoft.Extensions.Logging;
 
 namespace LoadLink.LoadMatching.RabbitMQIntegrationEventManager
 {
-    public class IntegrationEventPublisher<T> : IPublishIntegrationEvent<T> where T:IIntegrationEvent
+    public class RabbitMqEventPublisher<T> : IPublishIntegrationEvent<T> where T:IIntegrationEvent
     {
      
        private MqConfig _mqConfig;
+        private IRabbitMQPersistentConnection _persistentConnection;
+        private int _retryCount;
+      
 
-        public IntegrationEventPublisher(MqConfig mqConfig)
+        public RabbitMqEventPublisher(MqConfig mqConfig, IRabbitMQPersistentConnection persistentConnection)
         {
             _mqConfig = mqConfig;
+            _persistentConnection = persistentConnection;
+           
         }
 
         public void Publish(T integrationEvent, string queueName)
         {
+            if (!_persistentConnection.IsConnected)
+            {
+                _persistentConnection.TryConnect();
+            }
+            var policy = RetryPolicy.Handle<BrokerUnreachableException>()
+                .Or<SocketException>()
+                .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
+                {
+                    
+                });
+
             var queueConfig = GetConfig(queueName);
             if (queueConfig == null)
                 throw new ArgumentNullException("Configuration error, MqConfig miss queue " + queueName);
@@ -27,13 +49,9 @@ namespace LoadLink.LoadMatching.RabbitMQIntegrationEventManager
 
             var rand = new Random();
             var queueNo = queueName+ rand.Next(queueConfig.MqCount).ToString();
-            var factory = new ConnectionFactory() { 
-                HostName = _mqConfig.HostName??"LocalHost",
-                UserName=_mqConfig.UserName??"guest",
-                Password=_mqConfig.Password??"guest",
-                DispatchConsumersAsync = true };
-            using (var connection = factory.CreateConnection())
-            using (var channel = connection.CreateModel())
+            
+            
+            using (var channel = _persistentConnection.CreateModel())
             {
                 channel.QueueDeclare(queue: queueNo,
                                      durable: true,

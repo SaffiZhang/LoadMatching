@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using LoadLink.LoadMatching.Domain.Events;
 
-namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings.EquipmentMatchings
+namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Equipment.Matchings
 {
     public class LegacyEquipmentLead : LeadBase
     {
@@ -11,7 +11,7 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
         public LegacyEquipmentLead(PostingBase posting, PostingBase matchedPosting,  string dirO  ) : base(posting, matchedPosting,  dirO)
         {
             LeadType = "P";
-            this.PType = "L";
+            //this.PType = "L";
             this.EToken = posting.Token;
             this.LToken = matchedPosting.Token;
             //AddDomainEvent(new LegacyEquipmentLeadCreatedDomainEvent(this));

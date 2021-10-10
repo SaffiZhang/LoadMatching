@@ -3,9 +3,9 @@ using System.Threading;
 using Xunit;
 using Moq;
 using MediatR;
-
+using System.Collections.Generic;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
-using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings.EquipmentMatchings;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Equipment.Matchings;
 using LoadLink.LoadMatching.Domain.Events;
 
 using LoadLink.LoadMatching.Application.EquipmentPosting.DomainEventHandlers;
@@ -32,22 +32,22 @@ namespace LoadLink.LoadMatching.Application.Test
             Setup();
           
             var notification = new PlatformEquipmentLeadCreatedDomainEvent(lead, posting,posting , true);
-            var handler = new PlatformEquipmentLeadCreatedDomainEventHandler(mockEquipmentPostingRepository.Object, mockMediator.Object);
+            var handler = new PlatformEquipmentLeadCreatedDomainEventHandler( );
             
             await handler.Handle(notification, new CancellationToken());
             
-            mockEquipmentPostingRepository.Verify(m => m.SavePlatformLead(It.IsAny<LeadBase>()), Times.Never);
+            mockEquipmentPostingRepository.Verify(m => m.BulkInsertLeadTable(It.IsAny<IEnumerable<LeadBase>>()), Times.Never);
             mockMediator.Verify(m=>m.Publish(It.IsAny<INotification>(), It.IsAny<CancellationToken>()), Times.Never);
             
             // 2. platform match platform , IsGlobleExclude = false ,  2nd lead
             Setup();
             
             notification = new PlatformEquipmentLeadCreatedDomainEvent(lead, posting, posting,  false);
-            handler = new PlatformEquipmentLeadCreatedDomainEventHandler(mockEquipmentPostingRepository.Object, mockMediator.Object);
+            handler = new PlatformEquipmentLeadCreatedDomainEventHandler();
             
             await handler.Handle(notification, new CancellationToken());
             
-            mockEquipmentPostingRepository.Verify(m => m.SavePlatformLead(It.IsAny<LeadBase>()), Times.Never);
+            mockEquipmentPostingRepository.Verify(m => m.BulkInsertLeadTable(It.IsAny<IEnumerable<LeadBase>>()), Times.Never);
             mockMediator.Verify(m => m.Publish(It.IsAny<INotification>(), It.IsAny<CancellationToken>()), Times.Once);
 
 
@@ -58,7 +58,7 @@ namespace LoadLink.LoadMatching.Application.Test
         {
             mockEquipmentPostingRepository = new Mock<IEquipmentPostingRepository>();
             mockMediator = new Mock<IMediator>();
-            mockEquipmentPostingRepository.Setup(m => m.SavePlatformLead(It.IsAny<LeadBase>())).Verifiable();
+            mockEquipmentPostingRepository.Setup(m => m.BulkInsertLeadTable(It.IsAny<IEnumerable< LeadBase>>())).Verifiable();
             mockMediator.Setup(m => m.Publish(It.IsAny<INotification>(), It.IsAny<CancellationToken>())).Verifiable();
             posting = FakePosting.NotPlatformPostingOfCorridor("");
             posting.UpdateDistanceAndPointId(FakePosting.PostingDistanceAndPointId(ottawa, cambridge));

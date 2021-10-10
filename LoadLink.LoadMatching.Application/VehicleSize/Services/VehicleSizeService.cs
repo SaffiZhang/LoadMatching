@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using LoadLink.LoadMatching.Application.Caching;
+using LoadLink.LoadMatching.Domain.Caching;
 using LoadLink.LoadMatching.Application.VehicleSize.Models.Queries;
 using LoadLink.LoadMatching.Application.VehicleSize.Repository;
 using System.Collections.Generic;

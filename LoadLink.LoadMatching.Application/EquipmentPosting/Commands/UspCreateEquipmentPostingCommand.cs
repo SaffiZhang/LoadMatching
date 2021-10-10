@@ -2,7 +2,7 @@
 
 namespace LoadLink.LoadMatching.Application.EquipmentPosting.Models.Commands
 {
-    public class UspCreateEquipmentPostingCommand
+    public class UspCreatEquipmentPostingCommand
     {
 
         public string CustCD { get; set; }

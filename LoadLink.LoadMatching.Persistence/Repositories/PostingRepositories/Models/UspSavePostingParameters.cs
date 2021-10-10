@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LoadLink.LoadMatching.Application.EquipmentPosting.Models
+
+namespace LoadLink.LoadMatching.Persistence.Repositories.PostingRepositories.Models
 {
     public class UspSavePostingParameters
     {

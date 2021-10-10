@@ -4,7 +4,7 @@ using System.Text;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
 using LoadLink.LoadMatching.Domain.Events;
 
-namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings.EquipmentMatchings
+namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Equipment.Matchings
 {
     public class DatEquipmentLead : LeadBase
     {
@@ -13,7 +13,7 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
         public DatEquipmentLead(PostingBase posting, PostingBase matchedPosting, string dirO) : base(posting, matchedPosting, dirO)
         {
             LeadType = "P";
-            this.PType = "L";
+            //this.PType = "L";
             this.EToken = posting.Token;
             this.LToken = matchedPosting.Token;
             //AddDomainEvent(new DatEquipmentLeadCreatedDomainEvent(this));

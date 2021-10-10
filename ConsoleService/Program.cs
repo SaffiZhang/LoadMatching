@@ -17,6 +17,7 @@ using LoadLink.LoadMatching.IntegrationEventManager;
 using LoadLink.LoadMatching.RabbitMQIntegrationEventManager;
 using StackExchange.Redis.Extensions.Core.Configuration;
 using StackExchange.Redis.Extensions.Newtonsoft;
+using LoadLink.LoadMatching.Infrastructure.Caching;
 
 namespace ConsoleService
 {
@@ -59,16 +60,16 @@ namespace ConsoleService
 
             services.AddScoped<IEquipmentPostingRepository, EquipmentPostingRepository>();
 
-            services.AddMediatR(typeof(PostingBase).Assembly, typeof(CreateEquipmentPostingCommandHandler).Assembly, typeof(ConsoleService.LoadMatchingService).Assembly);
-            services.AddTransient<IFillNotPlatformPosting, FillingNotPlatformPosting>();
+            services.AddMediatR(typeof(PostingBase).Assembly, typeof(CreatEquipmentPostingCommandHandler).Assembly, typeof(ConsoleService.LoadMatchingService).Assembly);
+            services.AddScoped<IFillNotPlatformPosting, FillingNotPlatformPosting>();
 
-            services.AddTransient<IMatchingServiceFactory, MatchingServiceFactory>();
-            services.AddSingleton<LoadMatchingService>();
+           
             services.AddSingleton<IIntegrationEventHandler<PostingCreatedEvent>, PostingCreatedEventHandler>();
-            services.AddSingleton<IIntegationEventHandlerRegister<PostingCreatedEvent>, IntegrationHandlerRegister<PostingCreatedEvent, PostingCreatedEventHandler>>();
+         
 
             var redisConfiguration = Configuration.GetSection("Redis").Get<RedisConfiguration>();
             services.AddStackExchangeRedisExtensions<NewtonsoftSerializer>(redisConfiguration);
+            services.AddSingleton<ILeadCaching, LeadCaching>();
             return services.BuildServiceProvider();
            
 

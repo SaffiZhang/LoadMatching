@@ -4,7 +4,7 @@ using Xunit;
 using Moq;
 using System.Linq;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
-using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings.EquipmentMatchings;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Equipment.Matchings;
 using LoadLink.LoadMatching.Application.EquipmentPosting.Commands;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ using LoadLink.LoadMatching.Application.EquipmentPosting.IntetrationEvents;
 
 namespace LoadLink.LoadMatching.Application.Test
 {
-    public class CreateEquipmentPostingCommandHandlerTest
+    public class CreatEquipmentPostingCommandHandlerTest
     {
         private Point ottawa = new Point(-75.68861, 45.41972, 50);
         private Point cambridge = new Point(-80.29972, 43.36583, 50);
@@ -36,9 +36,9 @@ namespace LoadLink.LoadMatching.Application.Test
 
    
         [Fact]
-        public async Task CreateEquipmentPostingCommandHandlerShould()
+        public async Task CreatEquipmentPostingCommandHandlerShould()
         {
-            var request = new CreateEquipmentPostingCommand() {
+            var request = new CreatEquipmentPostingCommand() {
                 CustCD = "1", SrceCity = "1", SrceSt = "1", DestCity = "1", DestSt = "1", SrceRadius = 1, DestRadius = 1,
                 VehicleSize = "U", VehicleType = "V", PostingAttrib = "A"
             };
@@ -47,7 +47,8 @@ namespace LoadLink.LoadMatching.Application.Test
             Setup();
 
             var mqConfig = new MqConfig() { HostName = "localhost", Queues = new List<QueueConfig>() { new QueueConfig() { QueueName = "PostingCreated", MqNo = 0, MqCount = 1 } } };
-            var handler = new CreateEquipmentPostingCommandHandler(mockEquipmentPostingRepository.Object,mqConfig,mockPublishIntegrationEvent.Object );
+            var handler = new CreatEquipmentPostingCommandHandler(mockEquipmentPostingRepository.Object,
+                                            mqConfig,mockPublishIntegrationEvent.Object );
                                                                 
             var result = await handler.Handle(request, new CancellationToken());
 

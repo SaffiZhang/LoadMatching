@@ -39,12 +39,12 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
             var liveLeads = new List<LeadBase>();
 
             foreach (var task in tasks)
-         
+
                 liveLeads.AddRange(((Task<IEnumerable<LeadBase>>)task).Result);
 
-           
+
             return liveLeads;
-           
+
 
         }
         

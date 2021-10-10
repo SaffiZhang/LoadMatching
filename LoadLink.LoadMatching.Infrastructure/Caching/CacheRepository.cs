@@ -11,16 +11,19 @@
 // </copyright>
 // <summary>Caching of data</summary>
 // ***********************************************************************
-using LoadLink.LoadMatching.Application.Caching;
+
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using LoadLink.LoadMatching.Domain.Caching;
+using Newtonsoft.Json;
+
 
 namespace LoadLink.LoadMatching.Infrastructure.Caching
 {

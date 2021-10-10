@@ -1,7 +1,7 @@
 ﻿
 namespace LoadLink.LoadMatching.Domain.Procedures
 {
-    public class UspCreateEquipmentPostingCorridorResult
+    public class UspCreatEquipmentPostingCorridorResult
     {
     }
 }

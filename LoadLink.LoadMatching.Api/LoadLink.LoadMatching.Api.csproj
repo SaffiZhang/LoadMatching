@@ -47,7 +47,9 @@
   <ItemGroup>
     <ProjectReference Include="..\LoadLink.LoadMatching.Application\LoadLink.LoadMatching.Application.csproj" />
     <ProjectReference Include="..\LoadLink.LoadMatching.Infrastructure\LoadLink.LoadMatching.Infrastructure.csproj" />
+    <ProjectReference Include="..\LoadLink.LoadMatching.IntegrationEventManager\LoadLink.LoadMatching.IntegrationEventManager.csproj" />
     <ProjectReference Include="..\LoadLink.LoadMatching.Persistence\LoadLink.LoadMatching.Persistence.csproj" />
+    <ProjectReference Include="..\LoadLink.LoadMatching.RabbitMQIntegrationEventManager\LoadLink.LoadMatching.RabbitMQIntegrationEventManager.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -15,7 +15,7 @@ namespace LoadLink.LoadMatching.Persistence.Test
         {
             var lead = FakePosting.LeadBase();
             lead.LeadType = "P";
-            lead.PType = "L";
+            
             lead.EToken = 1;
             lead.LToken = 1;
 

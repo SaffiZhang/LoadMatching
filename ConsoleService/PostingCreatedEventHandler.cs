@@ -15,7 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using LoadLink.LoadMatching.IntegrationEventManager;
 using LoadLink.LoadMatching.Application.EquipmentPosting.IntetrationEvents;
 using StackExchange.Redis.Extensions.Core.Abstractions;
-using LoadLink.LoadMatching.Persistence.Caching;
+using LoadLink.LoadMatching.Infrastructure.Caching;
 
 namespace ConsoleService
 {
@@ -27,6 +27,7 @@ namespace ConsoleService
         private IMatch _equipmentPlatformLeadMatchingService;
         private ILeadCaching _leadCaching;
         private readonly IServiceProvider _service;
+       
 
         public PostingCreatedEventHandler(IServiceProvider service)
         {
@@ -74,9 +75,23 @@ namespace ConsoleService
                 return;
 
             var leads = await _equipmentPlatformLeadMatchingService.Match(posting, loadList, true, isGlobleExclude, _service);
-            //await _equipmentPostingRespository.UpdatePostingForPlatformLeadCompleted(posting.Token, leads.Count());
-            await _equipmentPostingRespository.BulkInsertLead(leads.ToList());
-            await _leadCaching.BulkInsertLeads(LeadType.EquipmentLead, posting.Token, leads);
+            
+            if (leads == null)
+                return;
+            if (leads.Count() == 0)
+                return;
+
+           var leadsWithId= await _equipmentPostingRespository.BulkInsertLeadTable(leads);
+            await _leadCaching.BulkInsertLeads(LeadPostingType.EquipmentLead, posting.Token, leadsWithId);
+            
+            if (posting.SecondaryLeads != null)
+            {
+                leadsWithId= await _equipmentPostingRespository.BulkInsert2ndLead(posting.SecondaryLeads);
+                foreach (var s in leadsWithId)
+                    await _leadCaching.InsertSingleLead(LeadPostingType.LoadLead, s.LToken, s);
+            }
+               
+            
 
 
         }
@@ -93,9 +108,15 @@ namespace ConsoleService
                 return;
 
             var leads = await _equipmentDatLeadMatchingService.Match(posting, datLoadList, false, false, _service);
-            //await _equipmentPostingRespository.UpdatePostingForDatLeadCompleted(posting.Token, leads.Count());
-            await _equipmentPostingRespository.BulkInsertLead(leads.ToList());
-            await _leadCaching.BulkInsertLeads(LeadType.EquipmentLead, posting.Token, leads);
+
+            if (leads == null)
+                return;
+            if (leads.Count() == 0)
+                return;
+            var leadsWithId = await _equipmentPostingRespository.BulkInsertDatLeadTable(leads);
+        
+            await _leadCaching.BulkInsertLeads(LeadPostingType.EquipmentLead, posting.Token, leadsWithId);
+
 
         }
         private async Task CreateLegacyLead(PostingBase posting)
@@ -111,9 +132,14 @@ namespace ConsoleService
             if (!legacyLoadList.Any())
                 return;
             var leads = await _equipmentLegacyLeadMatchingService.Match(posting, legacyLoadList, false, false, _service);
-            //await _equipmentPostingRespository.UpdatePostingForLegacyLeadCompleted(posting.Token, leads.Count());
-            await _equipmentPostingRespository.BulkInsertLead(leads.ToList());
-            await _leadCaching.BulkInsertLeads(LeadType.EquipmentLead, posting.Token, leads);
+
+            if (leads == null)
+                return;
+            if (leads.Count() == 0)
+                return;
+            var leadsWithId = await _equipmentPostingRespository.BulkInsertLeadTable(leads);
+            await _leadCaching.BulkInsertLeads(LeadPostingType.EquipmentLead, posting.Token, leadsWithId);
+
 
         }
 

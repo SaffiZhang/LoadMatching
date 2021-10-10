@@ -10,8 +10,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MediatR;
-using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
-using System.Collections.Generic;
+using LoadLink.LoadMatching.Application.EquipmentPosting.Commands;
+using System.Threading;
 
 namespace LoadLink.LoadMatching.Api.Controllers
 {
@@ -23,15 +23,17 @@ namespace LoadLink.LoadMatching.Api.Controllers
         private readonly IUserHelperService _userHelperService;
   
         private readonly IMediator _mediator;
+       
 
         public EquipmentPostingController(IUserHelperService userHelperService, IMediator mediator)
         {
             _userHelperService = userHelperService;
             _mediator = mediator;
+          
         }
 
         [HttpPost("{APIkey}")]
-        public async Task<IActionResult> Post([FromBody] CreateEquipmentPostingCommand posting, string APIkey)
+        public async Task<IActionResult> Post([FromBody] CreatEquipmentPostingCommand posting, string APIkey)
         {
             //DATA VALIDATIONS
             if (posting == null)
@@ -52,13 +54,22 @@ namespace LoadLink.LoadMatching.Api.Controllers
             posting.CustCD = _userHelperService.GetCustCd(); 
             posting.CreatedBy = _userHelperService.GetUserId();
             
-            var commandResult = await _mediator.Send(posting);
-              if (commandResult==null)
+            try
+            {
+                var commandResult=  await _mediator.Send(posting);
+                if (commandResult == null)
+                {
+                    return BadRequest();
+                }
+
+                return Ok(commandResult);
+            }
+            catch (Exception ex)
             {
                 return BadRequest();
             }
-
-            return Ok(commandResult);
+            
+              
         }
 
       

@@ -11,7 +11,7 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using LoadLink.LoadMatching.Application.Caching;
+using LoadLink.LoadMatching.Domain.Caching;
 using LoadLink.LoadMatching.Application.UserSubscription.Repository;
 using LoadLink.LoadMatching.Application.UserSubscription.Models.Queries;
 using System;

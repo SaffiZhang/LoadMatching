@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace LoadLink.LoadMatching.Application.Caching
+namespace LoadLink.LoadMatching.Domain.Caching
 {
     public interface ICacheRepository<T>
     {

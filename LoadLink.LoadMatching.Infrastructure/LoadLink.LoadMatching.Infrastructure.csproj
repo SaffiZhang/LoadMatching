@@ -10,16 +10,19 @@
 		<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\LoadLink.LoadMatching.Application\LoadLink.LoadMatching.Application.csproj" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="StackExchange.Redis.Extensions.AspNetCore" Version="7.1.1" />
+		<PackageReference Include="StackExchange.Redis.Extensions.Newtonsoft" Version="7.1.1" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Folder Include="EventStore\" />
 		<Folder Include="Http\" />
 		<Folder Include="ServiceBroker\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\LoadLink.LoadMatching.Domain\LoadLink.LoadMatching.Domain.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -4,11 +4,9 @@ using System.Text;
 
 namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
 {
-    public enum LeadType
+    public enum LeadPostingType
     {
             EquipmentLead,
             LoadLead   
-      
-
     }
 }

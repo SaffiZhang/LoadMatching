@@ -6,7 +6,7 @@ using MediatR;
 
 namespace LoadLink.LoadMatching.Application.EquipmentPosting.Commands
 {
-    public class CreateEquipmentPostingCommand:IRequest<int?>
+    public class CreatEquipmentPostingCommand:IRequest<int?>
     {
         public int Token { get; set; }
 

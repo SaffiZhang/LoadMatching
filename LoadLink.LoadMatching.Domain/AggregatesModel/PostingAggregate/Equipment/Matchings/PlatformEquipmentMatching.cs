@@ -2,8 +2,9 @@
 using MediatR;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
 using System.Threading.Tasks;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 
-namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings.EquipmentMatchings
+namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Equipment.Matchings
 {
     public class PlatformEquipmentMatching : MatchingService
     {

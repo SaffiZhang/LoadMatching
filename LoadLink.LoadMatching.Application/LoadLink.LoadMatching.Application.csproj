@@ -13,7 +13,6 @@
   <ItemGroup>
     <ProjectReference Include="..\LoadLink.LoadMatching.Domain\LoadLink.LoadMatching.Domain.csproj" />
     <ProjectReference Include="..\LoadLink.LoadMatching.IntegrationEventManager\LoadLink.LoadMatching.IntegrationEventManager.csproj" />
-    <ProjectReference Include="..\LoadLink.LoadMatching.RabbitMQIntegrationEventManager\LoadLink.LoadMatching.RabbitMQIntegrationEventManager.csproj" />
   </ItemGroup>
 
   <ItemGroup>

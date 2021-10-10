@@ -1,7 +1,7 @@
 ﻿
 namespace LoadLink.LoadMatching.Domain.Procedures
 {
-    public class UspUpdateEquipmentPostingLeadsCountResult
+    public class UspUpdatEquipmentPostingLeadsCountResult
     {
     }
 }

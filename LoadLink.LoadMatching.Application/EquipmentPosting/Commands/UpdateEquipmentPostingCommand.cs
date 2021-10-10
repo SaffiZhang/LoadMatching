@@ -2,7 +2,7 @@
 
 namespace LoadLink.LoadMatching.Application.EquipmentPosting.Models.Commands
 {
-    public class UpdateEquipmentPostingCommand
+    public class UpdatEquipmentPostingCommand
     {
         [Required(ErrorMessage = "Status required")]
         public string PStatus { get; set; }

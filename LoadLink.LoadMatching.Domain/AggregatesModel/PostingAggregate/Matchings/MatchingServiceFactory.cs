@@ -1,7 +1,7 @@
 ﻿using System;
 
 using MediatR;
-using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings.EquipmentMatchings;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Equipment.Matchings;
 
 namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings
 {

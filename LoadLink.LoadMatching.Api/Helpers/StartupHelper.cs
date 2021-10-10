@@ -7,7 +7,6 @@ using LoadLink.LoadMatching.Application.AssignedEquipment.Repository;
 using LoadLink.LoadMatching.Application.AssignedEquipment.Services;
 using LoadLink.LoadMatching.Application.AssignedLoad.Repository;
 using LoadLink.LoadMatching.Application.AssignedLoad.Services;
-using LoadLink.LoadMatching.Application.Caching;
 using LoadLink.LoadMatching.Application.City.Repository;
 using LoadLink.LoadMatching.Application.City.Services;
 using LoadLink.LoadMatching.Application.UserSubscription.Models.Queries;
@@ -39,6 +38,7 @@ using LoadLink.LoadMatching.Application.CarrierSearch.Services;
 using LoadLink.LoadMatching.Application.CarrierSearch.Repository;
 using LoadLink.LoadMatching.Persistence.Repositories.CarrierSearch;
 using LoadLink.LoadMatching.Application.EquipmentLead.Services;
+using LoadLink.LoadMatching.Domain.Caching;
 
 
 
@@ -146,14 +146,16 @@ using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
 using MediatR;
 using LoadLink.LoadMatching.Application.EquipmentPosting.Commands;
 using LoadLink.LoadMatching.Persistence.Repositories.PostingRepositories;
-using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings.EquipmentMatchings;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Equipment.Matchings;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings;
 
 using LoadLink.LoadMatching.Application.EquipmentPosting.Models;
 using Microsoft.Extensions.Hosting;
-using LoadLink.LoadMatching.Application.EquipmentPosting.IntetrationEvents;
+using StackExchange.Redis.Extensions.AspNetCore;
+using StackExchange.Redis.Extensions.Newtonsoft;
 using LoadLink.LoadMatching.IntegrationEventManager;
 using LoadLink.LoadMatching.RabbitMQIntegrationEventManager;
+
 
 
 namespace LoadLink.LoadMatching.Api.Helpers
@@ -260,12 +262,20 @@ namespace LoadLink.LoadMatching.Api.Helpers
 
             services.AddScoped<IEquipmentPostingRepository, EquipmentPostingRepository>();
 
-            services.AddMediatR(typeof(PostingBase).Assembly, typeof(CreateEquipmentPostingCommandHandler).Assembly, typeof(Startup).Assembly);
-            services.AddTransient<IFillNotPlatformPosting, FillingNotPlatformPosting>();
+            services.AddMediatR(typeof(PostingBase).Assembly, typeof(CreatEquipmentPostingCommandHandler).Assembly, typeof(Startup).Assembly);
+            services.AddScoped<IFillNotPlatformPosting, FillingNotPlatformPosting>();
 
-            services.AddTransient<IMatchingServiceFactory, MatchingServiceFactory>();
-            services.AddScoped(typeof(IPublishIntegrationEvent<>), typeof(IntegrationEventPublisher<>));
+            services.AddScoped<IMatchingServiceFactory, MatchingServiceFactory>();
             
+            services.AddScoped<ILeadCaching, LeadCaching>();
+            var redisConfiguration = configuration.GetSection("Redis").Get<StackExchange.Redis.Extensions.Core.Configuration.RedisConfiguration>();
+            services.AddStackExchangeRedisExtensions<NewtonsoftSerializer>(redisConfiguration);
+            services.AddScoped<IRabbitMQPersistentConnection, DefaultRabbitMQPersistentConnection>();
+            services.AddScoped<IRabbitMqConnectionFactory, RabbitConnectFactory>();
+            services.AddScoped(typeof(IPublishIntegrationEvent<>), typeof(RabbitMqEventPublisher<>));
+
+
+
 
 
 

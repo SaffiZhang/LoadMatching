@@ -36,9 +36,11 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
                                                         , int destCountry
                                                         , string postMode
                                                         , int networkId);
-        Task SavePlatformLead(LeadBase LeadBase);
-        Task SaveLegacyLead(LeadBase LeadBase);
-        Task SaveDatLead(LeadBase LeadBase);
+        Task<IEnumerable< LeadBase>> BulkInsertLeadTable(IEnumerable<LeadBase> Leads);
+        Task<IEnumerable< LeadBase>> BulkInsertDatLeadTable(IEnumerable<LeadBase> Leads);
+        Task<IEnumerable< LeadBase>> BulkInsert2ndLead(IEnumerable<LeadBase> Leads);
+        Task<IEnumerable<LeadBase>> GetLeadsByToken(int token);
+        Task<IEnumerable<PostingBase>> GetPostingByCustCD(string custCD);
         Task Save2ndLead(LeadBase LeadBase);
         Task UpdatePostingForPlatformLeadCompleted(int token,int initialLeadsCount);
         Task UpdatePostingForDatLeadCompleted(int token, int initialLeadsCount);
@@ -49,7 +51,7 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
         //Task FlagLead(string custId, int createdBy, int eToken, int lToken);
         //Task RemoveFlag(string custId, int createdBy, int eToken, int lToken);
         //Task DeletePost(int token, int userId);
-        Task BulkInsertLead(List<LeadBase> leads);
+        /*ask BulkInsertLead(List<LeadBase> leads, string tableName);*/
 
     }
 }

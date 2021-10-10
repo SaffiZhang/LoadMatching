@@ -8,13 +8,13 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 namespace LoadLink.LoadMatching.RabbitMQIntegrationEventManager
 {
-    public class IntegrationHandlerRegister<T,TH> : IIntegationEventHandlerRegister<T> 
-        where T:IIntegrationEvent where TH:IIntegrationEventHandler<T>
+    public class RabbitMqEventHandlerRegister<T> : IIntegationEventHandlerRegister<T> 
+        where T:IIntegrationEvent 
     {
         private MqConfig _mqConfig;
         private IConnection _connection;
 
-        public IntegrationHandlerRegister(MqConfig mqConfig)
+        public RabbitMqEventHandlerRegister(MqConfig mqConfig)
         {
             _mqConfig = mqConfig;
         }

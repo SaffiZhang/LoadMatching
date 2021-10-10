@@ -1,13 +1,7 @@
 ﻿
 using LoadLink.LoadMatching.Api.Controllers;
 using LoadLink.LoadMatching.Api.Services;
-using LoadLink.LoadMatching.Api.Test.Setup;
-using LoadLink.LoadMatching.Application.EquipmentPosting.Models.Commands;
-using LoadLink.LoadMatching.Application.EquipmentPosting.Models.Queries;
 
-using LoadLink.LoadMatching.Persistence.Repositories.UserSubscription;
-using LoadLink.LoadMatching.Application.UserSubscription.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
@@ -15,11 +9,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 using Microsoft.Extensions.Options;
-using LoadLink.LoadMatching.Api.Configuration;
+using LoadLink.LoadMatching.Persistence.Repositories.PostingRepositories.Models;
 using LoadLink.LoadMatching.Application.EquipmentPosting.Commands;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
 using MediatR;
-
+using LoadLink.LoadMatching.Application.EquipmentPosting.Commands;
 
 namespace LoadLink.LoadMatching.Api.Test.EquipmentPosting
 {
@@ -36,7 +30,7 @@ namespace LoadLink.LoadMatching.Api.Test.EquipmentPosting
         {
             // arrange
             SetupController();
-            var equipmentPostingCommand = new CreateEquipmentPostingCommand
+            var equipmentPostingCommand = new CreatEquipmentPostingCommand
             {
                     DateAvail = DateTime.UtcNow,
                     SrceCity =  "London",

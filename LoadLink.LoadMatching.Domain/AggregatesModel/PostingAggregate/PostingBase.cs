@@ -2,6 +2,8 @@
 using LoadLink.LoadMatching.Domain.Entities;
 using LoadLink.LoadMatching.Domain.Seedwork;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
 {
     public class PostingBase:Entity<int>,IAggregateRoot
@@ -151,6 +153,13 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
         public bool IsDatLeadCompleted { get; set; }
         public bool IsLegacyLeadCompleted { get; set; }
         public int LeadsCount { get; set; } = 0;
+        public List<LeadBase> SecondaryLeads { get; set; }
+        public void Add2ndLeads( LeadBase lead)
+        {
+            this.SecondaryLeads = SecondaryLeads?? new List<LeadBase>();
+            SecondaryLeads.Add(lead);
+            
+        }
         public Route GetRoute()
         {
             return new Route(GetSourcePoint(), GetDestinationPoint());
@@ -180,6 +189,6 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate
                                   
                                    DestMarketAreaID);
         }
-        public IEquatable<LeadBase> Leads { get; set; }
+        
     }
 }

@@ -7,9 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="Dapper" Version="2.0.90" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="StackExchange.Redis.Extensions.AspNetCore" Version="7.1.1" />
     <PackageReference Include="StackExchange.Redis.Extensions.Newtonsoft" Version="7.1.1" />
     <PackageReference Include="xunit" Version="2.4.0" />
@@ -21,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LoadLink.LoadMatching.Domain\LoadLink.LoadMatching.Domain.csproj" />
+    <ProjectReference Include="..\LoadLink.LoadMatching.Infrastructure\LoadLink.LoadMatching.Infrastructure.csproj" />
     <ProjectReference Include="..\LoadLink.LoadMatching.Persistence\LoadLink.LoadMatching.Persistence.csproj" />
   </ItemGroup>
 
