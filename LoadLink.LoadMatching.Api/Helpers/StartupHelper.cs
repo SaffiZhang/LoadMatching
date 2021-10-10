@@ -155,8 +155,7 @@ using StackExchange.Redis.Extensions.AspNetCore;
 using StackExchange.Redis.Extensions.Newtonsoft;
 using LoadLink.LoadMatching.IntegrationEventManager;
 using LoadLink.LoadMatching.RabbitMQIntegrationEventManager;
-
-
+using Microsoft.EntityFrameworkCore;
 
 namespace LoadLink.LoadMatching.Api.Helpers
 {
@@ -168,7 +167,10 @@ namespace LoadLink.LoadMatching.Api.Helpers
             var connectionString = configuration.GetConnectionString("DefaultConnection");
            
             services.AddScoped<IConnectionFactory>(x => new ConnectionFactory(connectionString));
-            
+
+            //Add EquipmentPostingContext
+            services.AddDbContext<EquipmentPostingContext>(options => options.UseSqlServer(connectionString));
+
             // mapping profiles            
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

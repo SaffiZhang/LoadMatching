@@ -8,6 +8,6 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
     public interface IMatch
     {
         Task<IEnumerable<LeadBase>> Match(PostingBase posting, IEnumerable<PostingBase> preMatchedPostings,
-           bool isMatchToPlatformPosting, bool? isGlobalExcluded=false, IServiceProvider service=null);
+           bool isMatchToPlatformPosting, bool? isGlobalExcluded=false);
     }
 }

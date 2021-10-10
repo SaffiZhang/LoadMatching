@@ -11,7 +11,8 @@ using LoadLink.LoadMatching.Infrastructure.Caching;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
 using Microsoft.Extensions.Configuration;
 using LoadLink.LoadMatching.Persistence.Data;
-
+using LoadLink.LoadMatching.Persistence.Repositories.PostingRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace LoadLink.LoadMatching.Persistence.Test
 {
@@ -33,6 +34,7 @@ namespace LoadLink.LoadMatching.Persistence.Test
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<ILeadCaching, LeadCaching>();
             services.AddSingleton<IPersistenceRedisCacheClient, PersistenceRedisCacheClient>();
+            services.AddDbContext<EquipmentPostingContext>(options => options.UseSqlServer(connectionString));
         }
     }
 }

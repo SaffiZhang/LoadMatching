@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MediatR;
-using System;
 using System.Threading.Tasks;
 using System.Linq;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Geometries;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings
 {
@@ -27,21 +24,19 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
         public async Task<IEnumerable<LeadBase>> Match(PostingBase posting, 
                                                         IEnumerable<PostingBase> preMatchedPostings,
                                                         bool isMatchToPlatformPosting,
-                                                        bool? isGlobalExcluded=false, IServiceProvider service=null)
+                                                        bool? isGlobalExcluded=false)
         {
         
             var tasks = new List<Task>();
             var lists = GetSmallBatch(preMatchedPostings);
             foreach (var list in lists)
-                tasks.Add(Task.Run(() => BatchMatch(posting, list,isMatchToPlatformPosting, isGlobalExcluded, service)));
+                tasks.Add(Task.Run(() => BatchMatch(posting, list,isMatchToPlatformPosting, isGlobalExcluded)));
 
             await Task.WhenAll(tasks);
             var liveLeads = new List<LeadBase>();
 
             foreach (var task in tasks)
-
                 liveLeads.AddRange(((Task<IEnumerable<LeadBase>>)task).Result);
-
 
             return liveLeads;
 
@@ -66,7 +61,7 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
         private async Task<IEnumerable<LeadBase>> BatchMatch(PostingBase posting, 
                                                             IEnumerable<PostingBase> preMatchedPostings,
                                                             bool isMatchToPlatformPosting,
-                                                            bool? isGlobalExcluded=false, IServiceProvider service = null)
+                                                            bool? isGlobalExcluded=false)
         {
             var pRoute = posting.GetRoute();
           
@@ -88,17 +83,12 @@ namespace LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matching
                     //for response to request
                     leads.Add(lead);
 
-                    if (service != null)
-                        using (var scope = service.CreateScope())
-                        {
-                            _mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-                            if (lead.DomainEvents !=null)
-                                foreach (var e in lead.DomainEvents)
-                                {
-                                        await _mediator.Publish(e);
-                                }
-                            return leads;
-                        }
+                    if (lead.DomainEvents != null)
+                    {
+                        lead.DomainEvents.ToList().ForEach(x => _mediator.Publish(x));
+                    }
+
+                    return leads;
                 }
             }
             return leads;

@@ -21,27 +21,16 @@ namespace ConsoleService
 {
     public class PostingCreatedEventHandler : IIntegrationEventHandler<PostingCreatedEvent>
     {
-        private IEquipmentPostingRepository _equipmentPostingRespository;
-        private IMatch _equipmentLegacyLeadMatchingService;
-        private IMatch _equipmentDatLeadMatchingService;
-        private IMatch _equipmentPlatformLeadMatchingService;
-        private ILeadCaching _leadCaching;
-        private readonly IServiceProvider _service;
+        private readonly IEquipmentPostingRepository _equipmentPostingRespository;
+        private readonly IMatchingServiceFactory _matchingFactory;
+        private readonly ILeadCaching _leadCaching;
        
 
-        public PostingCreatedEventHandler(IServiceProvider service)
+        public PostingCreatedEventHandler(ILeadCaching leadCaching, IEquipmentPostingRepository equipmentPostingRepository, IMatchingServiceFactory matchingServiceFactory )
         {
-            _service = service;
-            
-            using (var scope = _service.CreateScope())
-            {
-                _leadCaching = scope.ServiceProvider.GetRequiredService<ILeadCaching>();
-                _equipmentPostingRespository = scope.ServiceProvider.GetRequiredService<IEquipmentPostingRepository>();
-                var matchingFactory = scope.ServiceProvider.GetRequiredService<IMatchingServiceFactory>();
-                _equipmentDatLeadMatchingService = matchingFactory.GetService(PostingType.EquipmentPosting, MatchingType.Dat);
-                _equipmentLegacyLeadMatchingService = matchingFactory.GetService(PostingType.EquipmentPosting, MatchingType.Legacy);
-                _equipmentPlatformLeadMatchingService = matchingFactory.GetService(PostingType.EquipmentPosting, MatchingType.Platform);
-            };
+            _leadCaching = leadCaching;
+            _equipmentPostingRespository = equipmentPostingRepository;
+            _matchingFactory = matchingServiceFactory;
         }
 
         public async Task Handle(PostingCreatedEvent integrationEvent)
@@ -53,11 +42,9 @@ namespace ConsoleService
      
         private async Task CreateLeads(PostingBase posting, bool? isGlobleExclude)
         {
-            var tasks = new List<Task>();
-            tasks.Add(Task.Run(() => CreateDatLead(posting)));
-            tasks.Add(Task.Run(() => CreatePlatformLead(posting, isGlobleExclude ?? false)));
-            tasks.Add(Task.Run(() => CreateLegacyLead(posting)));
-
+            await Task.Factory.StartNew(() => CreateDatLead(posting));
+            await Task.Factory.StartNew(() => CreatePlatformLead(posting, isGlobleExclude ?? false));
+            await Task.Factory.StartNew(() => CreateLegacyLead(posting));
 
         }
         private async Task CreatePlatformLead(PostingBase posting, bool? isGlobleExclude)
@@ -74,7 +61,8 @@ namespace ConsoleService
             if (!loadList.Any())
                 return;
 
-            var leads = await _equipmentPlatformLeadMatchingService.Match(posting, loadList, true, isGlobleExclude, _service);
+            var equipmentPlatformLeadMatchingService = _matchingFactory.GetService(PostingType.EquipmentPosting, MatchingType.Platform);
+            var leads = await equipmentPlatformLeadMatchingService.Match(posting, loadList, true, isGlobleExclude);
             
             if (leads == null)
                 return;
@@ -107,7 +95,8 @@ namespace ConsoleService
             if (!datLoadList.Any())
                 return;
 
-            var leads = await _equipmentDatLeadMatchingService.Match(posting, datLoadList, false, false, _service);
+            var equipmentDatLeadMatchingService= _matchingFactory.GetService(PostingType.EquipmentPosting, MatchingType.Dat);
+            var leads = await equipmentDatLeadMatchingService.Match(posting, datLoadList, false, false);
 
             if (leads == null)
                 return;
@@ -131,7 +120,9 @@ namespace ConsoleService
                                                                            posting.NetworkId);
             if (!legacyLoadList.Any())
                 return;
-            var leads = await _equipmentLegacyLeadMatchingService.Match(posting, legacyLoadList, false, false, _service);
+
+            var equipmentLegacyLeadMatchingService= _matchingFactory.GetService(PostingType.EquipmentPosting, MatchingType.Legacy);
+            var leads = await equipmentLegacyLeadMatchingService.Match(posting, legacyLoadList, false, false);
 
             if (leads == null)
                 return;
@@ -140,10 +131,8 @@ namespace ConsoleService
             var leadsWithId = await _equipmentPostingRespository.BulkInsertLeadTable(leads);
             await _leadCaching.BulkInsertLeads(LeadPostingType.EquipmentLead, posting.Token, leadsWithId);
 
-
         }
-
-       
+   
     }
 }
 

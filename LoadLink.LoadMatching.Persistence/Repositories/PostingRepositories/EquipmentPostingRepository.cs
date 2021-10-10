@@ -14,8 +14,6 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.PostingRepositories
     {
         private readonly EquipmentPostingContext _context;
 
-
-
         public EquipmentPostingRepository(IConnectionFactory connectionFactory, IMapper mapper, EquipmentPostingContext context) : base(connectionFactory, mapper)
         {
             Usp_GetDatPostingForMatching = "usp_GetDatLoadPostingForMatching";
@@ -32,6 +30,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.PostingRepositories
         {
             var secondaryLeads = new List<LeadBase>().Cast<Domain.AggregatesModel.PostingAggregate.Load.LoadLead>().ToList();
             await _context.LoadLead.AddRangeAsync(secondaryLeads);
+            _context.SaveChanges();
             return secondaryLeads;
         }
 
@@ -39,6 +38,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.PostingRepositories
         {
             var datLeads = new List<LeadBase>().Cast<Domain.AggregatesModel.PostingAggregate.Equipment.DatEquipmentLead>().ToList();
             await _context.DatEquipmentLead.AddRangeAsync(datLeads);
+            _context.SaveChanges();
             return datLeads;
         }
 
@@ -46,6 +46,7 @@ namespace LoadLink.LoadMatching.Persistence.Repositories.PostingRepositories
         {
             var equipmentLeads = new List<LeadBase>().Cast<Domain.AggregatesModel.PostingAggregate.Equipment.EquipmentLead>().ToList();
             await _context.EquipmentLead.AddRangeAsync(equipmentLeads);
+            _context.SaveChanges();
             return equipmentLeads;
         }
 

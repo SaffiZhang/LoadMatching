@@ -18,6 +18,7 @@ using LoadLink.LoadMatching.RabbitMQIntegrationEventManager;
 using StackExchange.Redis.Extensions.Core.Configuration;
 using StackExchange.Redis.Extensions.Newtonsoft;
 using LoadLink.LoadMatching.Infrastructure.Caching;
+using Microsoft.EntityFrameworkCore;
 
 namespace ConsoleService
 {
@@ -41,6 +42,10 @@ namespace ConsoleService
            .Build();
             // connections
             var connectionString = Configuration.GetSection("ConnectionStrings").Get<ConnectionStrings>();
+
+            //Add EquipmentPostingContext
+            services.AddDbContext<EquipmentPostingContext>(options => options.UseSqlServer(connectionString.LoadMatching));
+
 
             services.AddScoped<IConnectionFactory>(x => new ConnectionFactory(connectionString.LoadMatching));
 

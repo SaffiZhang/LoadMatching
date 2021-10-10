@@ -1,6 +1,6 @@
 ﻿using System;
 using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate;
-using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Matchings.EquipmentMatchings;
+using LoadLink.LoadMatching.Domain.AggregatesModel.PostingAggregate.Equipment.Matchings;
 using LoadLink.LoadMatching.Domain.Entities;
 
 
